@@ -1,4 +1,5 @@
-# dataViz Project by Charles Gallay, Thomas Batschelet and Valentine Santarelli
+# DataViz Project
+### by Charles Gallay, Thomas Batschelet and Valentine Santarelli
 
 For our visualization project, we decided to focus our attention on environmental changes and plausible correlations between several aspects at a country level . 
 
