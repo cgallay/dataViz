@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>My leaflet map</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
+        integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
+        crossorigin=""/>
+        <style>
+            #mapContainer { height: 880px; }
+        </style>
+    </head>
+
+    <body>
+        <div id='mapContainer'></div>
+        <div id='mapContainer2'></div>
+        Content of the documents
+    
+        <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
+        integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
+        crossorigin=""></script>
+        <script src="geojson/world-countries.json" type="text/javascript"></script>
+        <script src="https://d3js.org/d3.v3.js"></script>
+        <script src='lib/lodash.js'></script>
+        <script src='lib/crossfilter.js'></script>
+        <script src='lib/dc.js'></script>
+
+        <!--<link rel="stylesheet" href="bower_components/dc-addons/dist/dc-addons.min.css" />
+        <script src="lib/dc-addons.min.js"></script>-->
+
+        <script src="lib/dc-leaflet.js"></script>
+        <script src='src/analysis.js'></script>
+    </body>
+
+</html> 
