@@ -1,85 +1,120 @@
-//Some functions
+// @flow
+const width = window.innerWidth;
+const height = window.innerHeight;
 
-function getCountryName(feature){
-    return feature.properties.name;
-}
+// D3 Projection
+const projection = d3.geoEquirectangular()
+    .scale(width / 2 / Math.PI)
+	.translate([width/2, height / 2]);
 
-function getColor(d) {
-    return d > 1000 ? '#800026' :
-           d > 500  ? '#BD0026' :
-           d > 200  ? '#E31A1C' :
-           d > 100  ? '#FC4E2A' :
-           d > 50   ? '#FD8D3C' :
-           d > 20   ? '#FEB24C' :
-           d > 10   ? '#FED976' :
-                      '#FFEDA0';
-}
+// path generator to convert JSON to SVG paths
+const path = d3.geoPath()
+	.projection(projection);
 
-function style(feature) {
-    console.log(feature);
-    return {
-        fillColor: getColor(getCountryName(feature)),
-        weight: 2,
-        opacity: 1,
-        color: 'white',
-        dashArray: '3',
-        fillOpacity: 0.7
+//colormap for population density
+var color = d3.scaleLinear()
+        .interpolate(d3.interpolateHcl)
+        .range([d3.rgb("#007AFF"), d3.rgb('#FFF500')]);
+    //.range(["hsl(62,100%,90%)", "hsl(228,30%,20%)"])
+    //.range(["rgb(0,255,255)", "rgb(255,255,255)"])
+    //.range(['lightblue', 'orange', 'lightgreen', 'pink']);
+	//.interpolate(d3.interpolateHcl);
+
+const svg = d3.select("body")
+    .append("svg")
+    .attr("id", "map")
+    .attr("viewBox", "0 0 " + width + " " + height )
+    .attr("preserveAspectRatio", "xMidYMid meet");
+
+
+
+function updateTemperature(countries, data) {
+    //TODO try avoid the double loop (sorting once for all)
+    // Loop through each country data value in the .csv file
+    for (let i = 0; i < data.length; i++) {
+        // Country name
+        let dataWorldCode = data[i].key;
+        
+        // Canton density
+        let dataWorldTemp = data[i].value.sum / data[i].value.count;
+
+        // Find the corresponding country inside the JSON
+        for (let j = 0; j < countries.features.length; j++) {
+            let jsonWorldCode = countries.features[j].id;
+            
+            if (dataWorldCode === jsonWorldCode) {
+                // Copy the canton density into the JSON
+                //console.log(dataWorldCode);
+                //console.log(dataWorldTemp);
+                countries.features[j].properties.temperature = dataWorldTemp;
+                break;
+            }
+        }
     }
-
+}
+function renderCountryColor(countries, color) {
+    svg.selectAll("path")
+    .data(countries.features)
+    .enter()
+    .append("path")
+    .attr("class", (d) => "countries")
+    .attr("d", path)
+    .style("fill", (d) => {
+            const temperature = d.properties.temperature;
+            return temperature ? color(temperature) : "white";//color(temperature);
+            });
 }
 
-//Reference
-//http://intellipharm.github.io/dc-addons/examples/leaflet-choropleth.html
-//https://github.com/Intellipharm/dc-addons/blob/master/README.md
+function updateCountryColor(countries, color) {
 
+    svg.selectAll(".countries")
+    .data(countries.features)
+    .attr("id", (d) => d.id)
+    .style("fill", (d) => {
+            const temperature = d.properties.temperature;
+            //console.log("hello" + temperature + "for " + d.id);
+            return temperature ? color(temperature) : "white";//color(temperature);
+        });
+}
 
-//Showing the map
-/*
-var myMap = L.map('mapContainer').setView([51.505,-0.09], 13);
-L.tileLayer('http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
-    maxZoom: 18,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(myMap);
+//map file
+topojson_path = "topojson/world/countries.json";
+geojson_path = "geojson/world-countries.json";
+d3.csv("data/output.csv", function(data) {
+	d3.json(geojson_path, function(world) {
+        //const countries = topojson.feature(world, world.objects.units);
+        const countries = world
+        cf = crossfilter(data)
+        var timeDimension = cf.dimension( d => d.dt);
+        var countryDim = cf.dimension (d => d["ISO Code"]);
+        var temperatureDim = cf.dimension( d => d.AverageTemperature);
+        timeDimension.filter(d => d=='1849-01-01');
 
-L.geoJson(countryData,  {style: style}).addTo(myMap);
-*/
+        grp_country = countryDim.group().reduce((p,v) => {p.sum = p.sum + parseFloat(v.AverageTemperature); p.count= p.count + 1; return p;},
+            (p,v) => {p.sum = p.sum - parseFloat(v.AverageTemperature); p.count= p.count - 1; return p;},
+            (p,v) => {return {sum:0, count:0}})
 
+            
+        updateTemperature(countries, grp_country.top(Infinity))
+    
+        // define domain for the colormap
+        //TODO move it to updateTemperature ?
+		var temperature = data.map((d) => d.AverageTemperature).sort((a, b) => a - b);
+        color = color.domain([d3.quantile(temperature, .01), d3.quantile(temperature, .99)]);
+        //console.log([d3.quantile(temperature, .01), d3.quantile(temperature, .99)])
 
-var mapChart = dc.leafletChoroplethChart("#mapContainer");
-var numberFormat = d3.format(".2f");
-// Loading the data
-d3.csv("data/temperatures_major.csv", function(error, data) {
-    if(error) console.error(error);
-    my_data = crossfilter(data);
-    var timeDimension = my_data.dimension( d => d.dt);
-    var temperatureDim = my_data.dimension( d => d.AverageTemperature);
-    var countryDim = my_data.dimension( d => d.Country);
-    temperatureDim.filter(t => t !== "")
-    var old_time = timeDimension.filter(d => d=='1849-01-01');
-    old_time
-    mapChart
-        .width(990)
-        .height(500)
-        .center([50.09024, -95.712891])
-        .zoom(3)
-        .dimension(countryDim) //WHY ?
-        .group(countryDim.group().reduce((p,v) => {p.sum = p.sum + parseFloat(v.AverageTemperature); p.count= p.count + 1; return p;},
-                            (p,v) => {p.sum = p.sum - parseFloat(v.AverageTemperature); p.count= p.count - 1; return p;},
-                            (p,v) => {return {sum:0, count:0}}))
-        .colors(d3.scale.quantize().range(["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"]))
-        .colorDomain([-20, 40])
-        .colorCalculator(function (d) { return d ? mapChart.colors()(d.value.sum/d.value.count) : '#cca'; })
-        .geojson(countryData.features)
-        .featureKeyAccessor(function(feature) {
-            return feature.properties.name;
-        })
-        .title(function (d) {
-            return "Country: " + d.key + "\n Mean temperature is: " + (d.value ? d.value.sum/d.value.count : 0) + " degree";
-        })
-        .legend(dc.leafletLegend().position('bottomright'));
-
-    console.log(old_time.top(Infinity));
-    console.log("hellods");
-    console.log(data[0]);
-    dc.renderAll();
+		//color the map according to the density of each canton
+        renderCountryColor(countries, color);
+        var year = 1850; 
+        updateCountryColor(countries, color);
+        setInterval(function(){
+            year = year + 1;
+            timeDimension.filter(d => d === year+'-01-01')
+            updateTemperature(countries, grp_country.top(Infinity))
+            updateCountryColor(countries, color);
+            //console.log(countries)
+        }, 1000) 
+        
+		
+	});
 });
