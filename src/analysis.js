@@ -24,8 +24,8 @@ const path = d3.geoPath()
 
 //colormap for population density
 var color = d3.scaleLinear()
-        .interpolate(d3.interpolateHcl)
-        .range([d3.rgb("#007AFF"), d3.rgb('#FFF500')]);
+        .range(["#2c7bb6", "#ffff8c", "#d7191c"])
+        .interpolate(d3.interpolateHcl);
     //.range(["hsl(62,100%,90%)", "hsl(228,30%,20%)"])
     //.range(["rgb(0,255,255)", "rgb(255,255,255)"])
     //.range(['lightblue', 'orange', 'lightgreen', 'pink']);
@@ -135,7 +135,7 @@ d3.csv("data/temp_country.csv", function(data) {
         // define domain for the colormap
         //TODO move it to updateTemperature ?
 		var temperature = data.map((d) => d.AverageTemperature).sort((a, b) => a - b);
-        color = color.domain([d3.quantile(temperature, .01), d3.quantile(temperature, .99)]);
+        color = color.domain([d3.quantile(temperature, 0), d3.quantile(temperature, .50), d3.quantile(temperature, 1)]);
         //console.log([d3.quantile(temperature, .01), d3.quantile(temperature, .99)])
 
 		//color the map according to the density of each canton
