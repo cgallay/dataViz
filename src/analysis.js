@@ -112,14 +112,12 @@ function updateCountryColor(countries, color) {
 }
 
 //map file
-topojson_path = "topojson/world/countries.json";
 geojson_path = "geojson/world-countries.json";
-d3.csv("data/output.csv", function(data) {
+d3.csv("data/temp_country.csv", function(data) {
 	d3.json(geojson_path, function(world) {
         //Hide loader
         d3.select("#spinner").remove();
 
-        //const countries = topojson.feature(world, world.objects.units);
         const countries = world
         cf = crossfilter(data)
         var timeDimension = cf.dimension( d => d.dt);
