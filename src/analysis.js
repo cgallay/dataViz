@@ -3,6 +3,8 @@ const width = window.innerWidth;
 const height = window.innerHeight;
 
 var active = d3.select(null);
+const selectionColor = "yellow";
+var oldColor; // remember to color of the country to reset it when unselected
 
 // D3 Projection
 const projection = d3.geoEquirectangular()
@@ -37,13 +39,14 @@ const svg = d3.select("body")
     .on("click", stopped, true);
 
 /*
-svg.append("rect")
+var div = d3.select.append("rect")
     .attr("class", "background")
     .attr("width", width)
     .attr("height", height)
+    .attr("opacity ")
     .on("click", reset);
-*/
 
+*/
 
 svg.call(zoom);
 
@@ -82,11 +85,14 @@ function renderCountryColor(countries, color) {
     .append("path")
     .attr("class", (d) => "countries")
     .attr("d", path)
+    //.transition().duration(100)
     .style("fill", (d) => {
             const temperature = d.properties.temperature;
             return temperature ? color(temperature) : "white";//color(temperature);
             })
-    .on("click", clicked);
+    .on("click", clicked)
+    .append("svg:title")
+    .text(d => d.properties.name);
 }
 
 function updateCountryColor(countries, color) {
@@ -94,10 +100,14 @@ function updateCountryColor(countries, color) {
     g.selectAll(".countries")
     .data(countries.features)
     .attr("id", (d) => d.id)
+    .transition().duration(500)
     .style("fill", (d) => {
-            const temperature = d.properties.temperature;
-            //console.log("hello" + temperature + "for " + d.id);
-            return temperature ? color(temperature) : "white";//color(temperature);
+            const temperature = d.properties.temperature; 
+            //color the selected country in a different manner
+            if(active.node() && active.node().id === d.id) {
+                return "green";
+            }
+            return temperature ? color(temperature) : "white";
         });
 }
 
@@ -106,6 +116,9 @@ topojson_path = "topojson/world/countries.json";
 geojson_path = "geojson/world-countries.json";
 d3.csv("data/output.csv", function(data) {
 	d3.json(geojson_path, function(world) {
+        //Hide loader
+        d3.select("#spinner").remove();
+
         //const countries = topojson.feature(world, world.objects.units);
         const countries = world
         cf = crossfilter(data)
@@ -149,9 +162,12 @@ d3.csv("data/output.csv", function(data) {
 
 function clicked(d) {
     if (active.node() === this) return reset();
+    active.style("fill", oldColor);
     active.classed("active", false);
     active = d3.select(this).classed("active", true);
-  
+    oldColor = active.style("fill");
+    active.style("fill", "green")
+
     var bounds = path.bounds(d),
         dx = bounds[1][0] - bounds[0][0],
         dy = bounds[1][1] - bounds[0][1],
@@ -164,9 +180,11 @@ function clicked(d) {
         .duration(750)
         // .call(zoom.translate(translate).scale(scale).event); // not in d3 v4
         .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) ); // updated for d3 v4
+
 }
   
 function reset() {
+    active.style("fill", oldColor);
     active.classed("active", false);
     active = d3.select(null);
 
