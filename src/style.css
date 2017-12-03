@@ -1,12 +1,19 @@
-html body #mapContainer {
+#mapContainer {
     margin: 0;
     padding: 0;
-    width: 100%;
+    width: 70%;
     height: 100%;
+    float: left;
 }
 
-body {
-    background-color: rgb(255, 255, 255);
+#panel {
+    margin: 0;
+    padding: 0;
+    width: 30%;
+    height: 100%;
+    float: right;
+    
+    background-color: purple;
 }
 
 

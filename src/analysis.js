@@ -3,7 +3,7 @@ const width = window.innerWidth;
 const height = window.innerHeight;
 
 var active = d3.select(null);
-const selectionColor = "yellow";
+const selectionColor = "green";
 var oldColor; // remember to color of the country to reset it when unselected
 
 // D3 Projection
@@ -31,12 +31,13 @@ var color = d3.scaleLinear()
     //.range(['lightblue', 'orange', 'lightgreen', 'pink']);
 	//.interpolate(d3.interpolateHcl);
 
-const svg = d3.select("body")
+const svg = d3.select("#mapContainer")
     .append("svg")
     .attr("id", "map")
     .attr("viewBox", "0 0 " + width + " " + height )
     .attr("preserveAspectRatio", "xMidYMid meet")
     .on("click", stopped, true);
+
 
 /*
 var div = d3.select.append("rect")
@@ -113,7 +114,7 @@ function updateCountryColor(countries, color) {
 
 //map file
 geojson_path = "geojson/world-countries.json";
-d3.csv("data/temp_country.csv", function(data) {
+d3.csv("data/temp_country_group.csv", function(data) {
 	d3.json(geojson_path, function(world) {
         //Hide loader
         d3.select("#spinner").remove();
@@ -123,7 +124,7 @@ d3.csv("data/temp_country.csv", function(data) {
         var timeDimension = cf.dimension( d => d.dt);
         var countryDim = cf.dimension (d => d["ISO Code"]);
         var temperatureDim = cf.dimension( d => d.AverageTemperature);
-        timeDimension.filter(d => d=='1849-01-01');
+        timeDimension.filter(d => d=='1900');
 
         grp_country = countryDim.group().reduce((p,v) => {p.sum = p.sum + parseFloat(v.AverageTemperature); p.count= p.count + 1; return p;},
             (p,v) => {p.sum = p.sum - parseFloat(v.AverageTemperature); p.count= p.count - 1; return p;},
@@ -140,11 +141,11 @@ d3.csv("data/temp_country.csv", function(data) {
 
 		//color the map according to the density of each canton
         renderCountryColor(countries, color);
-        var year = 1850; 
+        var year = 1900; 
         updateCountryColor(countries, color);
         setInterval(function(){
             year = year + 1;
-            timeDimension.filter(d => d === year+'-01-01')
+            timeDimension.filter(d => d == year)
             updateTemperature(countries, grp_country.top(Infinity))
             updateCountryColor(countries, color);
             //console.log(countries)

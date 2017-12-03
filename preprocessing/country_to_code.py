@@ -14,7 +14,7 @@ def main():
     (options, args) = parser.parse_args()
 
     if options.input and options.column:
-        df = pd.read_csv("ISO_3166-1_alpha-3.csv")
+        df = pd.read_csv("preprocessing/ISO_3166-1_alpha-3.csv")
         df['Country or Area'] = df['Country or Area'].apply(lambda s: s.lower())
         unique_set = set(df['Country or Area'].unique())
         df = df.set_index('Country or Area')
@@ -25,7 +25,15 @@ def main():
         print("diff")  
         print(unique_set2 - unique_set)
         df2['ISO Code'] = df2[options.column].replace(df.to_dict())
-        df2.to_csv(options.output)
+        df2 = df2.drop(["AverageTemperatureUncertainty", "Country"], axis=1).dropna()
+        df2.to_csv(options.output, index=False)
+        #df2.to_json(options.output + ".json")
+        #Group the data per year (instead of month)
+        df2["dt"] = df2["dt"].str[:4]   # Keep only the year info
+        df2 = df2.groupby(("ISO Code", "dt")).mean()
+        df2 = df2.reset_index()
+        print(df2.head())
+        df2.to_csv(options.output , index=False)
     else:
         parser.print_help()
         sys.exit()
