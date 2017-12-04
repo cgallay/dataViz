@@ -26,10 +26,6 @@ const path = d3.geoPath()
 var color = d3.scaleLinear()
         .range(["#2c7bb6", "#ffff8c", "#d7191c"])
         .interpolate(d3.interpolateHcl);
-    //.range(["hsl(62,100%,90%)", "hsl(228,30%,20%)"])
-    //.range(["rgb(0,255,255)", "rgb(255,255,255)"])
-    //.range(['lightblue', 'orange', 'lightgreen', 'pink']);
-	//.interpolate(d3.interpolateHcl);
 
 const svg = d3.select("#mapContainer")
     .append("svg")
@@ -37,17 +33,6 @@ const svg = d3.select("#mapContainer")
     .attr("viewBox", "0 0 " + width + " " + height )
     .attr("preserveAspectRatio", "xMidYMid meet")
     .on("click", stopped, true);
-
-
-/*
-var div = d3.select.append("rect")
-    .attr("class", "background")
-    .attr("width", width)
-    .attr("height", height)
-    .attr("opacity ")
-    .on("click", reset);
-
-*/
 
 svg.call(zoom);
 
