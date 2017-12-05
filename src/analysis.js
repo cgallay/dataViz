@@ -150,7 +150,7 @@ function clicked(d) {
     active.classed("active", false);
     active = d3.select(this).classed("active", true);
     oldColor = active.style("fill");
-    active.style("fill", "green")
+    active.style("fill", "green");
 
     var bounds = path.bounds(d),
         dx = bounds[1][0] - bounds[0][0],

@@ -5,6 +5,8 @@ export class MapManager {
         this.height = window.innerHeight;
         this.countries = geojson;
 
+        this.selection = null;
+
         // D3 Projection
         this.projection = d3.geoEquirectangular()
             .scale(this.width / 2 / Math.PI)
@@ -23,13 +25,46 @@ export class MapManager {
             .range(["#2c7bb6", "#ffff8c", "#d7191c"])
             .interpolate(d3.interpolateHcl);
         
+        this.clicked = this.getClickedFn(this)
+        
+    }
+
+    getClickedFn(mapRef){
+        return function(d) {
+            console.log("User clicked on Country: " + d.id);
+            mapRef.selection = d.id;
+            mapRef.updateColor();
+
+            if(mapRef.selectListener) {
+                mapRef.selectListener(mapRef.selection);
+            }
+        };
+    }
+
+    // clicked2(){
+
+    //     console.log("User clicked on Country: " + d.id);
+    //     this.selection = d.id;
+    //     this.updateColor();
+    //     if(this.selectListener) {
+    //         this.selectListener(this.selection);
+    //     }
+
+    // }
+
+    /**
+     * Function to be called when a country is selected
+     * @param {function} listener 
+     */
+    addSelectListener(listener){
+        this.selectListener = listener;
     }
 
     setColorDomain(domain) {
         //TODO test that domain match (sanity check)
         this.colorScale = this.colorScale.domain(domain);
     }
-    
+
     /**
      * Attach the map to a div
      * @param {string} div id of the div
@@ -45,10 +80,6 @@ export class MapManager {
         this.g = this.svg.append("g");
     }
     
-    clicked(d) {
-        console.log("User clicked on Country: " + d)    
-    }
-
     updateColor() {
         this.g.selectAll(".country")
         .data(this.countries.features)
@@ -57,12 +88,14 @@ export class MapManager {
         .style("fill", (d) => {
                 const temperature = d.properties.temperature; 
                 //color the selected country in a different manner
-                // if(active.node() && active.node().id === d.id) {
-                //     return "green";
-                // }
+                if(this.selection === d.id) {
+                    return "green";
+                }
                 return temperature ? this.colorScale(temperature) : "white";
             });
     }
+
+    
 
     /**
      * Draw the map into the div
