@@ -34,6 +34,7 @@ def main():
         df2 = df2.reset_index()
         print(df2.head())
         df2.to_csv(options.output , index=False)
+        #TODO: Check uniqueness of year per country
     else:
         parser.print_help()
         sys.exit()
