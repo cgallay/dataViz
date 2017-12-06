@@ -2,11 +2,13 @@
 import * as d3 from 'd3';
 import * as crossfilter from 'crossfilter';
 import { MapManager } from './map.js';
+import { TimeSlider } from './timeHandler.js';
 import { test } from './helpers.js';
 import { timeDay } from 'd3';
 
 const loaderStyle = require('./loader.css');
 const css = require('./style.css');
+const nouislidercss = require('./nouislider.css');
 
 const geojson_path = "geojson/world-countries.json";
 const dataset_path = "data/temp_country_group.csv";
@@ -16,7 +18,7 @@ const dataset_path = "data/temp_country_group.csv";
  * Move inside helpers
  */
 function selectYear(year) {
-    
+
 }
 
 //Loading dataset
@@ -49,6 +51,16 @@ d3.csv(dataset_path, function(data) {
 
         myMap.updateTemperature(d);
         myMap.updateColor();
+
+        var MyTimeSlider= new TimeSlider();
+        var temperature_bis = [12, 19, 3, 5, 2, 3];
+        var co2_bis = [10, 5, 3, 3, 8, 9];
+        let months = ['January', 'February', 'March', 'April', 'May', 'June'];
+        let timeSlider = document.getElementById('timeSlider');
+        MyTimeSlider.createSlider(months,timeSlider);
+        MyTimeSlider.changePipLabel('timeSlider', months);
+        MyTimeSlider.sliderListener(months, timeSlider,temperature_bis,co2_bis);
+
 
         //Hide loader
         d3.select("#spinner").remove();

@@ -12,14 +12,30 @@
     width: 30%;
     height: 100%;
     float: right;
-    background-color: purple;
+    background-color: white;
+}
+
+#main{
+  width: 100%;
+  height:100%;
 }
 
 #timeHandler {
-    margin: 0;
-    padding: 0;
-    width: 80%;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
     height: 30%;
-    float: bottom;
-    background-color: purple ;
+
+}
+
+#timeSlider{
+  float: right;
+  width: 80%;
+  height: 20%;
+}
+
+#timePlayer {
+  float: left;
+  width: 20%;
+  height: 100%;
 }
