@@ -5,6 +5,7 @@ import { MapManager } from './map.js';
 import { TimeSlider } from './timeHandler.js';
 import { test } from './helpers.js';
 import { timeDay } from 'd3';
+import { PanelChart } from './panel.js';
 
 const loaderStyle = require('./loader.css');
 const css = require('./style.css');
@@ -53,13 +54,42 @@ d3.csv(dataset_path, function(data) {
         myMap.updateColor();
 
         var MyTimeSlider= new TimeSlider();
-        var temperature_bis = [12, 19, 3, 5, 2, 3];
-        var co2_bis = [10, 5, 3, 3, 8, 9];
-        let months = ['January', 'February', 'March', 'April', 'May', 'June'];
+        console.log("years:");
+        var years = [];
+        for(var i = 0; i < data.length; i++){
+            years[i] = data[i].dt;
+        }
+        var years = Array.from(new Set(years)).sort()
+        console.log(years);
+        console.log("last");
+        console.log(years[years.length-1]);
+
+
+        function randomArray(length, max) {
+            return Array.apply(null, Array(length)).map(function() {
+                return Math.round(Math.random() * max);
+            });
+        }
+        var temperature_bis = randomArray(years.length, 40);
+        console.log("temp random:");
+        console.log(temperature_bis);
+        var co2_bis = randomArray(years.length, 100);
+        console.log("co2 random");
+        console.log(co2_bis);
+        /*let months = ['January', 'February', 'March', 'April', 'May', 'June'];*/
+
         let timeSlider = document.getElementById('timeSlider');
-        MyTimeSlider.createSlider(months,timeSlider);
-        MyTimeSlider.changePipLabel('timeSlider', months);
-        MyTimeSlider.sliderListener(months, timeSlider,temperature_bis,co2_bis);
+        MyTimeSlider.createSlider(years,timeSlider);
+        MyTimeSlider.changePipLabel('timeSlider', years);
+        var idLineChart_temperature = "temperatureChart";
+
+        var MyPanelChart= new PanelChart();
+        var idLineChart_temperature = "temperatureChart";
+        MyPanelChart.createCanvas(idLineChart_temperature);
+        var idLineChart_co2 = "CO2Chart";
+        MyPanelChart.createCanvas(idLineChart_co2);
+
+        MyTimeSlider.sliderListener(years, timeSlider,MyPanelChart,temperature_bis,co2_bis);
 
 
         //Hide loader

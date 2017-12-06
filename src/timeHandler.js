@@ -1,5 +1,6 @@
 import * as noUiSlider from 'noUiSlider';
 import * as sprintf from 'sprintf-js';
+import * as d3 from 'd3';
 import { PanelChart } from './panel.js';
 
 
@@ -20,7 +21,7 @@ export class TimeSlider {
     noUiSlider.create(timeSlider, {
       start: [0, Math.round(years.length / 2), years.length - 1],
       connect: [false, true, true, false],
-      step: 1,
+      step: 10,
       range: {
         'min': 0,
         'max': years.length - 1,
@@ -34,19 +35,48 @@ export class TimeSlider {
       animate: true,
       animationDuration: 400
     });
+
+    d3.selectAll('.noUi-handle').filter(function(d, i) {
+        if (i == 1) {
+          return i;
+        }
+      })
+      .style("width", "2px")
+      .style("height","70px")
+      .classed(" timeSelector ", true)
+      .style("position","relative").style("left","-1px").style("top","-30px")
+      .style("content","none")
+      .style("border-color","#F00");
+
+    d3.selectAll('.noUi-handle-upper').classed(" noUi-extended ", true);
+    d3.selectAll('.noUi-handle-lower').classed(" noUi-extended ", true);
+
+    /*default_width=34px;
+    default_height=28px;
+    -17px -14px*/
+
+    d3.selectAll('.noUi-extended').style("height", "24px").style("width", "16px").style("position","relative").style("top","-5px").style("left","-8px");
     }
+
+
 
     //function to change pips labels
     changePipLabel(idSlider, years) {
-     for (var i = 0; i < years.length; i++) {
+      var labels=[];
+      for ( var i=0; i< years.length; i+=10 )
+        {
+          labels.push(years[i]);
+        };
+        console.log(labels);
+     for (var i = 0; i < labels.length; i++) {
        var change_label = sprintf.vsprintf('#%s > div.noUi-pips.noUi-pips-horizontal > div:nth-child(%d)', [idSlider, 2 * i + 2]);
-       $(change_label).text(years[i]);
+       $(change_label).text(labels[i]);
     }
     }
 
     // on update
     //add and update graphs when slider in updated
-    sliderListener(years, timeSlider, temperature, co2){
+    sliderListener(years, timeSlider,panelChart, temperature, co2){
 
     timeSlider.noUiSlider.on('update', function(values, handle) {
 
@@ -58,16 +88,13 @@ export class TimeSlider {
       var color_temperature = 'rgba(255,99,132,1)';
       var label_temperature = ' °C';
       var idLineChart_temperature = "temperatureChart";
-      var MyPanelChart= new PanelChart();
-      MyPanelChart.createCanvas(idLineChart_temperature);
-      MyPanelChart.makeLineChart(temperature, years, years_id_selected, color_temperature, label_temperature, idLineChart_temperature, 'Temperature [°C]');
+      panelChart.makeLineChart(temperature, years, years_id_selected, color_temperature, label_temperature, idLineChart_temperature, 'Temperature [°C]');
 
       // function create graph for temperatureChart
       var color_co2 = 'rgba(99,255,132,1)';
       var label_co2 = ' kt';
       var idLineChart_co2 = "CO2Chart";
-      MyPanelChart.createCanvas(idLineChart_co2);
-      MyPanelChart.makeLineChart(co2, years, years_id_selected, color_co2, label_co2, idLineChart_co2, 'CO2 Emmissions [kt]')
+      panelChart.makeLineChart(co2, years, years_id_selected, color_co2, label_co2, idLineChart_co2, 'CO2 Emmissions [kt]')
 
     });
   }

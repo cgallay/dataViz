@@ -1,7 +1,38 @@
+
+html{
+  width:100%;
+  height:100%;
+}
+
+body{
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+#main{
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#mapAndPanel{
+  margin: 0;
+  padding: 1%;
+  width:99%;
+  height: 79%;
+}
+
+#timeHandler {
+    margin: 0px;
+    padding: 1%;
+    width: 99%;
+    height: 19%;
+}
+
 #mapContainer {
     margin: 0;
     padding: 0;
-    width: 70%;
+    width: 69%;
     height: 100%;
     float: left;
 }
@@ -9,29 +40,17 @@
 #panel {
     margin: 0;
     padding: 0;
-    width: 30%;
+    width: 29%;
     height: 100%;
     float: right;
-    background-color: white;
-}
-
-#main{
-  width: 100%;
-  height:100%;
-}
-
-#timeHandler {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 30%;
-
+    /*background-color: white;*/
 }
 
 #timeSlider{
   float: right;
   width: 80%;
-  height: 20%;
+  height: 15px;
+
 }
 
 #timePlayer {
@@ -39,3 +58,26 @@
   width: 20%;
   height: 100%;
 }
+
+.noUi-handle {
+  &::before{ content: none}
+}
+/*.noUi-horizontal .noUi-extended {
+	padding-right: 32px;
+}
+.noUi-horizontal .noUi-extended .noUi-handle {
+	left: -1px;
+}
+.noUi-horizontal .noUi-extended .noUi-origin  {
+	right: -32px;
+}
+
+.noUi-vertical .noUi-extended {
+	padding-bottom: 32px;
+}
+.noUi-vertical .noUi-extended .noUi-handle {
+	top: -1px;
+}
+.noUi-vertical .noUi-extended .noUi-origin  {
+	bottom: -32px;
+}*/

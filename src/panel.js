@@ -1,17 +1,27 @@
 import * as chart from 'chart.js';
 import * as d3 from 'd3';
 //Panel
+
 export class PanelChart {
 
       constructor(){
 
       }
-
     //create or select canvas
     createCanvas(idLineChart){
       //canvas for temperature chart
       let myPanel = d3.select("#panel");
 
+      if(myPanel.select(idLineChart).empty()){
+        //if no canvas with wanted id , create it
+        myPanel.append("canvas")
+                  .attr("id", idLineChart);
+      }else{
+        //if canvas with wanted id, select it
+        myPanel.select(idLineChart);
+      }
+
+      /*
       if (myPanel.select("canvas").empty()) {
         //if no canvas yet, create canvas with the id
         myPanel.append("canvas")
@@ -28,7 +38,7 @@ export class PanelChart {
           myPanel.select("canvas")
                       .attr("id", idLineChart);
         }
-      }
+      }*/
     }
     //create chart
      makeLineChart(dataset, years, years_id_selected, color, label, idLineChart, title) {

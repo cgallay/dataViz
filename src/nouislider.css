@@ -114,6 +114,7 @@
 }
 /* Handle stripes;
  */
+ /*
 .noUi-handle:before,
 .noUi-handle:after {
   content: "";
@@ -137,7 +138,7 @@
 }
 .noUi-vertical .noUi-handle:after {
   top: 17px;
-}
+}*/
 /* Disabled state;
  */
 [disabled] .noUi-connect {
