@@ -1,17 +1,22 @@
 //@flow
-
 import * as d3 from 'd3';
 import * as crossfilter from 'crossfilter';
 import { MapManager } from './map.js';
-import {test, updateTemperature} from './helpers.js';
+import { test } from './helpers.js';
 import { timeDay } from 'd3';
 
 const loaderStyle = require('./loader.css');
 const css = require('./style.css');
+
 const geojson_path = "geojson/world-countries.json";
 const dataset_path = "data/temp_country_group.csv";
-function selectYear(year) {
 
+
+/**
+ * Move inside helpers
+ */
+function selectYear(year) {
+    
 }
 
 //Loading dataset
@@ -21,8 +26,9 @@ d3.csv(dataset_path, function(data) {
         myMap.addTo("#mapContainer");
         myMap.drawMap();
         myMap.addSelectListener(function(sel){
-            alert("coutry " + sel + " is selected");
+            alert("country " + sel + " is selected");
         });
+
         // define domain for the colormap
         var temperature = data.map((d) => d.AverageTemperature).sort((a, b) => a - b);
         let domain = [d3.quantile(temperature, 0), d3.quantile(temperature, .50), d3.quantile(temperature, 1)];
@@ -36,11 +42,15 @@ d3.csv(dataset_path, function(data) {
         timeDimension.filter(d => d=='1970');
 
         let d = timeDimension.top(Infinity);
+        console.log("d:");
         console.log(d);
-        myMap.updateTemperature(data);
-        myMap.updateColor();     
+        console.log("data:");
+        console.log(data);
 
+        myMap.updateTemperature(d);
+        myMap.updateColor();
+
+        //Hide loader
+        d3.select("#spinner").remove();
     });
-    //Hide loader
-    d3.select("#spinner").remove();
 });

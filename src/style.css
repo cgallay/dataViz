@@ -14,15 +14,3 @@
     float: right;
     background-color: purple;
 }
-
-
-.active {
-    fill: green; /*!important;*/
-}
-
-#map {
-    margin: 0;
-    padding: 0;
-    stroke: black;
-    stroke-width: 0.05em;
-}

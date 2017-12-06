@@ -29,6 +29,11 @@ export class MapManager {
         
     }
 
+    /**
+     * return a function that has a reference to the map instance
+     * (usefull for onclick listener)
+     * @param {*} mapRef 
+     */
     getClickedFn(mapRef){
         return function(d) {
             console.log("User clicked on Country: " + d.id);
@@ -37,6 +42,8 @@ export class MapManager {
 
             if(mapRef.selectListener) {
                 mapRef.selectListener(mapRef.selection);
+            } else {
+                console.log("You might wanna attach a listener to this map");
             }
         };
     }
