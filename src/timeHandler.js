@@ -51,7 +51,7 @@ export class TimeSlider {
         .style("width", "2px")
         .style("height","70px")
         .classed(" timeSelector ", true)
-        .style("position","relative").style("left","-1px").style("top","-30px")
+        .style("position","relative").style("left","-1px").style("top","-35px")
         .style("content","none")
         .style("border-color","#F00");
 

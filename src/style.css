@@ -48,16 +48,16 @@ body{
 
 #timeSliderContainer{
   float: right;
-  width: 86%;
+  width: 95%;
   height: 99%;
   padding-top: 1%;
-  padding-left: 2%;
-  padding-right: 2%;
+  /*padding-left: 2%;
+  padding-right: 2%;*/
   position: relative;
 }
 
 #timeSlider{
-  width: 90%;
+  width: 95%;
   height: 15px;
   position: absolute;
   left: 50%;
@@ -68,7 +68,7 @@ body{
 
 #timePlayer {
   float: left;
-  width: 10%;
+  width: 5%;
   height: 100%;
   position: relative;
 
