@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import * as crossfilter from 'crossfilter';
 import { MapManager } from './map.js';
 import { test } from './helpers.js';
-import { timeDay } from 'd3';
+
 
 const loaderStyle = require('./loader.css');
 const css = require('./style.css');

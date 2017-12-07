@@ -16,11 +16,6 @@ export class MapManager {
             .projection(this.projection);
         
         //colormap for population density
-        this.color = d3.scaleLinear()
-            .range(["#2c7bb6", "#ffff8c", "#d7191c"])
-            .interpolate(d3.interpolateHcl);
-        
-        //colormap for population density
         this.colorScale = d3.scaleLinear()
             .range(["#2c7bb6", "#ffff8c", "#d7191c"])
             .interpolate(d3.interpolateHcl);
