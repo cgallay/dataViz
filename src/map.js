@@ -16,48 +16,30 @@ export class MapManager {
             .projection(this.projection);
         
         //colormap for population density
-        this.color = d3.scaleLinear()
-            .range(["#2c7bb6", "#ffff8c", "#d7191c"])
-            .interpolate(d3.interpolateHcl);
-        
-        //colormap for population density
         this.colorScale = d3.scaleLinear()
             .range(["#2c7bb6", "#ffff8c", "#d7191c"])
             .interpolate(d3.interpolateHcl);
         
-        this.clicked = this.getClickedFn(this)
+        //Adding Zoom to the map
+        this.zoom = d3.zoom()
+            .scaleExtent([1, 8])
+            .on("zoom", this.zoomed.bind(this));
         
     }
 
-    /**
-     * return a function that has a reference to the map instance
-     * (usefull for onclick listener)
-     * @param {*} mapRef 
-     */
-    getClickedFn(mapRef){
-        return function(d) {
-            console.log("User clicked on Country: " + d.id);
-            mapRef.selection = d.id;
-            mapRef.updateColor();
-
-            if(mapRef.selectListener) {
-                mapRef.selectListener(mapRef.selection);
-            } else {
-                console.log("You might wanna attach a listener to this map");
-            }
-        };
+    zoomed() {
+        this.g.style("stroke-width", 1.5 / d3.event.transform.k + "px");
+        this.g.attr("transform", d3.event.transform);
     }
 
-    // clicked2(){
-
-    //     console.log("User clicked on Country: " + d.id);
-    //     this.selection = d.id;
-    //     this.updateColor();
-    //     if(this.selectListener) {
-    //         this.selectListener(this.selection);
-    //     }
-
-    // }
+    clicked(d){
+        console.log("User clicked on Country: " + d.id);
+        this.selection = d.id;
+        this.updateColor();
+        if(this.selectListener) {
+            this.selectListener(this.selection);
+        }
+    }
 
     /**
      * Function to be called when a country is selected
@@ -85,6 +67,7 @@ export class MapManager {
             .attr("preserveAspectRatio", "xMidYMid meet");
             //.on("click", stopped, true);
         this.g = this.svg.append("g");
+        this.svg.call(this.zoom);
     }
     
     updateColor() {
@@ -114,7 +97,7 @@ export class MapManager {
             .append("path")
             .attr("class", "country")
             .attr("d", this.path)
-            .on("click", this.clicked)
+            .on("click", this.clicked.bind(this))
             .append("svg:title")
             .text(d => d.properties.name);
     }

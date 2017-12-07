@@ -4,14 +4,9 @@ import * as crossfilter from 'crossfilter';
 import { MapManager } from './map.js';
 import { TimeSlider } from './timeHandler.js';
 import { test } from './helpers.js';
-import { timeDay } from 'd3';
 import { PanelChart } from './panel.js';
 
 var $ = require("jquery");
-/*const { document } = (new JSDOM(``)).window;
-
-const jsdom = require("jsdom");
-const { JSDOM } = jsdom;*/
 
 const loaderStyle = require('./loader.css');
 const css = require('./style.css');
