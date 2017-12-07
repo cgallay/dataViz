@@ -5,11 +5,22 @@ import * as d3 from 'd3';
 export class PanelChart {
 
       constructor(){
-
+        this.dataCharts=[];
+        this.idCharts=[];
+        this.titleCharts=[];
+        this.colorCharts=[];
+        this.labelCharts=[];
       }
+
     //create or select canvas
-    createCanvas(idLineChart){
-      //canvas for temperature chart
+    createCanvas(data,idLineChart,title,color,label){
+      //save id of the chart
+      this.dataCharts.push(data);
+      this.idCharts.push(idLineChart);
+      this.titleCharts.push(title);
+      this.colorCharts.push(color);
+      this.labelCharts.push(label);
+
       let myPanel = d3.select("#panel");
 
       if(myPanel.select(idLineChart).empty()){
@@ -22,6 +33,7 @@ export class PanelChart {
       }
     }
     //create chart
+  
      makeLineChart(dataset, years, years_id_selected, color, label, idLineChart, title) {
       var data = {
         labels: years.slice(years_id_selected[0], years_id_selected[2]),

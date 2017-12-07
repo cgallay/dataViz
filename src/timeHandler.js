@@ -11,17 +11,34 @@ var $ = require("jquery");
 export class TimeSlider {
 
 
-    constructor(){
+    constructor(years){
+      this.years=years;
+      this.idSlider='timeSlider';
+      this.timeSlider = document.getElementById(this.idSlider);
+      this.createSlider(this.years,this.timeSlider,this.idSlider)
 
     }
     //function to add string label to the pips
 
     //function to create slider
-    createSlider(years,timeSlider){
-      function filter10( value, type ){
-        	return value % 10 ? 2 : 1;
-        }
+    createSlider(years,timeSlider,idTimeSlider){
 
+      /*Play Pause button animation*/
+      $('.control').on('mousedown', function() {
+          $(this).toggleClass('pause play');
+        });
+
+        $(document).on('keyup', function(e) {
+          if (e.which == 32) {
+            $('.control').toggleClass('pause play');
+          }
+        });
+      /*End Play Pause button animation*/
+
+      //
+      function filter10( value, type ){
+          return value % 10 ? 2 : 1;
+        }
 
       noUiSlider.create(timeSlider, {
         start: [0, Math.round(years.length / 2), years.length - 1],
@@ -63,71 +80,39 @@ export class TimeSlider {
       -17px -14px*/
 
       d3.selectAll('.noUi-extended').style("height", "24px").style("width", "16px").style("position","relative").style("top","-5px").style("left","-8px");
-    }
 
+      //function to change pips labels
+      function changePipLabel(idSlider, years) {
+       var labels=[];
+       for ( var i=0; i< years.length; i+=5 )
+         {
+           labels.push(years[i]);
+         };
+      labels.push(years[years.length-1]);
 
-
-    //function to change pips labels
-    changePipLabel(idSlider, years) {
-    /*
-     //first and last labels
-      var change_first_label = sprintf.vsprintf('#%s > div.noUi-pips.noUi-pips-horizontal > div:nth-child(%d)', [idSlider, 2]);
-      $(change_first_label).text(years[0]);
-      /*var change_last_label = sprintf.vsprintf('#%s > div.noUi-pips.noUi-pips-horizontal > div:nth-child(%d)', [idSlider, 2*(years.length-1) + 2]);
-      console.log("last year:")
-      console.log(years[years.length -1])
-      $(change_last_label).text(years[years.length -1]);*/
-      /*
-      var labels=[];
-      for ( var i=1; i< years.length -1 ; i+=10 )
-        {
-          labels.push(years[i]);
-        };
-        console.log(labels)
-        console.log(labels);
-     for (var i = 0; i < labels.length; i++) {
-       var change_label = sprintf.vsprintf('#%s > div.noUi-pips.noUi-pips-horizontal > div:nth-child(%d)', [idSlider, 2 * i + 4]);
-       $(change_label).text(labels[i]);
+      for (var i = 0; i < labels.length; i++) {
+        var change_label = sprintf.vsprintf('#%s > div.noUi-pips.noUi-pips-horizontal > div:nth-child(%d)', [idSlider, 2 * i + 2]);
+        $(change_label).text(labels[i]);
      }
-     */
+      }
 
-     var labels=[];
-     for ( var i=0; i< years.length; i+=5 )
-       {
-         labels.push(years[i]);
-       };
-    labels.push(years[years.length-1]);
-    console.log("labels")
-    console.log(labels);
-    for (var i = 0; i < labels.length; i++) {
-      var change_label = sprintf.vsprintf('#%s > div.noUi-pips.noUi-pips-horizontal > div:nth-child(%d)', [idSlider, 2 * i + 2]);
-      console.log($(change_label))
-      $(change_label).text(labels[i]);
-   }
+      changePipLabel(idTimeSlider, years);
     }
 
     // on update
     //add and update graphs when slider in updated
-    sliderListener(years, timeSlider,panelChart, temperature, co2){
+    sliderListener( panelChart){
+      var years = this.years; //to recover years later on
 
-    timeSlider.noUiSlider.on('update', function(values, handle) {
-
-      var years_id_selected = timeSlider.noUiSlider.get();;
+    this.timeSlider.noUiSlider.on('update', function(values, handle) {
+      //here "this" == "this.timeSlider.noUiSlider" not timeslider
+      var years_id_selected = this.get() /*this.timeSlider.noUiSlider.get()*/;
       years_id_selected[1] = Number(years_id_selected[1]);
       years_id_selected[2] = Number(years_id_selected[2]) + 1; // recover id of months selected
-
       //create graph for temperatureChart
-      var color_temperature = 'rgba(255,99,132,1)';
-      var label_temperature = ' °C';
-      var idLineChart_temperature = "temperatureChart";
-      panelChart.makeLineChart(temperature, years, years_id_selected, color_temperature, label_temperature, idLineChart_temperature, 'Temperature [°C]');
-
-      // function create graph for temperatureChart
-      var color_co2 = 'rgba(99,255,132,1)';
-      var label_co2 = ' kt';
-      var idLineChart_co2 = "CO2Chart";
-      panelChart.makeLineChart(co2, years, years_id_selected, color_co2, label_co2, idLineChart_co2, 'CO2 Emmissions [kt]')
-
+      for (var i =0 ; i < panelChart.idCharts.length; i++){
+        panelChart.makeLineChart(panelChart.dataCharts[i], years, years_id_selected, panelChart.colorCharts[i], panelChart.labelCharts[i], panelChart.idCharts[i], panelChart.titleCharts[i]);
+      }
     });
   }
 
