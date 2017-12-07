@@ -100,7 +100,7 @@ body{
   display: inline-block;
   vertical-align: middle;
   transition: border 0.4s, width 0.4s, height 0.4s, margin 0.4s;
-  transition-tiomig-function: cubic-bezier(1, 0, 0, 1);
+  transition-timing-function: cubic-bezier(1, 0, 0, 1);
 }
 .control:before {
   content: "";
