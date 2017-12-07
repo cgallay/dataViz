@@ -2,6 +2,7 @@
 import * as d3 from 'd3';
 import * as crossfilter from 'crossfilter';
 import { MapManager } from './map.js';
+import { DataManager } from './DataManager.js';
 import { TimeSlider } from './timeHandler.js';
 import { test } from './helpers.js';
 import { PanelChart } from './panel.js';
@@ -26,33 +27,19 @@ function selectYear(year) {
 //Loading dataset
 d3.csv(dataset_path, function(data) {
     d3.json(geojson_path, function(geojson) {
+        var mapData = new DataManager(data);
+        var panelData = new DataManager(data);
         var myMap = new MapManager(geojson);
         myMap.addTo("#mapContainer");
         myMap.drawMap();
-        myMap.addSelectListener(function(sel){
-            alert("country " + sel + " is selected");
-        });
+        
+        myMap.setColorDomain(mapData.getTempDomain());
 
-        // define domain for the colormap
-        var temperature = data.map((d) => d.AverageTemperature).sort((a, b) => a - b);
-        let domain = [d3.quantile(temperature, 0), d3.quantile(temperature, .50), d3.quantile(temperature, 1)];
-        myMap.setColorDomain(domain);
-
-        //Manage data
-        let cf = crossfilter(data);
-        var timeDimension = cf.dimension( d => d.dt);
-        var countryDim = cf.dimension (d => d["ISO Code"]);
-        var temperatureDim = cf.dimension( d => d.AverageTemperature);
-        timeDimension.filter(d => d=='1970');
-
-        let d = timeDimension.top(Infinity);
-        console.log("d:");
-        console.log(d);
-        console.log("data:");
-        console.log(data);
-
-        myMap.updateTemperature(d);
+        //TODO: Merge these two
+        mapData.selectYear(1980);
+        myMap.updateTemperature(mapData.getData());
         myMap.updateColor();
+
 
         var MyTimeSlider= new TimeSlider();
         console.log("years:");
@@ -104,7 +91,12 @@ d3.csv(dataset_path, function(data) {
             }
           });
         /*End Play Pause button animation*/
-
+        
+        myMap.addSelectListener(function(sel){
+            console.log(panelData.getTempForCountry(sel).slice(0, years.length));
+            var temperature_bis = panelData.getTempForCountry(sel); //.slice(0, years.length);
+            MyTimeSlider.sliderListener(years, timeSlider,MyPanelChart,temperature_bis,co2_bis);
+        });
 
         //Hide loader
         d3.select("#spinner").remove();
