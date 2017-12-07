@@ -53,6 +53,7 @@ export class PanelChart {
       };
 
       var option = {
+        animation:false,
         legend: {
           display: false
         },
