@@ -25,17 +25,7 @@ export class PanelChart {
      makeLineChart(dataset, years, years_id_selected, color, label, idLineChart, title) {
       var data = {
         labels: years.slice(years_id_selected[0], years_id_selected[2]),
-        datasets: [{
-            label: label,
-            data: dataset.slice(years_id_selected[0], years_id_selected[2]),
-            borderColor: color,
-            fill: false,
-            borderWidth: 1,
-            pointBackgroundColor: color,
-            pointBorderColor: color,
-            pointBorderWidth: 0,
-            pointRadius: 0
-          },
+        datasets: [
           {
 
             data: [{
@@ -44,12 +34,26 @@ export class PanelChart {
             }],
             pointBackgroundColor: 'rgba(255,0,0,1)',
             pointRadius: 4,
-            type: 'scatter',
+            type:'scatter'
+          },
+          {
+            label: label,
+            data: dataset.slice(years_id_selected[0], years_id_selected[2]),
+            borderColor: color,
+            fill: false,
+            borderWidth: 1,
+            pointBackgroundColor: color,
+            pointBorderColor: color,
+            pointBorderWidth: 0,
+            pointRadius: 0,
+            type: 'line'
           }
+
         ]
       };
 
       var option = {
+        animation : false,
         legend: {
           display: false
         },

@@ -19,37 +19,21 @@ export class TimeSlider {
     //function to create slider
     createSlider(years,timeSlider){
       function filter10( value, type ){
-        	return value % 20 ? 2 : 1;
+        	return value % 10 ? 2 : 1;
         }
-
-      /*noUiSlider.create(timeSlider, {
-        start: [0, Math.round(years.length / 2), years.length - 1],
-        connect: [false, true, true, false],
-        step: 10,
-        range: {
-          'min': 0,
-          'max': years.length - 1,
-        },
-        pips: {
-          mode: 'steps',
-          values: [...Array(years.length).keys()],
-          density: 25,
-          stepped: true
-        },
-        animate: true,
-        animationDuration: 400
-      });*/
 
 
       noUiSlider.create(timeSlider, {
         start: [0, Math.round(years.length / 2), years.length - 1],
         connect: [false, true, true, false],
-        step: 10,
+        step: 5,
         range: {
           'min': 0,
           'max': years.length - 1,
         },
         pips: {
+          /*mode:'values',
+          values:[...Array(years.length).keys()],*/
           mode: 'steps',
           filter: filter10,
           density: 25,
@@ -85,16 +69,41 @@ export class TimeSlider {
 
     //function to change pips labels
     changePipLabel(idSlider, years) {
+    /*
+     //first and last labels
+      var change_first_label = sprintf.vsprintf('#%s > div.noUi-pips.noUi-pips-horizontal > div:nth-child(%d)', [idSlider, 2]);
+      $(change_first_label).text(years[0]);
+      /*var change_last_label = sprintf.vsprintf('#%s > div.noUi-pips.noUi-pips-horizontal > div:nth-child(%d)', [idSlider, 2*(years.length-1) + 2]);
+      console.log("last year:")
+      console.log(years[years.length -1])
+      $(change_last_label).text(years[years.length -1]);*/
+      /*
       var labels=[];
-      for ( var i=0; i< years.length; i+=10 )
+      for ( var i=1; i< years.length -1 ; i+=10 )
         {
           labels.push(years[i]);
         };
+        console.log(labels)
         console.log(labels);
      for (var i = 0; i < labels.length; i++) {
-       var change_label = sprintf.vsprintf('#%s > div.noUi-pips.noUi-pips-horizontal > div:nth-child(%d)', [idSlider, 2 * i + 2]);
+       var change_label = sprintf.vsprintf('#%s > div.noUi-pips.noUi-pips-horizontal > div:nth-child(%d)', [idSlider, 2 * i + 4]);
        $(change_label).text(labels[i]);
-    }
+     }
+     */
+
+     var labels=[];
+     for ( var i=0; i< years.length; i+=5 )
+       {
+         labels.push(years[i]);
+       };
+    labels.push(years[years.length-1]);
+    console.log("labels")
+    console.log(labels);
+    for (var i = 0; i < labels.length; i++) {
+      var change_label = sprintf.vsprintf('#%s > div.noUi-pips.noUi-pips-horizontal > div:nth-child(%d)', [idSlider, 2 * i + 2]);
+      console.log($(change_label))
+      $(change_label).text(labels[i]);
+   }
     }
 
     // on update
