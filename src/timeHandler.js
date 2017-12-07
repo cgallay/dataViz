@@ -1,4 +1,4 @@
-import * as noUiSlider from 'noUiSlider';
+import * as noUiSlider from 'nouislider';
 import * as sprintf from 'sprintf-js';
 import * as d3 from 'd3';
 import { PanelChart } from './panel.js';
