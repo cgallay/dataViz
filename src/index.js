@@ -7,6 +7,12 @@ import { test } from './helpers.js';
 import { timeDay } from 'd3';
 import { PanelChart } from './panel.js';
 
+var $ = require("jquery");
+/*const { document } = (new JSDOM(``)).window;
+
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;*/
+
 const loaderStyle = require('./loader.css');
 const css = require('./style.css');
 const nouislidercss = require('./nouislider.css');
@@ -90,6 +96,19 @@ d3.csv(dataset_path, function(data) {
         MyPanelChart.createCanvas(idLineChart_co2);
 
         MyTimeSlider.sliderListener(years, timeSlider,MyPanelChart,temperature_bis,co2_bis);
+
+
+        /*Play Pause button animation*/
+        $('.control').on('mousedown', function() {
+            $(this).toggleClass('pause play');
+          });
+
+          $(document).on('keyup', function(e) {
+            if (e.which == 32) {
+              $('.control').toggleClass('pause play');
+            }
+          });
+        /*End Play Pause button animation*/
 
 
         //Hide loader

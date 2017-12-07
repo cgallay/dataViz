@@ -20,25 +20,6 @@ export class PanelChart {
         //if canvas with wanted id, select it
         myPanel.select(idLineChart);
       }
-
-      /*
-      if (myPanel.select("canvas").empty()) {
-        //if no canvas yet, create canvas with the id
-        myPanel.append("canvas")
-                  .attr("id", idLineChart);
-      } else {
-        //if canvas, check if canvas with the wanted id
-        if(myPanel.select(idLineChart).empty()){
-          //if no canvas with wanted id , create it
-          myPanel.append("canvas")
-                    .attr("id", idLineChart);
-        }
-        else{
-          //if canvas with wanted id, select it
-          myPanel.select("canvas")
-                      .attr("id", idLineChart);
-        }
-      }*/
     }
     //create chart
      makeLineChart(dataset, years, years_id_selected, color, label, idLineChart, title) {
@@ -52,8 +33,8 @@ export class PanelChart {
             borderWidth: 1,
             pointBackgroundColor: color,
             pointBorderColor: color,
-            pointBorderWidth: 1,
-            pointRadius: 2
+            pointBorderWidth: 0,
+            pointRadius: 0
           },
           {
 
@@ -62,12 +43,8 @@ export class PanelChart {
               y: dataset[years_id_selected[1]]
             }],
             pointBackgroundColor: 'rgba(255,0,0,1)',
-            pointBorderColor: 'rgba(255,0,0,1)',
-            pointBorderWidth: 2,
             pointRadius: 4,
             type: 'scatter',
-
-
           }
         ]
       };

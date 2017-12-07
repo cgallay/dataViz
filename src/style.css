@@ -31,53 +31,114 @@ body{
 
 #mapContainer {
     margin: 0;
-    padding: 0;
-    width: 69%;
-    height: 100%;
+    padding: 1%;
+    width: 68%;
+    height: 99%;
     float: left;
 }
 
 #panel {
     margin: 0;
-    padding: 0;
-    width: 29%;
-    height: 100%;
+    padding: 1%;
+    width: 28%;
+    height: 99%;
     float: right;
-    /*background-color: white;*/
+    background-color: white;
+}
+
+#timeSliderContainer{
+  float: right;
+  width: 86%;
+  height: 99%;
+  padding-top: 1%;
+  padding-left: 2%;
+  padding-right: 2%;
+  position: relative;
 }
 
 #timeSlider{
-  float: right;
-  width: 80%;
+  width: 90%;
   height: 15px;
+  position: absolute;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, 0);
 
 }
 
 #timePlayer {
   float: left;
-  width: 20%;
+  width: 10%;
   height: 100%;
+  position: relative;
+
 }
 
-.noUi-handle {
-  &::before{ content: none}
+/*Play Pause button */
+.control {
+  border: 3px solid #fff;
+  border-radius: 50%;
+  margin: 0; /*20px*/
+  padding: 7.5px;
+  width: 30px;
+  height: 30px;
+  font-size: 0;
+  white-space: nowrap;
+  text-align: center;
+  cursor: pointer;
+
+  margin: 0;
+  position: absolute;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, 0);
 }
-/*.noUi-horizontal .noUi-extended {
-	padding-right: 32px;
+.control,
+.control .left,
+.control .right,
+.control:before {
+  display: inline-block;
+  vertical-align: middle;
+  transition: border 0.4s, width 0.4s, height 0.4s, margin 0.4s;
+  transition-tiomig-function: cubic-bezier(1, 0, 0, 1);
 }
-.noUi-horizontal .noUi-extended .noUi-handle {
-	left: -1px;
+.control:before {
+  content: "";
+  height: 30px;
 }
-.noUi-horizontal .noUi-extended .noUi-origin  {
-	right: -32px;
+.control.pause .left,
+.control.pause .right {
+  margin: 0;
+  border-left: 9.9px solid #fff;
+  border-top: 0 solid transparent;
+  border-bottom: 0 solid transparent;
+  height: 25.98px;
+}
+.control.pause .left {
+  border-right: 6px solid transparent;
+}
+.control.play .left {
+  margin-left: 5px;
+  border-left: 12.99px solid #fff;
+  border-top: 7.5px solid transparent;
+  border-bottom: 7.5px solid transparent;
+  border-right: 0px solid transparent;
+  height: 15px;
+}
+.control.play .right {
+  margin: 0;
+  border-left: 12.99px solid #fff;
+  border-top: 7.5px solid transparent;
+  border-bottom: 7.5px solid transparent;
+  height: 0px;
+}
+.control:hover {
+  border-color: #e6e6e6;
+}
+.control:hover .left,
+.control:hover .right {
+  border-left-color: #e6e6e6;
 }
 
-.noUi-vertical .noUi-extended {
-	padding-bottom: 32px;
-}
-.noUi-vertical .noUi-extended .noUi-handle {
-	top: -1px;
-}
-.noUi-vertical .noUi-extended .noUi-origin  {
-	bottom: -32px;
-}*/
+
+/*End Play Pause button */

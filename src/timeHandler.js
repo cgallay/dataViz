@@ -18,44 +18,67 @@ export class TimeSlider {
 
     //function to create slider
     createSlider(years,timeSlider){
-    noUiSlider.create(timeSlider, {
-      start: [0, Math.round(years.length / 2), years.length - 1],
-      connect: [false, true, true, false],
-      step: 10,
-      range: {
-        'min': 0,
-        'max': years.length - 1,
-      },
-      pips: {
-        mode: 'values',
-        values: [...Array(years.length).keys()],
-        density: 25,
-        stepped: true
-      },
-      animate: true,
-      animationDuration: 400
-    });
-
-    d3.selectAll('.noUi-handle').filter(function(d, i) {
-        if (i == 1) {
-          return i;
+      function filter10( value, type ){
+        	return value % 20 ? 2 : 1;
         }
-      })
-      .style("width", "2px")
-      .style("height","70px")
-      .classed(" timeSelector ", true)
-      .style("position","relative").style("left","-1px").style("top","-30px")
-      .style("content","none")
-      .style("border-color","#F00");
 
-    d3.selectAll('.noUi-handle-upper').classed(" noUi-extended ", true);
-    d3.selectAll('.noUi-handle-lower').classed(" noUi-extended ", true);
+      /*noUiSlider.create(timeSlider, {
+        start: [0, Math.round(years.length / 2), years.length - 1],
+        connect: [false, true, true, false],
+        step: 10,
+        range: {
+          'min': 0,
+          'max': years.length - 1,
+        },
+        pips: {
+          mode: 'steps',
+          values: [...Array(years.length).keys()],
+          density: 25,
+          stepped: true
+        },
+        animate: true,
+        animationDuration: 400
+      });*/
 
-    /*default_width=34px;
-    default_height=28px;
-    -17px -14px*/
 
-    d3.selectAll('.noUi-extended').style("height", "24px").style("width", "16px").style("position","relative").style("top","-5px").style("left","-8px");
+      noUiSlider.create(timeSlider, {
+        start: [0, Math.round(years.length / 2), years.length - 1],
+        connect: [false, true, true, false],
+        step: 10,
+        range: {
+          'min': 0,
+          'max': years.length - 1,
+        },
+        pips: {
+          mode: 'steps',
+          filter: filter10,
+          density: 25,
+          stepped: true
+        },
+        animate: true,
+        animationDuration: 400
+      });
+
+      d3.selectAll('.noUi-handle').filter(function(d, i) {
+          if (i == 1) {
+            return i;
+          }
+        })
+        .style("width", "2px")
+        .style("height","70px")
+        .classed(" timeSelector ", true)
+        .style("position","relative").style("left","-1px").style("top","-30px")
+        .style("content","none")
+        .style("border-color","#F00");
+
+      d3.selectAll('.noUi-handle-upper').classed(" noUi-extended ", true);
+      d3.selectAll('.noUi-handle-lower').classed(" noUi-extended ", true);
+
+      /*default_width=34px;
+      default_height=28px;
+      -17px -14px*/
+
+      d3.selectAll('.noUi-extended').style("height", "24px").style("width", "16px").style("position","relative").style("top","-5px").style("left","-8px");
     }
 
 
