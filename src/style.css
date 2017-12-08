@@ -46,6 +46,14 @@ body{
     background-color: white;
 }
 
+#bubble {
+    margin: 0;
+    padding: 1%;
+    width: 100%;
+    position: relative;
+    bottom: 0;
+}
+
 #timeSliderContainer{
   float: right;
   width: 95%;
