@@ -5,7 +5,9 @@ import { MapManager } from './map.js';
 import { DataManager } from './DataManager.js';
 import { TimeSlider } from './timeHandler.js';
 import { test } from './helpers.js';
-import { PanelChart } from './panel.js';
+import { getRandomdata} from './helpers.js';
+import { Panel } from './panel.js';
+import { LineChart } from './lineChart.js';
 
 var $ = require("jquery");
 
@@ -40,47 +42,41 @@ d3.csv(dataset_path, function(data) {
         myMap.updateTemperature(mapData.getData());
         myMap.updateColor();
 
-        //Recover the years
-        var years = [];
-        for(var i = 0; i < data.length; i++){
-            //recover dt from each data object
-            years[i] = data[i].dt;
-        }
-        //get only the years appearing at least once (get rid of duplicates) and sort
-        var years = Array.from(new Set(years)).sort()
 
-
-        //TODO recover temperature and CO2
-        //create random data
-        function randomArray(length, max) {
-            return Array.apply(null, Array(length)).map(function() {
-                return Math.round(Math.random() * max);
-            });
-        }
-        var temperature_bis = randomArray(years.length, 40);
-        var co2_bis = randomArray(years.length, 100);
-
-
-        //Create Time slider
-        var myTimeSlider= new TimeSlider(years);
-
-        //Create Panel
-        var myPanelChart= new PanelChart();
-        //Create temperature canvas
-        myPanelChart.createCanvas(temperature_bis,"temperatureChart",'Temperature [°C]','rgba(255,99,132,1)', ' °C');
-        //Create CO2 canvas and save params and data
-        myPanelChart.createCanvas(co2_bis,"CO2Chart",'CO2 Emmissions [kt]','rgba(99,255,132,1)',' kt');
-        //Look at handles values and create charts accordingly
-        myTimeSlider.sliderListener(myPanelChart);
+        let myTimeSlider= new TimeSlider();
+        let myLineCharts =new LineChart();
+        myLineCharts.get();
 
         myMap.addSelectListener(function(sel){
-            console.log(panelData.getTempForCountry(sel).slice(0, years.length));
-            var temperature_bis = panelData.getTempForCountry(sel); //.slice(0, years.length);
-            myPanelChart.createCanvas(temperature_bis,"temperatureChart",'Temperature [°C]','rgba(255,99,132,1)', ' °C');
-            myTimeSlider.sliderListener(myPanelChart);
+          /*var temperature = panelData.getTempForCountry(sel);*/
+          //Create Time slider
+          var temperature=getRandomdata();
+          var data=[temperature, temperature];
+          let years=temperature.sort(DataManager.compareDate).map(d => d.dt);
+          myTimeSlider.createSlider(years);
+          myLineCharts.updateData(data);
+          myTimeSlider.sliderListener(data, myLineCharts);
+
         });
 
         //Hide loader
         d3.select("#spinner").remove();
     });
+
 });
+        /*
+        //Create Panel
+        var myPanel= new Panel();
+        //Create temperature canvas // merge canvas and make line chart
+        myPanel.createCanvas(temperature_bis,"temperatureChart",'Temperature [°C]','rgba(255,99,132,1)', ' °C');
+        //Create CO2 canvas and save params and data
+        myPanel.createCanvas(co2_bis,"CO2Chart",'CO2 Emmissions [kt]','rgba(99,255,132,1)',' kt');
+        //Look at handles values and create charts accordingly
+        myTimeSlider.sliderListener(myPanel);
+
+        myMap.addSelectListener(function(sel){
+            console.log(panelData.getTempForCountry(sel).slice(0, years.length));
+            var temperature_bis = panelData.getTempForCountry(sel); //.slice(0, years.length);
+            myPanel.createCanvas(temperature_bis,"temperatureChart",'Temperature [°C]','rgba(255,99,132,1)', ' °C');
+            myTimeSlider.sliderListener(myPanel);
+        });*/

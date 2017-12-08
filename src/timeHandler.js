@@ -10,18 +10,18 @@ var $ = require("jquery");
 //slider
 export class TimeSlider {
 
-
-    constructor(years){
-      this.years=years;
+    constructor(){
       this.idSlider='timeSlider';
-      this.timeSlider = document.getElementById(this.idSlider);
-      this.createSlider(this.years,this.timeSlider,this.idSlider)
+      this.timeSlider=document.getElementById(this.idSlider);
+
+      /*this.createSlider(this.years,this.timeSlider,this.idSlider)*/
 
     }
     //function to add string label to the pips
 
     //function to create slider
-    createSlider(years,timeSlider,idTimeSlider){
+    createSlider(years){
+
 
       /*Play Pause button animation*/
       $('.control').on('mousedown', function() {
@@ -96,24 +96,29 @@ export class TimeSlider {
      }
       }
 
-      changePipLabel(idTimeSlider, years);
+      changePipLabel(this.idSlider, years);
     }
 
     // on update
     //add and update graphs when slider in updated
-    sliderListener( panelChart){
-      var years = this.years; //to recover years later on
-
+    sliderListener( data, myLineChart){
+      var years_id_selected =[];
     this.timeSlider.noUiSlider.on('update', function(values, handle) {
-      //here "this" == "this.timeSlider.noUiSlider" not timeslider
-      var years_id_selected = this.get() /*this.timeSlider.noUiSlider.get()*/;
+
+      years_id_selected = this.get() /*this.timeSlider.noUiSlider.get()*/;
+
       years_id_selected[1] = Number(years_id_selected[1]);
-      years_id_selected[2] = Number(years_id_selected[2]) + 1; // recover id of months selected
+      years_id_selected[2] = Number(years_id_selected[2]) + 1;
+
+      myLineChart.updateTime(data,years_id_selected); // recover id of months selected
       //create graph for temperatureChart
-      for (var i =0 ; i < panelChart.idCharts.length; i++){
-        panelChart.makeLineChart(panelChart.dataCharts[i], years, years_id_selected, panelChart.colorCharts[i], panelChart.labelCharts[i], panelChart.idCharts[i], panelChart.titleCharts[i]);
-      }
+      /*for (var i =0 ; i < panelChart.idCharts.length; i++){
+        panelChart.drawLineChart(panelChart.dataCharts[i], years, years_id_selected, panelChart.colorCharts[i], panelChart.labelCharts[i], panelChart.idCharts[i], panelChart.titleCharts[i]);
+      }*/
+
+
     });
+
   }
 
 
