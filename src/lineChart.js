@@ -11,32 +11,24 @@ export class LineChart {
 
   get(){
     let charts=this.charts;
-    let temperature=[0]; // dataset, years_id_selected, years
-    let co2=[0];
-    let years=[0];
-    let  years_id_selected=[0,0,0];
-    this.drawLineChart(temperature,years, years_id_selected,"temperatureChart",'Temperature [°C]','rgba(255,99,132,1)', ' °C',charts);
-    this.drawLineChart(co2, years, years_id_selected,"CO2Chart",'CO2 Emmissions [kt]','rgba(99,255,132,1)',' kt',charts);
+    let initData=[0];
+    this.drawLineChart("temperatureChart",'Temperature [°C]','rgba(255,99,132,1)', ' °C',charts);
+    this.drawLineChart("CO2Chart",'CO2 Emmissions [kt]','rgba(99,255,132,1)',' kt',charts);
   }
 
-  drawLineChart(dataset,years, years_id_selected,idLineChart,title, color, label, charts) {
-    console.log("Hello from drawlinechart")
+  drawLineChart(idLineChart,title, color, label, charts) {
     let data = {
-      labels: years.slice(years_id_selected[0], years_id_selected[2]),
       datasets: [
         {
           label:label,
-          data: [{
-            x: years[years_id_selected[1]],
-            y: dataset[years_id_selected[1]]
-          }],
+          data:[],
           pointBackgroundColor: 'rgba(255,0,0,1)',
           pointRadius: 4,
           type:'scatter'
         },
         {
           label: label,
-          data: dataset.slice(years_id_selected[0], years_id_selected[2]),
+          data: [],
           borderColor: color,
           fill: false,
           borderWidth: 1,
@@ -61,9 +53,10 @@ export class LineChart {
       },
       scales: {
         xAxes: [{
-          type: 'category',
-          labels: years.slice(years_id_selected[0], years_id_selected[2])
-        }],
+                type: 'linear',
+                position: 'bottom'
+            }],
+
         yAxes: [{
           ticks: {
             beginAtZero: true
@@ -73,8 +66,6 @@ export class LineChart {
     };
 
     let ctx = document.getElementById(idLineChart);
-    console.log("ctx:")
-    console.log(ctx)
     let myChart = new Chart(ctx, {
       type: 'line',
       data: data,
@@ -87,34 +78,43 @@ export class LineChart {
 
 updateData(data){  // data=[temp,co2]
 
-  console.log(data);
   for(let i=0; i < data.length; i++)
   {
-  var value= data[i].sort(DataManager.compareDate).map(d => d.temp);
-  /*years= data[i].sort(DataManager.compareDate).map(d => d.x);*/
-  console.log("updatedata");
-  console.log(value);
-  this.charts[i].data.datasets[1].data= value;
+  this.charts[i].data.datasets[1].data= data[i];
   this.charts[i].update();
-  console.log(this.charts[i].data.datasets[1].data)
-
-  /*this.charts[i].data.labels =  years;*/
   }
+
 }
 
-updateTime(data, years_id_selected){
-
-  console.log("years selected")
-  console.log(years_id_selected);
+updateTime(data, years_selected){
   for (let i = 0; i < data.length; i++)
   {
-    var years =data[i].sort(DataManager.compareDate).map(d => d.dt);
-    this.charts[i].data.labels =  years.slice(years_id_selected[0], years_id_selected[2]);
-    this.charts[i].data.datasets[1].data= this.charts[i].data.datasets[1].data.slice(years_id_selected[0], years_id_selected[2]);
-    this.charts[i].data.datasets[0].data.x=years[years_id_selected[1]];
-    this.charts[i].data.datasets[0].data.y=this.charts[i].data.datasets[1].data[years_id_selected[1]];
+    //range of x axis of charts -> zoom on selected range
+    this.charts[i].options.scales.xAxes[0].ticks.min = years_selected[0];
+    this.charts[i].options.scales.xAxes[0].ticks.max = years_selected[2];
+
+
+    //this.charts[i].data.datasets[0].data=data[i][years_selected[1]];
+    //find value for which x=years_selected[1]!=
+
+
+    function findObject(element){
+      return element.x==years_selected[1];
+    }
+    var Data=data[i];
+    console.log("Data");
+    console.log(Data);
+    let ind = Data.findIndex(findObject);
+    let data_timeSelector=Data[ind];
+    console.log("ind");
+    console.log(ind)
+    console.log("data time selector");
+    console.log(data_timeSelector);
+
+    this.charts[i].data.datasets[0].data= [data_timeSelector];
     this.charts[i].update();
     }
+
 }
 
 }

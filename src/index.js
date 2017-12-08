@@ -6,7 +6,7 @@ import { DataManager } from './DataManager.js';
 import { TimeSlider } from './timeHandler.js';
 import { test } from './helpers.js';
 import { getRandomdata} from './helpers.js';
-import { Panel } from './panel.js';
+import { getYears} from './helpers.js';
 import { LineChart } from './lineChart.js';
 
 var $ = require("jquery");
@@ -43,20 +43,29 @@ d3.csv(dataset_path, function(data) {
         myMap.updateColor();
 
 
-        let myTimeSlider= new TimeSlider();
+        //create year vector for slider (all years present in the dataset)
+        let years_slider = getYears(panelData.data);
+        years_slider=  Array.from(new Set(years_slider)).sort();
+        //create slider
+        let myTimeSlider= new TimeSlider(years_slider);
+        //Create Line chart
         let myLineCharts =new LineChart();
         myLineCharts.get();
 
-        myMap.addSelectListener(function(sel){
-          /*var temperature = panelData.getTempForCountry(sel);*/
-          //Create Time slider
-          var temperature=getRandomdata();
-          var data=[temperature, temperature];
-          let years=temperature.sort(DataManager.compareDate).map(d => d.dt);
-          myTimeSlider.createSlider(years);
-          myLineCharts.updateData(data);
-          myTimeSlider.sliderListener(data, myLineCharts);
+        //temperature and co2 =[{x:year,y:value}]
+        //data=[temperature,co2]
+        // empty before selecting country
+        var chartData=[];
 
+        //When country selected update data and charts
+        myMap.addSelectListener(function(sel){
+          //get new temperature and co2 sorted by date !!
+          var temperature=getRandomdata(years_slider);
+          var co2=getRandomdata(years_slider);
+          chartData=[temperature, co2];
+          myLineCharts.updateData(chartData);
+          //when slider used, update charts
+          myTimeSlider.sliderListener(chartData, myLineCharts)
         });
 
         //Hide loader

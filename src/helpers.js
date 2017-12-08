@@ -10,24 +10,32 @@ export function test() {
 /**
 *create random data
 */
-export function getRandomdata(){
+export function getRandomdata(years){
 
  function randomArray(length, max) {
     return Array.apply(null, Array(length)).map(function() {
         return Math.round(Math.random() * max);
     });
 }
-var value = randomArray(267, 40);
-var years= [...Array(267).keys()];
+var value = randomArray(years.length, 40);
+//var years= [...Array(267).keys()];
 
 var data =[];
 for (var i =0; i < years.length;i++){
   data.push({
-    dt:years[i],
-    temp:value[i]
+    x:years[i],
+    y:value[i]
   })
 
 };
 
 return data;
+}
+
+export function getYears(data){
+  let years=[];
+  for(let i =0;i<data.length;i++){
+    years.push(Number(data[i].dt));
+  }
+  return years;
 }
