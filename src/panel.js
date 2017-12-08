@@ -2,24 +2,26 @@ import * as chart from 'chart.js';
 import * as d3 from 'd3';
 //Panel
 
-export class PanelChart {
+export class Panel{
 
-      constructor(){
+    constructor(){
         this.dataCharts=[];
         this.idCharts=[];
         this.titleCharts=[];
         this.colorCharts=[];
         this.labelCharts=[];
+        this.typeCharts=[];
       }
 
-    //create or select canvas
-    createCanvas(data,idLineChart,title,color,label){
+    //create or select canvas //autre nom , chooseChart ?
+    createCanvas(data,idLineChart,title,color,label,type){
       //save id of the chart
       this.dataCharts.push(data);
       this.idCharts.push(idLineChart);
       this.titleCharts.push(title);
       this.colorCharts.push(color);
       this.labelCharts.push(label);
+      this.typeCharts.push(type);
 
       let myPanel = d3.select("#panel");
 
@@ -32,9 +34,9 @@ export class PanelChart {
         myPanel.select(idLineChart);
       }
     }
-    //create chart
-  
-     makeLineChart(dataset, years, years_id_selected, color, label, idLineChart, title) {
+    //draw line chart (temperature)
+    drawLineChart(dataset, years, years_id_selected, color, label, idLineChart, title) {
+
       var data = {
         labels: years.slice(years_id_selected[0], years_id_selected[2]),
         datasets: [
