@@ -51,7 +51,6 @@ export class DataManager {
         this.countryDim.filter(c => c == countryCode);
         let sortedValue = this.timeDimension.top(Infinity).sort(this.compareDate);
         return sortedValue.map( x=> x.AverageTemperature)
-
     }
 
 }
