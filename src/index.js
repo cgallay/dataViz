@@ -64,32 +64,3 @@ d3.csv(dataset_path, function(data) {
     });
 
 });
-        /*
-        //Create Panel
-        var myPanel= new Panel();
-        //Create temperature canvas // merge canvas and make line chart
-        myPanel.createCanvas(temperature_bis,"temperatureChart",'Temperature [°C]','rgba(255,99,132,1)', ' °C');
-        //Create CO2 canvas and save params and data
-        myPanel.createCanvas(co2_bis,"CO2Chart",'CO2 Emmissions [kt]','rgba(99,255,132,1)',' kt');
-        //Look at handles values and create charts accordingly
-        myTimeSlider.sliderListener(myPanel);
-
-        myMap.addSelectListener(function(sel){
-<<<<<<< HEAD
-            console.log(panelData.getTempForCountry(sel).slice(0, years.length));
-            var temperature_bis = panelData.getTempForCountry(sel); //.slice(0, years.length);
-            myPanel.createCanvas(temperature_bis,"temperatureChart",'Temperature [°C]','rgba(255,99,132,1)', ' °C');
-            myTimeSlider.sliderListener(myPanel);
-        });*/
-=======
-            console.log(panelData.getTempForCountry(sel[0].id).slice(0, years.length));
-            var temperature_bis = panelData.getTempForCountry(sel[0].id); //.slice(0, years.length);
-            myPanelChart.createCanvas(temperature_bis,"temperatureChart",'Temperature [°C]','rgba(255,99,132,1)', ' °C');
-            myTimeSlider.sliderListener(myPanelChart);
-        });
-
-        //Hide loader
-        d3.select("#spinner").remove();
-    });
-});
->>>>>>> 357435eb947ac6ac9d68ae4d03ebf39117b29abe
