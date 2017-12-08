@@ -6,6 +6,7 @@ import { DataManager } from './DataManager.js';
 import { TimeSlider } from './timeHandler.js';
 import { test } from './helpers.js';
 import { getRandomdata} from './helpers.js';
+import { getRandomdata2} from './helpers.js';
 import { getYears} from './helpers.js';
 import { LineChart } from './lineChart.js';
 
@@ -52,7 +53,6 @@ d3.csv(dataset_path, function(data) {
         let myLineCharts =new LineChart();
         myLineCharts.get();
 
-        //temperature and co2 =[{x:year,y:value}]
         //data=[temperature,co2]
         // empty before selecting country
         var chartData=[];
@@ -60,13 +60,20 @@ d3.csv(dataset_path, function(data) {
         //When country selected update data and charts
         myMap.addSelectListener(function(sel){
           //get new temperature and co2 sorted by date !!
-          var temperature=getRandomdata(years_slider);
-          var co2=getRandomdata(years_slider);
+          //temperature=[ temp 1st country selected,temp 2nd country selected ,....];
+          //temp 1st country sected =[{x:year_value, y:temp_value},{x:year_value, y:temp_value}]
+
+          var temperature=getRandomdata2(years_slider);
+          var co2=getRandomdata2(years_slider);
+          var countries=['France','Switzerland'];
+
           chartData=[temperature, co2];
-          myLineCharts.updateData(chartData);
+          myLineCharts.updateData(chartData,countries);
           //when slider used, update charts
           myTimeSlider.sliderListener(chartData, myLineCharts)
         });
+
+        myTimeSlider.playPauseButtonAnimation();
 
         //Hide loader
         d3.select("#spinner").remove();
