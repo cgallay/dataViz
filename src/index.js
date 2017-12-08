@@ -74,8 +74,8 @@ d3.csv(dataset_path, function(data) {
         myTimeSlider.sliderListener(myPanelChart);
 
         myMap.addSelectListener(function(sel){
-            console.log(panelData.getTempForCountry(sel).slice(0, years.length));
-            var temperature_bis = panelData.getTempForCountry(sel); //.slice(0, years.length);
+            console.log(panelData.getTempForCountry(sel[0].id).slice(0, years.length));
+            var temperature_bis = panelData.getTempForCountry(sel[0].id); //.slice(0, years.length);
             myPanelChart.createCanvas(temperature_bis,"temperatureChart",'Temperature [°C]','rgba(255,99,132,1)', ' °C');
             myTimeSlider.sliderListener(myPanelChart);
         });

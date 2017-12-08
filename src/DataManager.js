@@ -17,7 +17,7 @@ export class DataManager {
     /**
      * Compare function to be use with .sort() to sort the data by years
      */
-    compareDate(a, b) {
+    static compareDate(a, b) {
         if (a.dt < b.dt) {
           return -1;
         }

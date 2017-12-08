@@ -6,6 +6,8 @@ export class MapManager {
         this.countries = geojson;
 
         this.selection = null;
+        this.selections = [];
+        this.SELECTION_MAX = 2; 
 
         // D3 Projection
         this.projection = d3.geoEquirectangular()
@@ -32,17 +34,39 @@ export class MapManager {
         this.g.attr("transform", d3.event.transform);
     }
 
+    isCountrySelected(countryId) {
+        console.log("Selections to Array");
+        console.log(Array.from(this.selections).map(c => c.id));
+        //return Array.from(this.selections).map(c => c.id).includes(countryId);
+        return this.selections.find((c) => c.id  === countryId);
+    }
+
+    unselectCountry(countryId) {
+        this.selections = this.selections.filter(c => c.id != countryId);
+    }
+
     clicked(d){
+        let country = {id: d.id, name: d.properties.name}   //selected country
         console.log("User clicked on Country: " + d.id);
-        this.selection = d.id;
+        console.log(d)
+        if(this.isCountrySelected(country.id)) {
+            console.log("selected again");
+            this.unselectCountry(country.id);
+        } else {
+            this.selections.push(country);
+            if(this.selections.length > this.SELECTION_MAX) {
+                this.selections.shift()
+            }
+        }
         this.updateColor();
         if(this.selectListener) {
-            this.selectListener(this.selection);
+            this.selectListener(this.selections);
         }
     }
 
     /**
      * Function to be called when a country is selected
+     * The function will receve a list of country in that format [{id: "FRA", name: "France"}, {id: "GER", name: "Germany"}]
      * @param {function} listener 
      */
     addSelectListener(listener){
@@ -78,7 +102,7 @@ export class MapManager {
         .style("fill", (d) => {
                 const temperature = d.properties.temperature; 
                 //color the selected country in a different manner
-                if(this.selection === d.id) {
+                if(this.isCountrySelected(d.id)) {
                     return "green";
                 }
                 return temperature ? this.colorScale(temperature) : "white";
