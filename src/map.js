@@ -35,9 +35,6 @@ export class MapManager {
     }
 
     isCountrySelected(countryId) {
-        console.log("Selections to Array");
-        console.log(Array.from(this.selections).map(c => c.id));
-        //return Array.from(this.selections).map(c => c.id).includes(countryId);
         return this.selections.find((c) => c.id  === countryId);
     }
 
@@ -47,10 +44,7 @@ export class MapManager {
 
     clicked(d){
         let country = {id: d.id, name: d.properties.name}   //selected country
-        console.log("User clicked on Country: " + d.id);
-        console.log(d)
         if(this.isCountrySelected(country.id)) {
-            console.log("selected again");
             this.unselectCountry(country.id);
         } else {
             this.selections.push(country);
