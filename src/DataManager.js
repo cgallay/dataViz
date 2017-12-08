@@ -17,7 +17,7 @@ export class DataManager {
     /**
      * Compare function to be use with .sort() to sort the data by years
      */
-    compareDate(a, b) {
+    static compareDate(a, b) {
         if (a.dt < b.dt) {
           return -1;
         }
@@ -51,7 +51,6 @@ export class DataManager {
         this.countryDim.filter(c => c == countryCode);
         let sortedValue = this.timeDimension.top(Infinity).sort(this.compareDate);
         return sortedValue.map( x=> x.AverageTemperature)
-
     }
 
 }

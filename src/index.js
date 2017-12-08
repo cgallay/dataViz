@@ -75,8 +75,21 @@ d3.csv(dataset_path, function(data) {
         myTimeSlider.sliderListener(myPanel);
 
         myMap.addSelectListener(function(sel){
+<<<<<<< HEAD
             console.log(panelData.getTempForCountry(sel).slice(0, years.length));
             var temperature_bis = panelData.getTempForCountry(sel); //.slice(0, years.length);
             myPanel.createCanvas(temperature_bis,"temperatureChart",'Temperature [°C]','rgba(255,99,132,1)', ' °C');
             myTimeSlider.sliderListener(myPanel);
         });*/
+=======
+            console.log(panelData.getTempForCountry(sel[0].id).slice(0, years.length));
+            var temperature_bis = panelData.getTempForCountry(sel[0].id); //.slice(0, years.length);
+            myPanelChart.createCanvas(temperature_bis,"temperatureChart",'Temperature [°C]','rgba(255,99,132,1)', ' °C');
+            myTimeSlider.sliderListener(myPanelChart);
+        });
+
+        //Hide loader
+        d3.select("#spinner").remove();
+    });
+});
+>>>>>>> 357435eb947ac6ac9d68ae4d03ebf39117b29abe
