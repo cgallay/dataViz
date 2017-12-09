@@ -68,6 +68,8 @@ d3.csv(dataset_path, function(data) {
           var countries=['France','Switzerland'];
 
           chartData=[temperature, co2];
+          console.log("index chartData");
+          console.log(chartData);
           myLineCharts.updateData(chartData,countries);
           //when slider used, update charts
           myTimeSlider.sliderListener(chartData, myLineCharts)

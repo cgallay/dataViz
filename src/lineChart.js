@@ -1,24 +1,44 @@
 import * as chart from 'chart.js';
 import { DataManager } from './DataManager.js';
 import * as d3 from 'd3';
+import * as d3_scale from 'd3-scale';
+import * as d3_scale_chromatic from 'd3-scale-chromatic';
 //Panel
 
 export class LineChart {
 
   constructor(){
     this.charts =[];
+    this.colorscale=d3_scale_chromatic.schemeSet2;
   }
 
   get(){
     let charts=this.charts;
     let initData=[0];
+
     this.drawLineChart("temperatureChart",'Temperature [°C]','rgba(255,99,132,1)', ' °C',charts);
     this.drawLineChart("CO2Chart",'CO2 Emmissions [kt]','rgba(99,255,132,1)',' kt',charts);
+    console.log('index js chartdatasets old');
+    console.log( this.charts[0].data.datasets);
   }
 
   drawLineChart(idLineChart,title, color, label, charts) {
     let data = {
-      datasets:[]
+      datasets:[
+        {
+          label: [],
+          data: [],
+          borderColor: [],
+          fill: false,
+          borderWidth: 1,
+          backgroundColor:[],
+          pointBackgroundColor: [],
+          /*pointBorderColor: [],
+          pointBorderWidth: 0,*/
+          pointRadius: 0,
+          type: 'line'
+        }
+   ]
     };
 
     let option = {
@@ -47,7 +67,18 @@ export class LineChart {
             beginAtZero: true
           }
         }]
-      }
+      },
+      tooltips: {
+            callbacks: {
+                label: function(tooltipItem, chart) {
+                    var country = chart.datasets[tooltipItem.datasetIndex].label;
+                    country= country.concat(": ");
+                    var value= String(tooltipItem.yLabel);
+                    var output= country.concat(value.concat(label));
+                    return  output;
+                }
+            }
+        }
     };
 
     let ctx = document.getElementById(idLineChart);
@@ -60,70 +91,46 @@ export class LineChart {
 
   }
 
-   getTemplateDatasets(color,color_point,label_chart,label_country){
-     var template=[
-    {
-      label:label_country,
-      data:[],
-      pointBackgroundColor: color_point,
-      pointRadius: 4,
-      type:'scatter'
-    },
-    {
-      label: label_chart,
-      data: [],
-      borderColor: color,
-      fill: false,
-      borderWidth: 1,
-      pointBackgroundColor: color,
-      pointBorderColor: color,
-      pointBorderWidth: 0,
-      pointRadius: 0,
-      type: 'line'
-    }
+  getTemplateDataset(){
 
-  ];
-  return template;
-}
+      let dataset=[
+        {
+          label: [],
+          data: [],
+          borderColor: [],
+          fill: false,
+          borderWidth: 1,
+          pointBackgroundColor: [],
+          pointBorderColor: [],
+          pointRadius: 1,
+          type: 'line'
+        }];
+        return dataset;
+  }
 
 
-updateData(data,countries){  // data=[temp,co2]
+
+
+updateData(data,countries){
 
   for(let i=0; i < data.length; i++) // iterate on the two charts :temp and co2
   {
-    let label_chart;
-    let color;
-    let color_point;
-    if (i==0){ //temp
-      label_chart= ' °C';
-    }
-    else{ //co2
-      label_chart='kt';
-    }
-
-    let chartDatasets =[];
-    let chartData=data[i]; //multiple curves
+    var chartDatasets =[];
+    var chartData=data[i]; //multiple curves
+    const chartDatasets_old = this.charts[i].data.datasets;
     for(let j =0; j < data[i].length; j++){ // iterate on the #curves i.e #countries selected
+      var lineDatasets=this.getTemplateDataset();
+      lineDatasets[0].data= chartData[j];// 1 curve;
+      lineDatasets[0].label= countries[j];
+      lineDatasets[0].borderColor= this.colorscale[j];
+      lineDatasets[0].backgroundColor= this.colorscale[j];
 
-      if (j==0){ //temp
-        color = 'rgba(255,99,132,1)';
-        color_point = 'rgba(255,0,0,1)';
-      }
-      else{ //co2
-        color='rgba(99,255,132,1)';
-        color_point='rgba(0,255,0,1)';
-      }
-
-      var lineDatasets=this.getTemplateDatasets(color,color_point,label_chart, countries[j]);
-      lineDatasets[1].data= chartData[j];// 1 curve
       chartDatasets= chartDatasets.concat(lineDatasets);
     };
     this.charts[i].data.datasets = chartDatasets;
+
     this.charts[i].update();
   }
-  console.log("UpdateData datasets");
-  console.log(this.charts[0].data.datasets);
-
 }
 
 updateTime(data, years_selected){
@@ -135,8 +142,7 @@ updateTime(data, years_selected){
 
 
     let chartDatasets=this.charts[i].data.datasets;
-    console.log("chartDatasets update time");
-    console.log(chartDatasets);
+
     let chartData=data[i];// multiple curves
     for(let j =0; j < data[i].length; j++){ //iterate on curves
         //find value for which x=years_selected[1]!
@@ -146,17 +152,24 @@ updateTime(data, years_selected){
         let lineData=chartData[j];
         let ind = lineData.findIndex(findObject);
         let data_timeSelector=lineData[ind];
-        console.log("j");
-        console.log(j);
-        console.log("2*j");
-        console.log(2 * j);
-        var k =2 * j;
-        chartDatasets[k].data= [data_timeSelector];
+
+        let zero_vec=[];
+        let color_vec=[];
+        for (let k=0; k<lineData.length; k++){
+          zero_vec.push(1);
+          color_vec.push(this.colorscale[j]);
+        }
+        let pointRadius_vec=zero_vec;
+        pointRadius_vec[ind]=3;
+        let  pointBackgroundColor_vec=color_vec;
+        pointBackgroundColor_vec[ind]='rgba(255,0,0,1)';
+        let pointBorderColor_vec=pointBackgroundColor_vec;
+        chartDatasets[j].pointRadius= pointRadius_vec;
+        chartDatasets[j].pointBackgroundColor=pointBackgroundColor_vec;
+        chartDatasets[j].pointBorderColor=pointBorderColor_vec;
       }
     this.charts[i].update();
   }
-  console.log("Updatetimedatasets");
-  console.log(this.charts[0].data.datasets);
 
 }
 
