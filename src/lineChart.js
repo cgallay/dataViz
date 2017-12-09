@@ -57,14 +57,17 @@ export class LineChart {
                 position: 'bottom',
                 ticks:{
                   minRotation: 45,
-                  stepSize:20
-                },
+                  autoSkip: true
+
+                  }
+
 
             }],
 
         yAxes: [{
           ticks: {
-            beginAtZero: true
+            beginAtZero: true,
+            stepSize: 10
           }
         }]
       },
@@ -103,6 +106,7 @@ export class LineChart {
           pointBackgroundColor: [],
           pointBorderColor: [],
           pointRadius: 1,
+          spanGaps:true,
           type: 'line'
         }];
         return dataset;
@@ -129,17 +133,13 @@ updateData(data,countries){
     };
     this.charts[i].data.datasets = chartDatasets;
 
-    this.charts[i].update();
+    this.charts[i].update(/*{duration: 5000}*/);
   }
 }
 
 updateTime(data, years_selected){
   for (let i = 0; i < data.length; i++) // iterate on chart , temp and co2
   {
-    //range of x axis of charts -> zoom on selected range
-    this.charts[i].options.scales.xAxes[0].ticks.min = years_selected[0];
-    this.charts[i].options.scales.xAxes[0].ticks.max = years_selected[2];
-
 
     let chartDatasets=this.charts[i].data.datasets;
 
@@ -168,7 +168,14 @@ updateTime(data, years_selected){
         chartDatasets[j].pointBackgroundColor=pointBackgroundColor_vec;
         chartDatasets[j].pointBorderColor=pointBorderColor_vec;
       }
-    this.charts[i].update();
+    /*this.charts[i].update({duration:0});*/
+
+    //range of x axis of charts -> zoom on selected range
+    this.charts[i].options.scales.xAxes[0].ticks.min = years_selected[0];
+    this.charts[i].options.scales.xAxes[0].ticks.max = years_selected[2];
+    this.charts[i].update(/*{duration: 2000}*/);
+
+
   }
 
 }

@@ -14,6 +14,7 @@ export class TimeSlider {
       this.idSlider='timeSlider';
       this.timeSlider=document.getElementById(this.idSlider);
       this.createSlider();
+      this.playPauseButtonAnimation();
     }
 
 
