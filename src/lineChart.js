@@ -66,7 +66,7 @@ export class LineChart {
 
         yAxes: [{
           ticks: {
-            beginAtZero: true,
+            beginAtZero: false,
             stepSize: 10
           }
         }]

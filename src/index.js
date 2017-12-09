@@ -72,6 +72,7 @@ d3.csv(dataset_path, function(data) {
           //when slider used, update charts
           myLineCharts.updateData(chartData,countries);
           myTimeSlider.sliderListener(chartData, myLineCharts);
+
         });
 
 
