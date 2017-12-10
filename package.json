@@ -29,7 +29,10 @@
     "lodash": "4.17.4",
     "nouislider": "10.1.0",
     "sprintf-js": "1.1.1",
-    "chart.js": "2.7.1"
+    "chart.js": "2.7.1",
+    "wnumb": "1.1.0",
+    "d3-scale-chromatic": "1.1.1",
+    "d3-scale": "1.0.7"
   },
   "devDependencies": {
     "babel-core": "6.26.0",

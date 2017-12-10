@@ -5,8 +5,9 @@ import { MapManager } from './map.js';
 import { DataManager } from './DataManager.js';
 import { TimeSlider } from './timeHandler.js';
 import { test } from './helpers.js';
-import { getRandomdata} from './helpers.js';
-import { Panel } from './panel.js';
+import { getRandomdata } from './helpers.js';
+import { getRandomdata2 } from './helpers.js';
+import { getYears } from './helpers.js';
 import { LineChart } from './lineChart.js';
 import { bubble, BubbleChart } from './bubble.js';
 
@@ -38,11 +39,9 @@ d3.csv(dataset_path, function (data) {
             d3.csv(dataset_pop_path, (pop_data) => {
                 d3.csv(dataset_delta_temp_path, (delta_data) => {
 
-
                     let myBubble = new BubbleChart();
                     myBubble.addTo('#bubble');
                     myBubble.get_chart();
-
 
                     var mapData = new DataManager(data);
                     var panelData = new DataManager(data);
@@ -58,22 +57,39 @@ d3.csv(dataset_path, function (data) {
                     myMap.updateColor();
 
 
-                    let myTimeSlider = new TimeSlider();
+                    //create year vector for slider (all years present in the dataset)
+                    let years_slider = getYears(panelData.data);
+                    years_slider = Array.from(new Set(years_slider)).sort();
+                    //create slider
+                    let myTimeSlider = new TimeSlider(years_slider);
+                    //Create Line chart
                     let myLineCharts = new LineChart();
                     myLineCharts.get();
 
+                    //data=[temperature,co2]
+                    // empty before selecting country
+                    var chartData = [];
+
+                    //When country selected update data and charts
                     myMap.addSelectListener(function (sel) {
-                        /*var temperature = panelData.getTempForCountry(sel);*/
-                        //Create Time slider
-                        var temperature = getRandomdata();
-                        var data = [temperature, temperature];
-                        let years = temperature.sort(DataManager.compareDate).map(d => d.dt);
-                        myTimeSlider.createSlider(years);
-                        myLineCharts.updateData(data);
-                        myTimeSlider.sliderListener(data, myLineCharts);
+                        //get new temperature and co2 sorted by date !!
+                        //temperature=[ temp 1st country selected,temp 2nd country selected ,....];
+                        //temp 1st country sected =[{x:year_value, y:temp_value},{x:year_value, y:temp_value}]
+
+                        var temperature = getRandomdata2(years_slider);
+                        var co2 = getRandomdata2(years_slider);
+                        var countries = ['France', 'Switzerland'];
+
+                        chartData = [temperature, co2];
+
+                        //when slider used, update charts
+                        myLineCharts.updateData(chartData, countries);
+                        myTimeSlider.sliderListener(chartData, myLineCharts);
                         myBubble.update(sel);
 
                     });
+
+
 
                     //Hide loader
                     d3.select("#spinner").remove();
