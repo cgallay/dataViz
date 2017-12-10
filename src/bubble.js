@@ -89,39 +89,44 @@ export class BubbleChart {
             }
         });
     }
+
     update(selected) {
 
-        let countries = []
+        let countries = [];
+        let eraseIndex = [];
 
         selected.forEach(country => {
-            countries.push(country.name)
+            countries.push(country.name);
         });
-
+        
         let color = () => {
             var o = Math.round, r = Math.random, s = 255;
             let randRGB = 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',';
             return [randRGB + '0.2' + ')', randRGB + '1' + ')'];
         };
-
+        
         this.myBubbleChart.data.datasets.forEach((dataset, index) => {
 
             if (countries.includes(dataset.label)) {
-                ind = countries.findIndex((ele) => {
+                let ind = countries.findIndex((ele) => {
                     return ele==dataset.label;
-                })
+                });
                 countries.splice(ind, 1);
             }
             else{
-                this.myBubbleChart.data.datasets.splice(index, 1);
+                eraseIndex.push(index);
             }
         });
 
+        eraseIndex.forEach(ind => {
+            this.myBubbleChart.data.datasets.splice(ind, 1);
+        });
         countries.forEach(newCountry => {
 
             let myColor = color();
 
             this.myBubbleChart.data.datasets.push({
-                label: [newCountry],
+                label: newCountry,
                 backgroundColor: myColor[0],
                 borderColor: myColor[1],
                 data: [{
@@ -131,7 +136,6 @@ export class BubbleChart {
                 }]
             });
         });
-
         this.myBubbleChart.update();
     }
 }
