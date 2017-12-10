@@ -89,28 +89,39 @@ export class BubbleChart {
             }
         });
     }
-    update(name) {
-        console.log(this.selected);
-        if (this.selected.includes(name)) {
+    update(selected) {
 
-            this.myBubbleChart.data.datasets.forEach((dataset, index) => {
-                if (dataset.label == name) {
-                    this.myBubbleChart.data.datasets.splice(index, 1);
-                }
-            });
-            this.selected.pop(name);
-        }
-        else {
-            let color = () => {
-                var o = Math.round, r = Math.random, s = 255;
-                let randRGB = 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',';
-                return [randRGB + '0.2' + ')', randRGB + '1' + ')'];
-            };
+        let countries = []
+
+        selected.forEach(country => {
+            countries.push(country.name)
+        });
+
+        let color = () => {
+            var o = Math.round, r = Math.random, s = 255;
+            let randRGB = 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',';
+            return [randRGB + '0.2' + ')', randRGB + '1' + ')'];
+        };
+
+        this.myBubbleChart.data.datasets.forEach((dataset, index) => {
+
+            if (countries.includes(dataset.label)) {
+                ind = countries.findIndex((ele) => {
+                    return ele==dataset.label;
+                })
+                countries.splice(ind, 1);
+            }
+            else{
+                this.myBubbleChart.data.datasets.splice(index, 1);
+            }
+        });
+
+        countries.forEach(newCountry => {
 
             let myColor = color();
 
             this.myBubbleChart.data.datasets.push({
-                label: [name],
+                label: [newCountry],
                 backgroundColor: myColor[0],
                 borderColor: myColor[1],
                 data: [{
@@ -119,8 +130,8 @@ export class BubbleChart {
                     r: 15
                 }]
             });
-            this.selected.push(name);
-        }
+        });
+
         this.myBubbleChart.update();
     }
 }
