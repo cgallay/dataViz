@@ -77,16 +77,54 @@ export class TimeSlider {
 
     //function to add animation to th play button
     playPauseButtonAnimation(){
+      var slider=this;
       /*Play Pause button animation*/
       $('.control').on('mousedown', function() {
+        console.log("hello1");
           $(this).toggleClass('pause play');
+
+          console.log("button animation this");
+          console.log(slider);
+          slider.animateTimeSelector();
         });
 
         $(document).on('keyup', function(e) {
+
           if (e.which == 32) {
+
             $('.control').toggleClass('pause play');
           }
         });
       /*End Play Pause button animation*/
     };
-}
+
+    animateTimeSelector(){
+
+       var pos = 0;
+       var id = setInterval(frame, 5);
+       console.log("animate time selector this");
+       console.log(this);
+
+       var limits=this.timeSlider.noUiSlider.get();
+       var start = Number(limits[0]);
+       var selector_start = Number(limits[1]);
+       var end = Number(limits[2]);
+       var selector;
+
+       function frame() {
+           if (selector == end){
+
+              $('.control').toggleClass('pause play');
+               clearInterval(id);
+               console.log("hello end");
+           } else {
+                pos++;
+                selector=selector_start+pos;
+               this.timeSlider.noUiSlider.set([start,selector,end]);
+
+
+           }
+
+         }
+    }
+  }
