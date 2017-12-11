@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import * as crossfilter from 'crossfilter';
 import { MapManager } from './map.js';
 import { DataManager } from './DataManager.js';
-import { TimeSlider } from './TimeSlider.js';
+import { TimeSlider } from './TimeHandler.js';
 import { test } from './helpers.js';
 import { getRandomdata } from './helpers.js';
 import { getRandomdata2 } from './helpers.js';
@@ -56,18 +56,20 @@ d3.csv(dataset_path, function (data) {
                     myMap.updateTemperature(mapData.getData());
                     myMap.updateColor();
 
-                    let myLineCharts = new LineChart();
-                    myLineCharts.get();
-
                     //create year vector for slider (all years present in the dataset)
                     let years_slider = getYears(panelData.data);
                     years_slider = Array.from(new Set(years_slider)).sort();
+
+                    //Create Line chart
+                    let myLineCharts = new LineChart();
+                    myLineCharts.draw(years_slider);
+
                     //create slider
                     let myTimeSlider = new TimeSlider();
                     myTimeSlider.addTo('timeSlider');
                     myTimeSlider.createSlider(years_slider);
 
-                    //Create Line chart
+                    
 
                     //data=[temperature,co2]
                     // empty before selecting country
