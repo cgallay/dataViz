@@ -63,7 +63,8 @@ d3.csv(dataset_path, function (data) {
                     years_slider = Array.from(new Set(years_slider)).sort();
                     //create slider
                     let myTimeSlider = new TimeSlider();
-                    myTimeSlider.addTo('timeSlider');
+                    myTimeSlider.addSliderTo('timeSlider');
+                    myTimeSlider.addPlayPauseTo('PlayPauseContainer');
                     myTimeSlider.createSlider(years_slider);
 
                     //Create Line chart

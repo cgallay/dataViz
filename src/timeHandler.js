@@ -10,14 +10,24 @@ var $ = require("jquery");
 export class TimeSlider {
 
     constructor(){
-      this.playPauseButtonAnimation();
+
     }
 
-    addTo(div){
+    addPlayPauseTo(div){
+      this.PlayPause=document.getElementById(div);
+      this.PlayPauseId='#'.concat(div);
+      d3.selectAll(this.PlayPauseId)
+        .append("div").attr("class","control play")
+          .append("span").attr("class","left")
+
+      d3.selectAll(this.PlayPauseId).select("div").append("span").attr("class","right");
+      this.playPauseButtonAnimation()
+    }
+
+    addSliderTo(div){
       this.timeSlider=document.getElementById(div);
+
     }
-
-
 
     //function to create slider
     createSlider(years){
@@ -81,35 +91,36 @@ export class TimeSlider {
         this.selectListener = listener;
       }
 
-    //function to add animation to th play button
-    playPauseButtonAnimation(){
-      var slider=this;
-      /*Play Pause button animation*/
-      $('.control').on('mousedown', function() {
-        console.log("hello1");
-          $(this).toggleClass('pause play');
+      //function to add animation to th play button
+      playPauseButtonAnimation(){
+        /*Play Pause button animation*/
+        //$('.control')
+        d3.selectAll('.control')
+          .on('mousedown', function() {
 
-          console.log("button animation this");
-          console.log(slider);
-          slider.animateTimeSelector();
-        });
-
-        $(document).on('keyup', function(e) {
-
-          if (e.which == 32) {
+            console.log("hello1");
 
             $('.control').toggleClass('pause play');
-          }
-        });
-      /*End Play Pause button animation*/
-    };
 
+            console.log("button animation this");
+            console.log(this);
+            this.animateTimeSelector();
+          }.bind(this));
+
+          $(document).on('keyup', function(e) {
+
+            if (e.which == 32) {
+
+              $('.control').toggleClass('pause play');
+            }
+          });
+        /*End Play Pause button animation*/
+      };
     animateTimeSelector(){
 
        var pos = 0;
-       var id = setInterval(frame, 5);
-       console.log("animate time selector this");
-       console.log(this);
+       var id = setInterval(frame.bind(this), 5);
+
 
        var limits=this.timeSlider.noUiSlider.get();
        var start = Number(limits[0]);
@@ -117,20 +128,25 @@ export class TimeSlider {
        var end = Number(limits[2]);
        var selector;
 
-       function frame() {
-           if (selector == end){
 
-              $('.control').toggleClass('pause play');
+       function frame() {
+          var pause =  d3.selectAll(this.PlayPauseId).select("div").attr("class") == 'control play';
+
+           if (selector == end | pause == true ){
                clearInterval(id);
-               console.log("hello end");
+               if(selector==end){
+                 $('.control').toggleClass('pause play');
+               }
+               console.log("end");
            } else {
                 pos++;
                 selector=selector_start+pos;
-               this.timeSlider.noUiSlider.set([start,selector,end]);
 
+               this.timeSlider.noUiSlider.set([start,selector,end]);
 
            }
 
          }
     }
+
   }
