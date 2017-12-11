@@ -72,6 +72,7 @@ d3.csv(dataset_path, function (data) {
                     //data=[temperature,co2]
                     // empty before selecting country
 
+                    let chartData = [];
 
                     //When country selected update data and charts
                     myMap.addSelectListener(function (sel) {
@@ -82,13 +83,13 @@ d3.csv(dataset_path, function (data) {
                         var temperature = getRandomdata2(years_slider);
                         var co2 = getRandomdata2(years_slider);
                         var countries = ['France', 'Switzerland'];
-                        var chartData = [temperature, co2];
+                        chartData = [temperature, co2];
                         myLineCharts.updateData(chartData, countries);
                         myBubble.update(sel);
 
                     });
                     myTimeSlider.addSelectListener(function (years) {
-                        myLineCharts.updateTime(data, years);
+                        myLineCharts.updateTime(chartData, years);
                     });
 
                     //Hide loader

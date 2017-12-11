@@ -133,7 +133,7 @@ updateData(data,countries){
 }
 
 updateTime(data, years_selected){
-  for (let i = 0; i < this.charts.length; i++) // iterate on chart , temp and co2
+  for (let i = 0; i < data.length; i++) // iterate on chart , temp and co2
   {
     let chartDatasets=this.charts[i].data.datasets;
 
