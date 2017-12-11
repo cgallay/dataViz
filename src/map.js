@@ -7,7 +7,7 @@ export class MapManager {
 
         this.selection = null;
         this.selections = [];
-        this.SELECTION_MAX = 2; 
+        this.SELECTION_MAX = 2;
 
         // D3 Projection
         this.projection = d3.geoEquirectangular()
@@ -16,17 +16,17 @@ export class MapManager {
         // path generator to convert JSON to SVG paths
         this.path = d3.geoPath()
             .projection(this.projection);
-        
+
         //colormap for population density
         this.colorScale = d3.scaleLinear()
             .range(["#2c7bb6", "#ffff8c", "#d7191c"])
             .interpolate(d3.interpolateHcl);
-        
+
         //Adding Zoom to the map
         this.zoom = d3.zoom()
-            .scaleExtent([1, 8])
+            .scaleExtent([0.65, 8])
             .on("zoom", this.zoomed.bind(this));
-        
+
     }
 
     zoomed() {
@@ -61,7 +61,7 @@ export class MapManager {
     /**
      * Function to be called when a country is selected
      * The function will receve a list of country in that format [{id: "FRA", name: "France"}, {id: "GER", name: "Germany"}]
-     * @param {function} listener 
+     * @param {function} listener
      */
     addSelectListener(listener){
         this.selectListener = listener;
@@ -87,14 +87,14 @@ export class MapManager {
         this.g = this.svg.append("g");
         this.svg.call(this.zoom);
     }
-    
+
     updateColor() {
         this.g.selectAll(".country")
         .data(this.countries.features)
         .attr("id", (d) => d.id)
         .transition().duration(500)
         .style("fill", (d) => {
-                const temperature = d.properties.temperature; 
+                const temperature = d.properties.temperature;
                 //color the selected country in a different manner
                 if(this.isCountrySelected(d.id)) {
                     return "green";
@@ -103,7 +103,7 @@ export class MapManager {
             });
     }
 
-    
+
 
     /**
      * Draw the map into the div
@@ -122,8 +122,8 @@ export class MapManager {
 
     /**
      * For each country add a temperature property
-     * to countries json  
-     * @param {Array} data temperature for countries 
+     * to countries json
+     * @param {Array} data temperature for countries
      */
     updateTemperature(data) {
         //TODO try avoid the double loop (sorting once for all)

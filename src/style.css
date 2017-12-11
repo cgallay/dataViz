@@ -15,35 +15,42 @@ body{
   height: 100%;
 }
 
-#mapAndPanel{
+/*#mapAndPanel{
   margin: 0;
   padding: 1%;
   width:99%;
-  height: 79%;
-}
+  height: 99%;
+}*/
 
 #timeHandler {
     margin: 0px;
     padding: 1%;
     width: 99%;
-    height: 19%;
+    height: 15%;
+    position: absolute;
+    z-index:2;
+    top: 94%;
 }
 
 #mapContainer {
     margin: 0;
-    padding: 1%;
-    width: 68%;
-    height: 99%;
-    float: left;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index:1;
+
 }
 
 #panel {
     margin: 0;
     padding: 1%;
     width: 28%;
-    height: 99%;
-    float: right;
+    height: 90%;
+    left: 68%;
+    top: 1%;
     background-color: white;
+    position: absolute;
+    z-index:2;
 }
 
 #bubble {
