@@ -101,7 +101,7 @@ d3.csv(dataset_path, function (data) {
                         myLineCharts.updateData(chartData, countries_name);
                         //set the range of the x-axis to the default values of handles
                         //when the slider is created
-                        //myLineCharts.updateTime(chartData,myTimeSlider.getYears());
+                        myLineCharts.updateTime(chartData,myTimeSlider.getYears());
                         myBubble.update(sel);
 
                     });
