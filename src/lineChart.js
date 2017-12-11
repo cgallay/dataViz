@@ -13,13 +13,8 @@ export class LineChart {
   }
 
   get(){
-    let charts=this.charts;
-    let initData=[0];
-
-    this.drawLineChart("temperatureChart",'Temperature [°C]','rgba(255,99,132,1)', ' °C',charts);
-    this.drawLineChart("CO2Chart",'CO2 Emmissions [kt]','rgba(99,255,132,1)',' kt',charts);
-    console.log('index js chartdatasets old');
-    console.log( this.charts[0].data.datasets);
+    this.drawLineChart("temperatureChart",'Temperature [°C]','rgba(255,99,132,1)', ' °C');
+    this.drawLineChart("CO2Chart",'CO2 Emmissions [kt]','rgba(99,255,132,1)',' kt');
   }
 
   drawLineChart(idLineChart,title, color, label, charts) {
@@ -90,8 +85,7 @@ export class LineChart {
       data: data,
       options: option
     });
-    charts.push(myChart);
-
+    this.charts.push(myChart);
   }
 
   getTemplateDataset(){
@@ -121,7 +115,6 @@ updateData(data,countries){
   {
     var chartDatasets =[];
     var chartData=data[i]; //multiple curves
-    const chartDatasets_old = this.charts[i].data.datasets;
     for(let j =0; j < data[i].length; j++){ // iterate on the #curves i.e #countries selected
       var lineDatasets=this.getTemplateDataset();
       lineDatasets[0].data= chartData[j];// 1 curve;
@@ -173,9 +166,7 @@ updateTime(data, years_selected){
     //range of x axis of charts -> zoom on selected range
     this.charts[i].options.scales.xAxes[0].ticks.min = years_selected[0];
     this.charts[i].options.scales.xAxes[0].ticks.max = years_selected[2];
-    this.charts[i].update(/*{duration: 2000}*/);
-
-
+    this.charts[i].update();
   }
 
 }

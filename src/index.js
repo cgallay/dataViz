@@ -58,14 +58,17 @@ d3.csv(dataset_path, function (data) {
 
 
                     //create year vector for slider (all years present in the dataset)
+                    //to replace later
                     let years_slider = getYears(panelData.data);
                     years_slider = Array.from(new Set(years_slider)).sort();
                     //create slider
-                    let myTimeSlider = new TimeSlider(years_slider);
+                    let myTimeSlider = new TimeSlider();
+                    myTimeSlider.addTo('timeSlider');
+                    myTimeSlider.createSlider(years_slider);
+
                     //Create Line chart
                     let myLineCharts = new LineChart();
                     myLineCharts.get();
-
                     //data=[temperature,co2]
                     // empty before selecting country
                     var chartData = [];
@@ -84,13 +87,18 @@ d3.csv(dataset_path, function (data) {
 
                         //when slider used, update charts
                         myLineCharts.updateData(chartData, countries);
-                        myTimeSlider.sliderListener(chartData, myLineCharts);
+                        //set the range of the x-axis to the default values of handles
+                        //when the slider is created
+                        myLineCharts.updateTime(chartData,myTimeSlider.getYears());
                         myBubble.update(sel);
 
                     });
 
-
-
+                    myTimeSlider.addSelectListener(function(years_selected){
+                      //update the years range and time selector of the charts
+                      myLineCharts.updateTime(chartData,years_selected);
+                      //pass the year of the timeselector to the map to change the colormap
+                    });
                     //Hide loader
                     d3.select("#spinner").remove();
                 });

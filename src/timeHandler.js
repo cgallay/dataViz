@@ -9,19 +9,19 @@ var $ = require("jquery");
 //slider
 export class TimeSlider {
 
-    constructor(years){
-      this.years = years;
-      this.idSlider='timeSlider';
-      this.timeSlider=document.getElementById(this.idSlider);
-      this.createSlider();
+    constructor(){
       this.playPauseButtonAnimation();
     }
 
+    addTo(div){
+      this.timeSlider=document.getElementById(div);
+    }
+
+
 
     //function to create slider
-    createSlider(){
+    createSlider(years){
       //create noUISlider
-      let years=this.years;
       noUiSlider.create(this.timeSlider, {
         //place handler to 0%, 50% and 100%
         start: [years[0],years[Math.round(years.length / 2)],years[years.length - 1]],
@@ -38,9 +38,16 @@ export class TimeSlider {
         },
         animate: true,
         animationDuration: 400
-      });
+      }).on('update', function(values, handle) {
+        var years_selected= this.getYears()
+        //update
+        if(this.selectListener) {
+          this.selectListener(years_selected);
+        }
 
-      //TimeSelect = second handle , design it :
+      }.bind(this));
+
+      //TimeSelector = second handle , design it :
       d3.selectAll('.noUi-handle').filter(function(d, i) {
           if (i == 1) {
             return i;
@@ -53,27 +60,26 @@ export class TimeSlider {
         .style("content","none")
         .style("border-color","#F00");
 
-      //Design the Rangle handles
+      //Design the Range handles
       d3.selectAll('.noUi-handle-upper').classed(" noUi-extended ", true);
       d3.selectAll('.noUi-handle-lower').classed(" noUi-extended ", true);
       d3.selectAll('.noUi-extended').style("height", "24px").style("width", "16px").style("position","relative").style("top","-5px").style("left","-8px");
 
     }
 
-    // on update call function to update charts
-    sliderListener( data, myLineChart){
-      var years_selected =[];
-      this.timeSlider.noUiSlider.on('update', function(values, handle) {
-        years_selected = this.get() /*this.timeSlider.noUiSlider.get()*/;
-        years_selected[0] = Number(years_selected[0]);
-        years_selected[1] = Number(years_selected[1]);
-        years_selected[2] = Number(years_selected[2]);
-
-        //call function to update charts
-        myLineChart.updateTime(data,years_selected); // recover id of months selected
-      });
-
+    // get Years selected by slider (this function not only use in the update of the slider
+    //let it be !)
+    getYears(){
+      var years_selected= this.timeSlider.noUiSlider.get();
+      years_selected[0]=Number(years_selected[0]);
+      years_selected[1]=Number(years_selected[1]);
+      years_selected[2]=Number(years_selected[2]);
+      return years_selected;
     }
+
+    addSelectListener(listener){
+        this.selectListener = listener;
+      }
 
     //function to add animation to th play button
     playPauseButtonAnimation(){
