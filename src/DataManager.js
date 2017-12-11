@@ -2,7 +2,7 @@ import * as crossfilter from 'crossfilter';
 import * as d3 from 'd3';
 
 /**
- * The goal of this class is to centralize every 
+ * The goal of this class is to centralize every
  * interaciton that we have with the data
  */
 export class DataManager {
@@ -45,12 +45,20 @@ export class DataManager {
     getData() {
         return this.dataDim.top(Infinity);
     }
-    
+
     getTempForCountry(countryCode) {
         //this.df.filterAll();
         this.countryDim.filter(c => c == countryCode);
         let sortedValue = this.timeDimension.top(Infinity).sort(this.compareDate);
-        return sortedValue.map( x=> x.AverageTemperature)
+        return sortedValue.map( function(elem){
+          let obj ={
+            x:elem.dt,
+            y:elem.AverageTemperature
+          };
+          return obj;
+        });
+
+        //return sortedValue.map( x=> x.AverageTemperature)
     }
 
 }

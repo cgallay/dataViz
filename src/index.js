@@ -57,22 +57,20 @@ d3.csv(dataset_path, function (data) {
                     myMap.updateColor();
 
                     //create year vector for slider (all years present in the dataset)
+                    //to replace later
                     let years_slider = getYears(panelData.data);
                     years_slider = Array.from(new Set(years_slider)).sort();
+
+                    //create slider
+                    let myTimeSlider = new TimeSlider();
+                    myTimeSlider.addSliderTo('timeSlider');
+                    myTimeSlider.addPlayPauseTo('PlayPauseContainer');
+                    myTimeSlider.createSlider(years_slider);
+
 
                     //Create Line chart
                     let myLineCharts = new LineChart();
                     myLineCharts.draw(years_slider);
-
-                    //create slider
-                    let myTimeSlider = new TimeSlider();
-                    myTimeSlider.addTo('timeSlider');
-                    myTimeSlider.createSlider(years_slider);
-
-                    
-
-                    //data=[temperature,co2]
-                    // empty before selecting country
 
                     let chartData = [];
 
@@ -81,19 +79,35 @@ d3.csv(dataset_path, function (data) {
                         //get new temperature and co2 sorted by date !!
                         //temperature=[ temp 1st country selected,temp 2nd country selected ,....];
                         //temp 1st country sected =[{x:year_value, y:temp_value},{x:year_value, y:temp_value}]
-                        //when slider used, update charts
-                        var temperature = getRandomdata2(years_slider);
-                        var co2 = getRandomdata2(years_slider);
-                        var countries = ['France', 'Switzerland'];
+
+                        console.log("sel");
+                        console.log(sel);
+                        let temperature=[];
+                        let countries_name=[];
+                        sel.forEach(function(sel_elem){
+                           countries_name.push(sel_elem.name);
+                           temperature.push(panelData.getTempForCountry(sel_elem.id));
+                        })
+                        console.log("temperature of all countries");
+                        console.log(temperature);
+                        //var temperature = getRandomdata2(years_slider);
+                        var co2 = getRandomdata(years_slider);
+                        //var countries = ['France', 'Switzerland'];
                         chartData = [temperature, co2];
-                        myLineCharts.updateData(chartData, countries);
+                        console.log("chartData");
+                        console.log(chartData);
+
+                        //when slider used, update charts
+                        myLineCharts.updateData(chartData, countries_name);
                         myBubble.update(sel);
 
                     });
-                    myTimeSlider.addSelectListener(function (years) {
-                        myLineCharts.updateTime(chartData, years);
-                    });
 
+                    myTimeSlider.addSelectListener(function(years_selected){
+                      //update the years range and time selector of the charts
+                      myLineCharts.updateTime(chartData,years_selected);
+                      //pass the year of the timeselector to the map to change the colormap
+                    });
                     //Hide loader
                     d3.select("#spinner").remove();
                 });

@@ -118,7 +118,6 @@ export class LineChart {
         {
             var chartDatasets = [];
             var chartData = data[i]; //multiple curves
-            const chartDatasets_old = this.charts[i].data.datasets;
             for (let j = 0; j < data[i].length; j++) { // iterate on the #curves i.e #countries selected
                 var lineDatasets = this.getTemplateDataset();
                 lineDatasets.data = chartData[j];// 1 curve;
