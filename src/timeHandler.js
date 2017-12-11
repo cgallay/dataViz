@@ -97,13 +97,7 @@ export class TimeSlider {
         //$('.control')
         d3.selectAll('.control')
           .on('mousedown', function() {
-
-            console.log("hello1");
-
             $('.control').toggleClass('pause play');
-
-            console.log("button animation this");
-            console.log(this);
             this.animateTimeSelector();
           }.bind(this));
 
@@ -137,7 +131,6 @@ export class TimeSlider {
                if(selector==end){
                  $('.control').toggleClass('pause play');
                }
-               console.log("end");
            } else {
                 pos++;
                 selector=selector_start+pos;

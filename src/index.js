@@ -80,17 +80,28 @@ d3.csv(dataset_path, function (data) {
                         //temperature=[ temp 1st country selected,temp 2nd country selected ,....];
                         //temp 1st country sected =[{x:year_value, y:temp_value},{x:year_value, y:temp_value}]
 
-                        var temperature = getRandomdata2(years_slider);
-                        var co2 = getRandomdata2(years_slider);
-                        var countries = ['France', 'Switzerland'];
-
+                        console.log("sel");
+                        console.log(sel);
+                        let temperature=[];
+                        let countries_name=[];
+                        sel.forEach(function(sel_elem){
+                           countries_name.push(sel_elem.name);
+                           temperature.push(panelData.getTempForCountry(sel_elem.id));
+                        })
+                        console.log("temperature of all countries");
+                        console.log(temperature);
+                        //var temperature = getRandomdata2(years_slider);
+                        var co2 = getRandomdata(years_slider);
+                        //var countries = ['France', 'Switzerland'];
                         chartData = [temperature, co2];
+                        console.log("chartData");
+                        console.log(chartData);
 
                         //when slider used, update charts
-                        myLineCharts.updateData(chartData, countries);
+                        myLineCharts.updateData(chartData, countries_name);
                         //set the range of the x-axis to the default values of handles
                         //when the slider is created
-                        myLineCharts.updateTime(chartData,myTimeSlider.getYears());
+                        //myLineCharts.updateTime(chartData,myTimeSlider.getYears());
                         myBubble.update(sel);
 
                     });

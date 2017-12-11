@@ -17,7 +17,7 @@ export class LineChart {
     this.drawLineChart("CO2Chart",'CO2 Emmissions [kt]','rgba(99,255,132,1)',' kt');
   }
 
-  drawLineChart(idLineChart,title, color, label, charts) {
+  drawLineChart(idLineChart,title, color, label, charts,years) {
     let data = {
       datasets:[
         {
