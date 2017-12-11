@@ -97,10 +97,25 @@ export class MapManager {
                 const temperature = d.properties.temperature;
                 //color the selected country in a different manner
                 if(this.isCountrySelected(d.id)) {
-                    return "green";
+                    return 'rgba(80,111,255,1)';
                 }
-                return temperature ? this.colorScale(temperature) : "white";
+                return temperature ? this.colorScale(temperature) : "gray";
+            })
+        .style("stroke",(d) => {
+                const temperature = d.properties.temperature;
+                //color the selected country in a different manner
+                if(this.isCountrySelected(d.id)) {
+                    return 'white';
+                }
+            })
+        .style("stroke-width",(d) => {
+                const temperature = d.properties.temperature;
+                //color the selected country in a different manner
+                if(this.isCountrySelected(d.id)) {
+                    return '1';
+                }
             });
+
     }
 
 

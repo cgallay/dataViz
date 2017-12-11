@@ -57,6 +57,7 @@ export class LineChart {
                         minRotation: 45,
                         autoSkip: true
 
+
                     }
 
 
@@ -64,10 +65,8 @@ export class LineChart {
 
                 yAxes: [{
                     ticks: {
-                        /*beginAtZero: false,
-                        stepSize: 10,
-                        min: -10,
-                        max: 40*/
+                        beginAtZero: false,
+                        autoSkip: true
                     }
                 }]
             },
