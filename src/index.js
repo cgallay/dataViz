@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import * as crossfilter from 'crossfilter';
 import { MapManager } from './map.js';
 import { DataManager } from './DataManager.js';
-import { TimeSlider } from './timeHandler.js';
+import { TimeSlider } from './TimeHandler.js';
 import { test } from './helpers.js';
 import { getRandomdata } from './helpers.js';
 import { getRandomdata2 } from './helpers.js';
@@ -56,23 +56,23 @@ d3.csv(dataset_path, function (data) {
                     myMap.updateTemperature(mapData.getData());
                     myMap.updateColor();
 
-
                     //create year vector for slider (all years present in the dataset)
                     //to replace later
                     let years_slider = getYears(panelData.data);
                     years_slider = Array.from(new Set(years_slider)).sort();
+
                     //create slider
                     let myTimeSlider = new TimeSlider();
                     myTimeSlider.addSliderTo('timeSlider');
                     myTimeSlider.addPlayPauseTo('PlayPauseContainer');
                     myTimeSlider.createSlider(years_slider);
 
+
                     //Create Line chart
                     let myLineCharts = new LineChart();
-                    myLineCharts.get();
-                    //data=[temperature,co2]
-                    // empty before selecting country
-                    var chartData = [];
+                    myLineCharts.draw(years_slider);
+
+                    let chartData = [];
 
                     //When country selected update data and charts
                     myMap.addSelectListener(function (sel) {
@@ -99,9 +99,6 @@ d3.csv(dataset_path, function (data) {
 
                         //when slider used, update charts
                         myLineCharts.updateData(chartData, countries_name);
-                        //set the range of the x-axis to the default values of handles
-                        //when the slider is created
-                        myLineCharts.updateTime(chartData,myTimeSlider.getYears());
                         myBubble.update(sel);
 
                     });
