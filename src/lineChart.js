@@ -108,7 +108,7 @@ export class LineChart {
                 borderWidth: 1,
                 pointBackgroundColor: [],
                 pointBorderColor: [],
-                pointRadius: 1,
+                pointRadius: 0,
                 spanGaps: true,
                 type: 'line'
             };
@@ -169,7 +169,7 @@ export class LineChart {
                 let zero_vec = [];
                 let color_vec = [];
                 for (let k = 0; k < lineData.length; k++) {
-                    zero_vec.push(1);
+                    zero_vec.push(0);
                     color_vec.push(this.colorscale[j]);
                 }
                 let pointRadius_vec = zero_vec;
