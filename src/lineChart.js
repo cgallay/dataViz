@@ -78,8 +78,6 @@ export class LineChart {
                         var country = chart.datasets[tooltipItem.datasetIndex].label;
                         country = country.concat(": ");
                         var value = String(format.to(tooltipItem.yLabel));
-                        console.log("value");
-                        console.log(format.to(tooltipItem.yLabel));
                         var output = country.concat(value.concat(label));
                         return output;
                     }
@@ -130,6 +128,8 @@ export class LineChart {
                 lineDatasets.label = countries[j];
                 lineDatasets.borderColor = this.colorscale[j];
                 lineDatasets.backgroundColor = this.colorscale[j];
+                lineDatasets.pointBackgroundColor = this.colorscale[j];
+                lineDatasets.pointBorderColor = this.colorscale[j];
                 chartDatasets = chartDatasets.concat(lineDatasets);
             };
             this.charts[i].data.datasets = chartDatasets;
