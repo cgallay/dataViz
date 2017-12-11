@@ -125,7 +125,6 @@ export class LineChart {
                 lineDatasets.label = countries[j];
                 lineDatasets.borderColor = this.colorscale[j];
                 lineDatasets.backgroundColor = this.colorscale[j];
-
                 chartDatasets = chartDatasets.concat(lineDatasets);
             };
             this.charts[i].data.datasets = chartDatasets;
