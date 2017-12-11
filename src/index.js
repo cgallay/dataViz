@@ -56,12 +56,13 @@ d3.csv(dataset_path, function (data) {
                     myMap.updateTemperature(mapData.getData());
                     myMap.updateColor();
 
-                    let myLineCharts = new LineChart();
-                    myLineCharts.get();
-
                     //create year vector for slider (all years present in the dataset)
                     let years_slider = getYears(panelData.data);
                     years_slider = Array.from(new Set(years_slider)).sort();
+
+                    let myLineCharts = new LineChart();
+                    myLineCharts.draw(years_slider);
+
                     //create slider
                     let myTimeSlider = new TimeSlider();
                     myTimeSlider.addTo('timeSlider');

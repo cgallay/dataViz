@@ -32,7 +32,7 @@ export class TimeSlider {
 
         noUiSlider.create(this.timeSlider, {
             //place handler to 0%, 50% and 100%
-            start: [years[0], years[Math.round(years.length / 2)], years[years.length - 1]],
+            start: [years[0], years[0], years[years.length - 1]],
             connect: [false, true, true, false],
             step: 1,
             tooltips: true,
