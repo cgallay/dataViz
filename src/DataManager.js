@@ -39,7 +39,8 @@ export class DataManager {
     }
 
     selectYear(year) {
-        this.timeDimension.filter(d => d=='1970');
+        this.timeDimension.filter(d => d==year);
+
     }
 
     getData() {

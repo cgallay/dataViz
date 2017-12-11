@@ -107,6 +107,11 @@ d3.csv(dataset_path, function (data) {
                       //update the years range and time selector of the charts
                       myLineCharts.updateTime(chartData,years_selected);
                       //pass the year of the timeselector to the map to change the colormap
+                      mapData.selectYear(years_selected[1]);
+                      console.log("selectYear");
+                      console.log(mapData.selectYear(years_selected[1]));
+                      myMap.updateTemperature(mapData.getData());
+                      myMap.updateColor();
                     });
                     //Hide loader
                     d3.select("#spinner").remove();

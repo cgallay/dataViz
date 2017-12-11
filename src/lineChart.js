@@ -3,6 +3,7 @@ import { DataManager } from './DataManager.js';
 import * as d3 from 'd3';
 import * as d3_scale from 'd3-scale';
 import * as d3_scale_chromatic from 'd3-scale-chromatic';
+import * as wNumb from 'wnumb';
 //Panel
 
 export class LineChart {
@@ -71,9 +72,14 @@ export class LineChart {
             tooltips: {
                 callbacks: {
                     label: function (tooltipItem, chart) {
+                        var format=wNumb({
+                          decimals: 1
+                        });
                         var country = chart.datasets[tooltipItem.datasetIndex].label;
                         country = country.concat(": ");
-                        var value = String(tooltipItem.yLabel);
+                        var value = String(format.to(tooltipItem.yLabel));
+                        console.log("value");
+                        console.log(format.to(tooltipItem.yLabel));
                         var output = country.concat(value.concat(label));
                         return output;
                     }
