@@ -64,8 +64,10 @@ export class LineChart {
 
                 yAxes: [{
                     ticks: {
-                        beginAtZero: false,
-                        stepSize: 10
+                        /*beginAtZero: false,
+                        stepSize: 10,
+                        min: -10,
+                        max: 40*/
                     }
                 }]
             },
@@ -122,6 +124,8 @@ export class LineChart {
         {
             var chartDatasets = [];
             var chartData = data[i]; //multiple curves
+            var max_values=[];
+            var min_values=[];
             for (let j = 0; j < data[i].length; j++) { // iterate on the #curves i.e #countries selected
                 var lineDatasets = this.getTemplateDataset();
                 lineDatasets.data = chartData[j];// 1 curve;
@@ -131,14 +135,23 @@ export class LineChart {
                 lineDatasets.pointBackgroundColor = this.colorscale[j];
                 lineDatasets.pointBorderColor = this.colorscale[j];
                 chartDatasets = chartDatasets.concat(lineDatasets);
+
+                max_values.push(Math.max.apply(null,chartData[j].map(elem => elem.y)));
+                min_values.push(Math.min.apply(null,chartData[j].map(elem => elem.y)));
             };
             this.charts[i].data.datasets = chartDatasets;
             this.charts[i].options.legend.display = true;
+            //adapt y scale the max and min of the data visualized
+            this.charts[i].options.scales.yAxes[0].ticks.max = Math.max.apply(null,max_values) ;
+            this.charts[i].options.scales.yAxes[0].ticks.min = Math.min.apply(null,min_values) ;
+
             this.charts[i].update(/*{duration: 5000}*/);
         }
     }
 
     updateTime(data, years_selected) {
+      console.log("years_selected");
+      console.log(years_selected);
         for (let i = 0; i < data.length; i++) // iterate on chart , temp and co2
         {
             let chartDatasets = this.charts[i].data.datasets;
