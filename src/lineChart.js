@@ -13,15 +13,11 @@ export class LineChart {
   }
 
   get(){
-    let initData=[0];
-
     this.drawLineChart("temperatureChart",'Temperature [°C]','rgba(255,99,132,1)', ' °C');
     this.drawLineChart("CO2Chart",'CO2 Emmissions [kt]','rgba(99,255,132,1)',' kt');
-    console.log('index js chartdatasets old');
-    console.log( this.charts[0].data.datasets);
   }
 
-  drawLineChart(idLineChart,title, color, label) {
+  drawLineChart(idLineChart, title, color, label) {
     let data = {
       datasets:[
         {
@@ -137,10 +133,8 @@ updateData(data,countries){
 }
 
 updateTime(data, years_selected){
-  for (let i = 0; i < data.length; i++) // iterate on chart , temp and co2
+  for (let i = 0; i < this.charts.length; i++) // iterate on chart , temp and co2
   {
-
-    console.log(this.charts[0].data);
     let chartDatasets=this.charts[i].data.datasets;
 
     let chartData=data[i];// multiple curves

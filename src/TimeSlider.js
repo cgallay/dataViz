@@ -10,13 +10,9 @@ var $ = require("jquery");
 export class TimeSlider {
 
     constructor() {
-        //this.years = years;
         this.width = window.innerWidth;
         this.height = window.innerHeight;
 
-        //this.idSlider = 'timeSlider';
-        //this.timeSlider = document.getElementById(this.idSlider);
-        //this.createSlider();
         this.playPauseButtonAnimation();
     }
 
@@ -33,7 +29,6 @@ export class TimeSlider {
     //function to create slider
     createSlider(years) {
         //create noUISlider
-        //let years = this.years;
 
         noUiSlider.create(this.timeSlider, {
             //place handler to 0%, 50% and 100%
@@ -73,22 +68,6 @@ export class TimeSlider {
         d3.selectAll('.noUi-extended').style("height", "24px").style("width", "16px").style("position", "relative").style("top", "-5px").style("left", "-8px");
 
     }
-
-    // on update call function to update charts
-    /*
-    sliderListener(data, myLineChart) {
-        var years_selected = [];
-        this.timeSlider.noUiSlider.on('update', function (values, handle) {
-            years_selected = this.get();//this.timeSlider.noUiSlider.get()
-            years_selected[0] = Number(years_selected[0]);
-            years_selected[1] = Number(years_selected[1]);
-            years_selected[2] = Number(years_selected[2]);
-
-            //call function to update charts
-            myLineChart.updateTime(data, years_selected); // recover id of months selected
-        });
-
-    }*/
 
     sliderChange() {
 
