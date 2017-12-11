@@ -82,7 +82,7 @@ export class BubbleChart {
                         },
                         scaleLabel: {
                             display: true,
-                            labelString: "Temperature change since 1960"
+                            labelString: "Temperature change since 1950"
                         }
                     }]
                 }
