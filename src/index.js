@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import * as crossfilter from 'crossfilter';
 import { MapManager } from './map.js';
 import { DataManager } from './DataManager.js';
-import { TimeSlider } from './TimeHandler.js';
+import { TimeSlider } from './timeHandler.js';
 import { test } from './helpers.js';
 import { getRandomdata } from './helpers.js';
 import { getRandomdata2 } from './helpers.js';
