@@ -134,7 +134,7 @@ export class LineChart {
     updateTime(years_selected) {
 
         console.log('updating time !!');
-        this.charts.forEach((chartData, k) => {
+        this.charts.forEach((chartData) => {
             let chartDatasets = chartData.data.datasets;
 
             chartDatasets.forEach((dataset, i) => {
