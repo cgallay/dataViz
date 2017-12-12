@@ -77,12 +77,7 @@ d3.csv(fulldata_path, function (data) {
         //When country selected update data and charts
         myMap.addSelectListener(function (sel) {
 
-            let temperature = panelData.getTempByCountry(sel);
-            let CO2 = panelData.getCO2ByCountry(sel, getRandomdata(years_slider));
-
-            chartData = [temperature, CO2];
-
-            myLineCharts.updateData_second(chartData);
+            myLineCharts.updateData_second([panelData.getTempByCountry(sel), panelData.getCO2ByCountry(sel)]);
             myBubble.update(sel);
 
         });
