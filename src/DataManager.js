@@ -61,4 +61,54 @@ export class DataManager {
         //return sortedValue.map( x=> x.AverageTemperature)
     }
 
+    getTempByCountry(selected_countries) {
+        
+        let tempByCountryDict = [];
+        selected_countries.forEach(country => {
+
+            this.countryDim.filter(c => c == country.id);
+            let sortedValue = this.timeDimension.top(Infinity).sort(this.compareDate);
+            let temperature = sortedValue.map( function(elem){
+                let obj ={
+                  x:elem.dt,
+                  y:elem.AverageTemperature
+                };
+                return obj;
+              });
+
+            tempByCountryDict.push({
+                name: country.name,
+                value: temperature
+            }); 
+            
+        });
+
+        return tempByCountryDict;
+    }
+
+    getCO2ByCountry(selected_countries, values) {//TODO
+        
+        let CO2ByCountryDict = [];
+        selected_countries.forEach(country => {
+
+            /*
+            this.countryDim.filter(c => c == country.id);
+            let sortedValue = this.timeDimension.top(Infinity).sort(this.compareDate);
+            let temperature = sortedValue.map( function(elem){
+                let obj ={
+                  x:elem.dt,
+                  y:elem.AverageTemperature
+                };
+                return obj;
+              });
+
+              */
+              CO2ByCountryDict.push({
+                name: country.name,
+                value: values[0]
+            }); 
+            
+        });
+        return CO2ByCountryDict;
+    }
 }

@@ -109,69 +109,59 @@ export class LineChart {
         return dataset;
     }
 
+    updateData_second(chartData) {
+        console.log('updating data !!');
+        chartData.forEach((chart, i) => {
 
+            let chartDatasets = [];
 
+            chart.forEach((country, index) => {
+                let lineDatasets = this.getTemplateDataset();
+                lineDatasets.data = country.value;
+                lineDatasets.label = country.name;
+                lineDatasets.borderColor = this.colorscale[index];
+                lineDatasets.backgroundColor = this.colorscale[index];
+                chartDatasets.push(lineDatasets);
+            });
 
-    updateData(data, countries) {
-
-        for (let i = 0; i < data.length; i++) // iterate on the two charts :temp and co2
-        {
-            var chartDatasets = [];
-            var chartData = data[i]; //multiple curves
-            for (let j = 0; j < data[i].length; j++) { // iterate on the #curves i.e #countries selected
-                var lineDatasets = this.getTemplateDataset();
-                lineDatasets.data = chartData[j];// 1 curve;
-                lineDatasets.label = countries[j];
-                lineDatasets.borderColor = this.colorscale[j];
-                lineDatasets.backgroundColor = this.colorscale[j];
-                chartDatasets = chartDatasets.concat(lineDatasets);
-            };
             this.charts[i].data.datasets = chartDatasets;
             this.charts[i].options.legend.display = true;
-            this.charts[i].update(/*{duration: 5000}*/);
-        }
+            this.charts[i].update();
+        });
+
     }
 
-    updateTime(data, years_selected) {
-        for (let i = 0; i < data.length; i++) // iterate on chart , temp and co2
-        {
-            let chartDatasets = this.charts[i].data.datasets;
+    updateTime(years_selected) {
 
-            let chartData = data[i];// multiple curves
-            for (let j = 0; j < data[i].length; j++) { //iterate on curves
-                //find value for which x=years_selected[1]!
-                function findObject(element) {
-                    return element.x == years_selected[1];
-                }
-                let lineData = chartData[j];
-                let ind = lineData.findIndex(findObject);
-                let data_timeSelector = lineData[ind];
+        console.log('updating time !!');
+        this.charts.forEach((chartData, k) => {
+            let chartDatasets = chartData.data.datasets;
 
-                let zero_vec = [];
-                let color_vec = [];
-                for (let k = 0; k < lineData.length; k++) {
-                    zero_vec.push(1);
-                    color_vec.push(this.colorscale[j]);
+            chartDatasets.forEach((dataset, i) => {
+
+                let ind = dataset.data.findIndex((date) => {
+                    return parseInt(date.x) == years_selected[1];
+                });
+                let pointRadius_vec = [];
+                let pointBackgroundColor_vec = [];
+
+                for (let j = 0; j < dataset.data.length; j++) {
+                    pointRadius_vec.push(1);
+                    pointBackgroundColor_vec.push(this.colorscale[i]);
                 }
-                let pointRadius_vec = zero_vec;
                 pointRadius_vec[ind] = 3;
-                let pointBackgroundColor_vec = color_vec;
                 pointBackgroundColor_vec[ind] = 'rgba(255,0,0,1)';
-                let pointBorderColor_vec = pointBackgroundColor_vec;
-                chartDatasets[j].pointRadius = pointRadius_vec;
-                chartDatasets[j].pointBackgroundColor = pointBackgroundColor_vec;
-                chartDatasets[j].pointBorderColor = pointBorderColor_vec;
-            }
-            /*this.charts[i].update({duration:0});*/
 
-            //range of x axis of charts -> zoom on selected range
-            this.charts[i].options.scales.xAxes[0].ticks.min = years_selected[0];
-            this.charts[i].options.scales.xAxes[0].ticks.max = years_selected[2];
-            this.charts[i].update(/*{duration: 2000}*/);
+                
+                dataset.pointRadius = pointRadius_vec;
+                dataset.pointBackgroundColor = pointBackgroundColor_vec;
+                dataset.pointBorderColor = pointBackgroundColor_vec;
+            });
 
-
-        }
-
+            chartData.options.scales.xAxes[0].ticks.min = years_selected[0];
+            chartData.options.scales.xAxes[0].ticks.max = years_selected[2];
+            chartData.update();
+        });
     }
 
 }
