@@ -80,9 +80,9 @@ export class TimeSlider {
     sliderChange() {
 
         let years_selected = this.timeSlider.noUiSlider.get();
-        years_selected[0] = Number(years_selected[0]);
-        years_selected[1] = Number(years_selected[1]);
-        years_selected[2] = Number(years_selected[2]);
+        years_selected[0] = parseInt(years_selected[0]);
+        years_selected[1] = parseInt(years_selected[1]);
+        years_selected[2] = parseInt(years_selected[2]);
 
         if (this.selectionListener) {
             this.selectionListener(years_selected);
@@ -97,7 +97,6 @@ export class TimeSlider {
             .on('mousedown', () => {
 
                 var button = d3.selectAll(this.PlayPauseId).select("div").attr("class");
-                console.log(button);
                 if (button == 'control play') {
 
                     $('.control').toggleClass('play');
@@ -108,28 +107,18 @@ export class TimeSlider {
 
                         if (selector == limits[2]) {
                             $('.control').toggleClass('play');
+                            this.timeSlider.noUiSlider.set([limits[0], limits[0], limits[2]]);
                             clearInterval(this.id);
                         } else {
                             this.timeSlider.noUiSlider.set([null, ++selector, null]);
                         }
                     }, 500);
                 }
-                else{
+                else {
                     $('.control').toggleClass('play');
-                    console.log(button);
                     clearInterval(this.id);
                 }
 
-        });
-/*
-        $(document).on('keyup', function (e) {
-            console.log('nooow');
-            if (e.which == 32) {
-
-                $('.control').toggleClass('pause play');
-            }
-        });
-        */
-        /*End Play Pause button animation*/
+            });
     };
 }

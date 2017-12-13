@@ -28,9 +28,7 @@ export class LineChart {
                     borderWidth: 1,
                     backgroundColor: [],
                     pointBackgroundColor: [],
-                    /*pointBorderColor: [],
-                    pointBorderWidth: 0,*/
-                    pointRadius: 0,
+                    pointRadius: 1,
                     type: 'line'
                 }
             ]
@@ -100,7 +98,7 @@ export class LineChart {
                 borderColor: [],
                 fill: false,
                 borderWidth: 1,
-                pointBackgroundColor: [],
+                pointBackgroundColor: 'black',
                 pointBorderColor: [],
                 pointRadius: 1,
                 spanGaps: true,
@@ -134,6 +132,7 @@ export class LineChart {
     updateTime(years_selected) {
 
         console.log('updating time !!');
+
         this.charts.forEach((chartData) => {
             let chartDatasets = chartData.data.datasets;
 
@@ -147,15 +146,14 @@ export class LineChart {
 
                 for (let j = 0; j < dataset.data.length; j++) {
                     pointRadius_vec.push(1);
-                    pointBackgroundColor_vec.push(this.colorscale[i]);
+                    pointBackgroundColor_vec.push('black');
                 }
                 pointRadius_vec[ind] = 3;
                 pointBackgroundColor_vec[ind] = 'rgba(255,0,0,1)';
 
-                
                 dataset.pointRadius = pointRadius_vec;
                 dataset.pointBackgroundColor = pointBackgroundColor_vec;
-                dataset.pointBorderColor = pointBackgroundColor_vec;
+
             });
 
             chartData.options.scales.xAxes[0].ticks.min = years_selected[0];
