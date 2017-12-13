@@ -109,7 +109,7 @@ export class LineChart {
         return dataset;
     }
 
-    updateData_second(chartData) {
+    updateData(chartData) {
         console.log('updating data !!');
         chartData.forEach((chart, i) => {
 

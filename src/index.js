@@ -67,17 +67,14 @@ d3.csv(fulldata_path, function (data) {
         myTimeSlider.addPlayPauseTo('PlayPauseContainer');
         myTimeSlider.createSlider(years_slider);
 
-
         //Create Line chart
         let myLineCharts = new LineChart();
         myLineCharts.draw(years_slider);
 
-        let chartData = [];
-
         //When country selected update data and charts
         myMap.addSelectListener(function (sel) {
 
-            myLineCharts.updateData_second([panelData.getTempByCountry(sel), panelData.getCO2ByCountry(sel)]);
+            myLineCharts.updateData([panelData.getTempByCountry(sel), panelData.getCO2ByCountry(sel)]);
             myBubble.update(sel);
 
         });
