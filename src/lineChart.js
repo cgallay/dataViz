@@ -129,7 +129,7 @@ export class LineChart {
                 lineDatasets.backgroundColor = this.colorscale[index];
 
                 
-                let value = country.value.map((elem) => parseInt(elem.y));
+                let value = country.value.map((elem) => parseFloat(elem.y));
 
                 max_values.push(Math.max.apply(null, value));
                 min_values.push(Math.min.apply(null, value));
@@ -138,6 +138,7 @@ export class LineChart {
 
             });
             
+            console.log(Math.max.apply(null, max_values));
             this.charts[i].options.scales.yAxes[0].ticks.max = Math.max.apply(null, max_values) ;
             this.charts[i].options.scales.yAxes[0].ticks.min = Math.min.apply(null, min_values) ;
             
