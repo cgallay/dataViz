@@ -7,7 +7,7 @@ export class MapManager {
 
         this.selection = null;
         this.selections = [];
-        this.SELECTION_MAX = 2;
+        this.SELECTION_MAX = 5;
 
         // D3 Projection
         this.projection = d3.geoEquirectangular()
