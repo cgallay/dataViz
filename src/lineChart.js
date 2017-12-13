@@ -3,6 +3,7 @@ import { DataManager } from './DataManager.js';
 import * as d3 from 'd3';
 import * as d3_scale from 'd3-scale';
 import * as d3_scale_chromatic from 'd3-scale-chromatic';
+import * as wNumb from 'wnumb';
 //Panel
 
 export class LineChart {
@@ -54,6 +55,7 @@ export class LineChart {
                         minRotation: 45,
                         autoSkip: true
 
+
                     }
 
 
@@ -62,16 +64,19 @@ export class LineChart {
                 yAxes: [{
                     ticks: {
                         beginAtZero: false,
-                        stepSize: 10
+                        autoSkip: true
                     }
                 }]
             },
             tooltips: {
                 callbacks: {
                     label: function (tooltipItem, chart) {
+                        var format=wNumb({
+                          decimals: 1
+                        });
                         var country = chart.datasets[tooltipItem.datasetIndex].label;
                         country = country.concat(": ");
-                        var value = String(tooltipItem.yLabel);
+                        var value = String(format.to(tooltipItem.yLabel));
                         var output = country.concat(value.concat(label));
                         return output;
                     }
@@ -113,15 +118,29 @@ export class LineChart {
 
             let chartDatasets = [];
 
+            let max_values=[];
+            let min_values=[];
+
             chart.forEach((country, index) => {
                 let lineDatasets = this.getTemplateDataset();
                 lineDatasets.data = country.value;
                 lineDatasets.label = country.name;
                 lineDatasets.borderColor = this.colorscale[index];
                 lineDatasets.backgroundColor = this.colorscale[index];
-                chartDatasets.push(lineDatasets);
-            });
 
+                
+                let value = country.value.map((elem) => parseInt(elem.y));
+
+                max_values.push(Math.max.apply(null, value));
+                min_values.push(Math.min.apply(null, value));
+                
+                chartDatasets.push(lineDatasets);
+
+            });
+            
+            this.charts[i].options.scales.yAxes[0].ticks.max = Math.max.apply(null, max_values) ;
+            this.charts[i].options.scales.yAxes[0].ticks.min = Math.min.apply(null, min_values) ;
+            
             this.charts[i].data.datasets = chartDatasets;
             this.charts[i].options.legend.display = true;
             this.charts[i].update();
@@ -134,6 +153,7 @@ export class LineChart {
         console.log('updating time !!');
 
         this.charts.forEach((chartData) => {
+
             let chartDatasets = chartData.data.datasets;
 
             chartDatasets.forEach((dataset, i) => {

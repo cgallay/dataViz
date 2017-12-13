@@ -82,7 +82,11 @@ d3.csv(fulldata_path, function (data) {
         myTimeSlider.addSelectListener(function (years_selected) {
             //update the years range and time selector of the charts
             myLineCharts.updateTime(years_selected);
-            //pass the year of the timeselector to the map to change the colormap
+            
+            mapData.selectYear(years_selected[1]);
+            myMap.updateTemperature(mapData.getData());
+            myMap.updateColor();
+            
         });
         //Hide loader
         d3.select("#spinner").remove();
