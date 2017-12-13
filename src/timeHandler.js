@@ -43,7 +43,6 @@ export class TimeSlider {
             //place handler to 0%, 50% and 100%
             start: [years[0], years[0], years[years.length - 1]],
             connect: [false, true, true, false],
-            step: 1,
             tooltips: true,
             format: wNumb({
                 decimals: 0
@@ -59,7 +58,7 @@ export class TimeSlider {
 
 
         //TimeSelect = second handle , design it :
-        d3.selectAll('.noUi-handle').filter(function (d, i) {
+        d3.selectAll('.noUi-handle').filter((d, i) => {
             if (i == 1) {
                 return i;
             }
@@ -95,50 +94,42 @@ export class TimeSlider {
         /*Play Pause button animation*/
         //$('.control')
         d3.selectAll('.control')
-            .on('mousedown', function () {
-                $('.control').toggleClass('pause play');
-                this.animateTimeSelector();
-            }.bind(this));
+            .on('mousedown', () => {
 
+                var button = d3.selectAll(this.PlayPauseId).select("div").attr("class");
+                console.log(button);
+                if (button == 'control play') {
+
+                    $('.control').toggleClass('play');
+                    console.log(d3.selectAll(this.PlayPauseId).select("div").attr("class"));
+                    this.id = setInterval(() => {
+                        var limits = this.timeSlider.noUiSlider.get();
+                        var selector = limits[1];
+
+                        if (selector == limits[2]) {
+                            $('.control').toggleClass('play');
+                            clearInterval(this.id);
+                        } else {
+                            this.timeSlider.noUiSlider.set([null, ++selector, null]);
+                        }
+                    }, 500);
+                }
+                else{
+                    $('.control').toggleClass('play');
+                    console.log(button);
+                    clearInterval(this.id);
+                }
+
+        });
+/*
         $(document).on('keyup', function (e) {
-
+            console.log('nooow');
             if (e.which == 32) {
 
                 $('.control').toggleClass('pause play');
             }
         });
+        */
         /*End Play Pause button animation*/
     };
-    animateTimeSelector() {
-
-        var pos = 0;
-        var id = setInterval(frame.bind(this), 5);
-
-
-        var limits = this.timeSlider.noUiSlider.get();
-        var start = Number(limits[0]);
-        var selector_start = Number(limits[1]);
-        var end = Number(limits[2]);
-        var selector;
-
-
-        function frame() {
-            var pause = d3.selectAll(this.PlayPauseId).select("div").attr("class") == 'control play';
-
-            if (selector == end | pause == true) {
-                clearInterval(id);
-                if (selector == end) {
-                    $('.control').toggleClass('pause play');
-                }
-            } else {
-                pos++;
-                selector = selector_start + pos;
-
-                this.timeSlider.noUiSlider.set([start, selector, end]);
-
-            }
-
-        }
-    }
-
 }

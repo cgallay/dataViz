@@ -121,15 +121,15 @@ body{
   content: "";
   height: 30px;
 }
-.control.pause .left,
-.control.pause .right {
+.control .left,
+.control .right {
   margin: 0;
   border-left: 9.9px solid #fff;
   border-top: 0 solid transparent;
   border-bottom: 0 solid transparent;
   height: 25.98px;
 }
-.control.pause .left {
+.control .left {
   border-right: 6px solid transparent;
 }
 .control.play .left {
