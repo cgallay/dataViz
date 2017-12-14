@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import * as crossfilter from 'crossfilter';
 import { MapManager } from './map.js';
 import { DataManager } from './DataManager.js';
-import { TimeSlider } from './TimeHandler.js';
+import { TimeSlider } from './timeHandler.js';
 import { test } from './helpers.js';
 import { getRandomdata } from './helpers.js';
 import { getRandomdata2 } from './helpers.js';
@@ -19,9 +19,6 @@ const nouislidercss = require('./nouislider.css');
 
 const geojson_path = "geojson/world-countries.json";
 const dataset_path = "data/temp_country_group.csv";
-const dataset_CO2_path = "data/CO2_country.csv";
-const dataset_pop_path = "data/population_country.csv";
-const dataset_delta_temp_path = "data/delta_temp.csv";
 
 const fulldata_path = "data/full_data.csv"
 
@@ -35,24 +32,23 @@ function selectYear(year) {
 
 //Loading dataset
 
-d3.csv(fulldata_path, function (data) {
-    d3.json(geojson_path, function (geojson) {
+d3.csv(fulldata_path, (data) => {
+    d3.json(geojson_path, (geojson) => {
 
 
         let myBubble = new BubbleChart();
         myBubble.addTo('#bubble');
         myBubble.get_chart();
 
-        var mapData = new DataManager(data);
-        var panelData = new DataManager(data);
-        var myMap = new MapManager(geojson);
+        let mapData = new DataManager(data);
+        let panelData = new DataManager(data);
+        let myMap = new MapManager(geojson);
         myMap.addTo("#mapContainer");
         myMap.drawMap();
 
         myMap.setColorDomain(mapData.getTempDomain());
 
-        //TODO: Merge these two
-        mapData.selectYear(1980);
+
         myMap.updateTemperature(mapData.getData());
         myMap.updateColor();
 
@@ -72,14 +68,14 @@ d3.csv(fulldata_path, function (data) {
         myLineCharts.draw(years_slider);
 
         //When country selected update data and charts
-        myMap.addSelectListener(function (sel) {
+        myMap.addSelectListener( (sel) => {
 
             myLineCharts.updateData([panelData.getTempByCountry(sel), panelData.getCO2ByCountry(sel)]);
             myBubble.update(sel);
 
         });
 
-        myTimeSlider.addSelectListener(function (years_selected) {
+        myTimeSlider.addSelectListener( (years_selected) => {
             //update the years range and time selector of the charts
             myLineCharts.updateTime(years_selected);
             

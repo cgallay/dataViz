@@ -48,7 +48,6 @@ export class DataManager {
     }
 
     getTempForCountry(countryCode) {
-        //this.df.filterAll();
         this.countryDim.filter(c => c == countryCode);
         let sortedValue = this.timeDimension.top(Infinity).sort(this.compareDate);
         return sortedValue.map(function (elem) {
@@ -58,8 +57,6 @@ export class DataManager {
             };
             return obj;
         });
-
-        //return sortedValue.map( x=> x.AverageTemperature)
     }
 
     getTempByCountry(selected_countries) {
@@ -69,7 +66,7 @@ export class DataManager {
 
             this.countryDim.filter(c => c == country.id);
             let sortedValue = this.timeDimension.top(Infinity).sort(this.compareDate);
-            let temperature = sortedValue.map(function (elem) {
+            let temperature = sortedValue.map( (elem) => {
                 let obj = {
                     x: elem.dt,
                     y: elem.AverageTemperature
@@ -95,7 +92,7 @@ export class DataManager {
 
             this.countryDim.filter(c => c == country.id);
             let sortedValue = this.timeDimension.top(Infinity).sort(this.compareDate);
-            let CO2 = sortedValue.map(function (elem) {
+            let CO2 = sortedValue.map( (elem) => {
                 let obj = {
                     x: elem.dt,
                     y: elem.CO2

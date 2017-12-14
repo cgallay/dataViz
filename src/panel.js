@@ -37,7 +37,7 @@ export class Panel{
     //draw line chart (temperature)
     drawLineChart(dataset, years, years_id_selected, color, label, idLineChart, title) {
 
-      var data = {
+      let data = {
         labels: years.slice(years_id_selected[0], years_id_selected[2]),
         datasets: [
           {
@@ -66,7 +66,7 @@ export class Panel{
         ]
       };
 
-      var option = {
+      let option = {
         animation:false,
         legend: {
           display: false
@@ -88,8 +88,8 @@ export class Panel{
         }
       };
 
-      var ctx = document.getElementById(idLineChart);
-      var myChart = new Chart(ctx, {
+      let ctx = document.getElementById(idLineChart);
+      let myChart = new Chart(ctx, {
         type: 'line',
         data: data,
         options: option

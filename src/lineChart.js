@@ -70,14 +70,14 @@ export class LineChart {
             },
             tooltips: {
                 callbacks: {
-                    label: function (tooltipItem, chart) {
-                        var format=wNumb({
+                    label:  (tooltipItem, chart) => {
+                        let format=wNumb({
                           decimals: 1
                         });
-                        var country = chart.datasets[tooltipItem.datasetIndex].label;
+                        let country = chart.datasets[tooltipItem.datasetIndex].label;
                         country = country.concat(": ");
-                        var value = String(format.to(tooltipItem.yLabel));
-                        var output = country.concat(value.concat(label));
+                        let value = String(format.to(tooltipItem.yLabel));
+                        let output = country.concat(value.concat(label));
                         return output;
                     }
                 }
@@ -113,7 +113,7 @@ export class LineChart {
     }
 
     updateData(chartData) {
-        console.log('updating data !!');
+        
         chartData.forEach((chart, i) => {
 
             let chartDatasets = [];
@@ -138,9 +138,8 @@ export class LineChart {
 
             });
             
-            console.log(Math.max.apply(null, max_values));
-            this.charts[i].options.scales.yAxes[0].ticks.max = Math.max.apply(null, max_values) ;
-            this.charts[i].options.scales.yAxes[0].ticks.min = Math.min.apply(null, min_values) ;
+            this.charts[i].options.scales.yAxes[0].ticks.max = ( max_values.length > 0 ? Math.max.apply(null, max_values) : 30) ;
+            this.charts[i].options.scales.yAxes[0].ticks.min = ( min_values.length > 0 ? Math.min.apply(null, min_values) : 0) ;
             
             this.charts[i].data.datasets = chartDatasets;
             this.charts[i].options.legend.display = true;
@@ -150,8 +149,6 @@ export class LineChart {
     }
 
     updateTime(years_selected) {
-
-        console.log('updating time !!');
 
         this.charts.forEach((chartData) => {
 

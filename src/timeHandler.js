@@ -3,7 +3,7 @@ import * as sprintf from 'sprintf-js';
 import * as d3 from 'd3';
 import * as wNumb from 'wnumb';
 
-var $ = require("jquery");
+let $ = require("jquery");
 
 
 //slider
@@ -96,14 +96,14 @@ export class TimeSlider {
         d3.selectAll('.control')
             .on('mousedown', () => {
 
-                var button = d3.selectAll(this.PlayPauseId).select("div").attr("class");
+                let button = d3.selectAll(this.PlayPauseId).select("div").attr("class");
                 if (button == 'control play') {
 
                     $('.control').toggleClass('play');
                     console.log(d3.selectAll(this.PlayPauseId).select("div").attr("class"));
                     this.id = setInterval(() => {
-                        var limits = this.timeSlider.noUiSlider.get();
-                        var selector = limits[1];
+                        let limits = this.timeSlider.noUiSlider.get();
+                        let selector = limits[1];
 
                         if (selector == limits[2]) {
                             $('.control').toggleClass('play');
