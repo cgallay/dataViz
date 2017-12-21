@@ -104,10 +104,10 @@ export class BubbleChart {
             });
         })
 
-        let co2_max = Math.max.apply(null, co2_values);
+        let co2_max = Math.max.apply(null, co2_values) + 1;
         let r_co2_max = r_values[co2_values.indexOf(String(co2_max))];
-
-        this.myBubbleChart.options.scales.yAxes[0].ticks.max =  co2_max ;
+        console.log(co2_max);
+        this.myBubbleChart.options.scales.yAxes[0].ticks.max =  co2_max;
         this.myBubbleChart.update();
     }
 
