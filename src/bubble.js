@@ -1,17 +1,17 @@
 import * as d3 from 'd3';
+import { values } from 'd3';
 
 export class BubbleChart {
-    constructor() {
+    constructor(initial_year) {
         this.width = window.innerWidth;
         this.height = window.innerHeight;
-        this.selected = [];
+        this.selectedYear = parseInt(initial_year);
     }
     addTo(div) {
 
         this.Bubble = d3.select(div);
         this.canvas = this.Bubble.append('canvas')
             .attr('width', window.innerWidth)
-            //.attr('height', window.innerHeight)
             .attr('id', 'bubble-chart');
 
     }
@@ -29,8 +29,8 @@ export class BubbleChart {
                 }, scales: {
                     yAxes: [{
                         ticks: {
-                            //suggestedMin: 50,
-                            //suggestedMax: 100
+                            suggestedMin: 0,
+                            suggestedMax: 30
                         },
                         scaleLabel: {
                             display: true,
@@ -39,8 +39,8 @@ export class BubbleChart {
                     }],
                     xAxes: [{
                         ticks: {
-                            //min: 5000,
-                            suggestedMax: 30000000
+                            suggestedMin: -1,
+                            suggestedMax: 3
                         },
                         scaleLabel: {
                             display: true,
@@ -52,49 +52,57 @@ export class BubbleChart {
         });
     }
 
-    update(selected) {
+    updateTime(year){
 
-        let countries = [];
+        this.selectedYear = parseInt(year);
+
+        this.myBubbleChart.data.datasets.forEach((dataset, index) => {
+            dataset.data.forEach(element => {
+                //TODO
+            }); 
+        })
+    }
+
+
+    updateData(bubbleData) {
+
         let eraseIndex = [];
 
-        selected.forEach(country => {
-            countries.push(country.name);
-        });
+        let countries = bubbleData.map(country => country.name);
         
         let color = () => {
             let o = Math.round, r = Math.random, s = 255;
             let randRGB = 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',';
-            return [randRGB + '0.2' + ')', randRGB + '1' + ')'];
+            return [randRGB + '0.5' + ')', randRGB + '1' + ')'];
         };
         
         this.myBubbleChart.data.datasets.forEach((dataset, index) => {
 
             if (countries.includes(dataset.label)) {
-                let ind = countries.findIndex((ele) => {
-                    return ele==dataset.label;
-                });
+                let ind = countries.findIndex((ele) => ele==dataset.label);
                 countries.splice(ind, 1);
             }
             else{
                 eraseIndex.push(index);
             }
         });
-
         eraseIndex.forEach(ind => {
             this.myBubbleChart.data.datasets.splice(ind, 1);
         });
         countries.forEach(newCountry => {
-
+            
             let myColor = color();
-
+            console.log(this.selectedYear);
+            let data = bubbleData.filter(x => x.name==newCountry)[0].value.filter(x => x.year == this.selectedYear);
+            console.log(data);
             this.myBubbleChart.data.datasets.push({
                 label: newCountry,
                 backgroundColor: myColor[0],
                 borderColor: myColor[1],
                 data: [{
-                    x: Math.round(Math.random() * 30000000),
-                    y: 5.921,
-                    r: 15
+                    x: parseFloat(data[0].co2),
+                    y: parseFloat(data[0].delta),
+                    r: Math.sqrt(parseFloat(data[0].pop)/100000)
                 }]
             });
         });

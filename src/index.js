@@ -35,11 +35,6 @@ function selectYear(year) {
 d3.csv(fulldata_path, (data) => {
     d3.json(geojson_path, (geojson) => {
 
-
-        let myBubble = new BubbleChart();
-        myBubble.addTo('#bubble');
-        myBubble.get_chart();
-
         let mapData = new DataManager(data);
         let panelData = new DataManager(data);
         let myMap = new MapManager(geojson);
@@ -67,17 +62,24 @@ d3.csv(fulldata_path, (data) => {
         let myLineCharts = new LineChart();
         myLineCharts.draw(years_slider);
 
+        //Create Bubble chart
+        let myBubble = new BubbleChart(years_slider[0]);
+        myBubble.addTo('#bubble');
+        myBubble.get_chart();
+
         //When country selected update data and charts
         myMap.addSelectListener( (sel) => {
-
-            myLineCharts.updateData([panelData.getTempByCountry(sel), panelData.getCO2ByCountry(sel)]);
-            myBubble.update(sel);
+            let data = panelData.getDataByCountry(sel)
+            myLineCharts.updateData(data.slice(0,2));
+            //myBubble.update(sel);
+            myBubble.updateData(data[2]);
 
         });
 
         myTimeSlider.addSelectListener( (years_selected) => {
             //update the years range and time selector of the charts
             myLineCharts.updateTime(years_selected);
+            //myBubble.updateTime(years_selected[1]);
             
             mapData.selectYear(years_selected[1]);
             myMap.updateTemperature(mapData.getData());

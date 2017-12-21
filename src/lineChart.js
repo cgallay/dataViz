@@ -4,6 +4,7 @@ import * as d3 from 'd3';
 import * as d3_scale from 'd3-scale';
 import * as d3_scale_chromatic from 'd3-scale-chromatic';
 import * as wNumb from 'wnumb';
+import { min } from 'd3';
 //Panel
 
 export class LineChart {
@@ -129,7 +130,7 @@ export class LineChart {
                 lineDatasets.backgroundColor = this.colorscale[index];
 
                 
-                let value = country.value.map((elem) => parseFloat(elem.y));
+                let value = country.value.map((elem) => parseFloat(elem.y)).filter((elem) => ! isNaN(elem));
 
                 max_values.push(Math.max.apply(null, value));
                 min_values.push(Math.min.apply(null, value));

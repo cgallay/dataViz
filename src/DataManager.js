@@ -1,5 +1,6 @@
 import * as crossfilter from 'crossfilter';
 import * as d3 from 'd3';
+import { select } from 'd3';
 
 /**
  * The goal of this class is to centralize every
@@ -12,6 +13,9 @@ export class DataManager {
         this.dataDim = this.cf.dimension(d => d);
         this.countryDim = this.cf.dimension(d => d["ISO Code"]);
         this.timeDimension = this.cf.dimension(d => d.dt);
+        this.deltaDimension = this.cf.dimension(d => d.delta);
+        this.co2Dim = this.cf.dimension(d => d.CO2);
+        this.popDimension = this.cf.dimension(d => d.population);
     }
 
     /**
@@ -39,7 +43,7 @@ export class DataManager {
     }
 
     selectYear(year) {
-        this.timeDimension.filter(d => d==year);
+        return this.timeDimension.filter(d => d==year).top(Infinity);
 
     }
 
@@ -47,66 +51,43 @@ export class DataManager {
         return this.dataDim.top(Infinity);
     }
 
-    getTempForCountry(countryCode) {
-        this.countryDim.filter(c => c == countryCode);
-        let sortedValue = this.timeDimension.top(Infinity).sort(this.compareDate);
-        return sortedValue.map(function (elem) {
-            let obj = {
-                x: elem.dt,
-                y: elem.AverageTemperature
-            };
-            return obj;
-        });
-    }
+    getDataByCountry(selected_countries) {
 
-    getTempByCountry(selected_countries) {
+        let dataDictList = [[], [], []]; // TempChart, CO2Chart, BubbleChart
 
-        let tempByCountryDict = [];
         selected_countries.forEach(country => {
 
             this.countryDim.filter(c => c == country.id);
             let sortedValue = this.timeDimension.top(Infinity).sort(this.compareDate);
-            let temperature = sortedValue.map( (elem) => {
-                let obj = {
+            let data = sortedValue.map( (elem) => {
+
+                return [{/*
                     x: elem.dt,
                     y: elem.AverageTemperature
-                };
-                return obj;
-            });
-
-            tempByCountryDict.push({
-                name: country.name,
-                value: temperature
-            });
-
-        });
-
-        return tempByCountryDict;
-    }
-
-    getCO2ByCountry(selected_countries) {
-
-        let CO2ByCountryDict = [];
-
-        selected_countries.forEach(country => {
-
-            this.countryDim.filter(c => c == country.id);
-            let sortedValue = this.timeDimension.top(Infinity).sort(this.compareDate);
-            let CO2 = sortedValue.map( (elem) => {
-                let obj = {
+                },{/*/
+                    x: elem.dt,
+                    y: elem.delta
+                },{//*/
                     x: elem.dt,
                     y: elem.CO2
-                };
-                return obj;
+                },{
+                    year: elem.dt,
+                    pop: elem.population,
+                    delta: elem.delta,
+                    co2: elem.CO2,
+                }];
             });
 
-            CO2ByCountryDict.push({
-                name: country.name,
-                value: CO2
+            dataDictList.forEach((chartDict, i) => {
+                chartDict.push({
+                    name: country.name,
+                    value: data.map(elem => elem[i])
+                })
             });
+
 
         });
 
-        return CO2ByCountryDict;
+        return dataDictList;
     }
 }
