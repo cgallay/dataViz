@@ -67,24 +67,29 @@ d3.csv(fulldata_path, (data) => {
         myBubble.addTo('#bubble');
         myBubble.get_chart();
 
+        var data_country_select;
         //When country selected update data and charts
         myMap.addSelectListener( (sel) => {
             let data = panelData.getDataByCountry(sel)
             myLineCharts.updateData(data.slice(0,2));
             //myBubble.update(sel);
             myBubble.updateData(data[2]);
+            data_country_select = panelData.getDataByCountry(sel);
+            console.log(sel);
+            console.log("data country");
+            console.log(data_country_select);
 
         });
 
         myTimeSlider.addSelectListener( (years_selected) => {
             //update the years range and time selector of the charts
             myLineCharts.updateTime(years_selected);
-            //myBubble.updateTime(years_selected[1]);
-            
+
+            myBubble.updateTime(years_selected[1]);
             mapData.selectYear(years_selected[1]);
             myMap.updateTemperature(mapData.getData());
             myMap.updateColor();
-            
+
         });
         //Hide loader
         d3.select("#spinner").remove();

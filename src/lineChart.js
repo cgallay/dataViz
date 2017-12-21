@@ -30,7 +30,7 @@ export class LineChart {
                     borderWidth: 1,
                     backgroundColor: [],
                     pointBackgroundColor: [],
-                    pointRadius: 1,
+                    pointRadius: 0,
                     type: 'line'
                 }
             ]
@@ -106,7 +106,7 @@ export class LineChart {
                 borderWidth: 1,
                 pointBackgroundColor: 'black',
                 pointBorderColor: [],
-                pointRadius: 1,
+                pointRadius: 0,
                 spanGaps: true,
                 type: 'line'
             };
@@ -114,7 +114,7 @@ export class LineChart {
     }
 
     updateData(chartData) {
-        
+
         chartData.forEach((chart, i) => {
 
             let chartDatasets = [];
@@ -129,19 +129,19 @@ export class LineChart {
                 lineDatasets.borderColor = this.colorscale[index];
                 lineDatasets.backgroundColor = this.colorscale[index];
 
-                
+
                 let value = country.value.map((elem) => parseFloat(elem.y)).filter((elem) => ! isNaN(elem));
 
                 max_values.push(Math.max.apply(null, value));
                 min_values.push(Math.min.apply(null, value));
-                
+
                 chartDatasets.push(lineDatasets);
 
             });
-            
+
             this.charts[i].options.scales.yAxes[0].ticks.max = ( max_values.length > 0 ? Math.max.apply(null, max_values) : 30) ;
             this.charts[i].options.scales.yAxes[0].ticks.min = ( min_values.length > 0 ? Math.min.apply(null, min_values) : 0) ;
-            
+
             this.charts[i].data.datasets = chartDatasets;
             this.charts[i].options.legend.display = true;
             this.charts[i].update();
@@ -164,7 +164,7 @@ export class LineChart {
                 let pointBackgroundColor_vec = [];
 
                 for (let j = 0; j < dataset.data.length; j++) {
-                    pointRadius_vec.push(1);
+                    pointRadius_vec.push(0);
                     pointBackgroundColor_vec.push('black');
                 }
                 pointRadius_vec[ind] = 3;
