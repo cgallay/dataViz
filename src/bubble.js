@@ -15,7 +15,6 @@ export class BubbleChart {
 
         this.Bubble = d3.select(div);
         this.canvas = this.Bubble.append('canvas')
-            .attr('width', window.innerWidth)
             .attr('id', 'bubble-chart');
 
     }
@@ -27,6 +26,7 @@ export class BubbleChart {
                 datasets: []
             },
             options: {
+                maintainAspectRatio : false,
                 title: {
                     display: true,
                     text: 'CO2 / Temperature change'
@@ -100,19 +100,11 @@ export class BubbleChart {
             });
         })
 
-<<<<<<< HEAD
-        let co2_max = Math.max.apply(null, co2_values) + 1;
-        let r_co2_max = r_values[co2_values.indexOf(String(co2_max))];
-        console.log(co2_max);
-        this.myBubbleChart.options.scales.yAxes[0].ticks.max =  co2_max;
-        this.myBubbleChart.update();
-=======
         //let co2_max = Math.max.apply(null, co2_values);
         //let r_co2_max = r_values[co2_values.indexOf(String(co2_max))];
 
         //this.myBubbleChart.options.scales.yAxes[0].ticks.max =  co2_max ;
         this.myBubbleChart.update(5000);
->>>>>>> dev
     }
 
 
@@ -126,7 +118,7 @@ export class BubbleChart {
         //let co2_values = [];
         //let r_values = [];
         countries.forEach(displayedCountry => {
-            
+
             let data = bubbleData.filter(x => x.name == displayedCountry)[0].value.filter(x => x.year == this.selectedYear);
             //co2_values.push(data[0].co2);
             //r_values.push(Math.sqrt(parseFloat(data[0].pop) / 100000));

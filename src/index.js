@@ -31,7 +31,9 @@ function selectYear(year) {
 }
 
 //Loading dataset
-
+let myLineCharts;
+let myBubble;
+let panelExtended = false;
 d3.csv(fulldata_path, (data) => {
     d3.json(geojson_path, (geojson) => {
 
@@ -59,11 +61,11 @@ d3.csv(fulldata_path, (data) => {
         myTimeSlider.createSlider(years_slider);
 
         //Create Line chart
-        let myLineCharts = new LineChart();
+        myLineCharts = new LineChart();
         myLineCharts.draw(years_slider);
 
         //Create Bubble chart
-        let myBubble = new BubbleChart(years_slider[0]);
+        myBubble= new BubbleChart(years_slider[0]);
         myBubble.addTo('#bubble');
         myBubble.get_chart();
 
@@ -73,7 +75,6 @@ d3.csv(fulldata_path, (data) => {
             myLineCharts.updateData(data.slice(0,2));
             //myBubble.update(sel);
             myBubble.updateData(data[2]);
-
 
         });
 
@@ -92,3 +93,42 @@ d3.csv(fulldata_path, (data) => {
     });
 
 });
+
+d3.selectAll('#panel')
+  .on("click", function(d) {
+    if(panelExtended ==false){
+        d3.selectAll('#panel').transition()
+              .duration(2000)
+              .style("width",'96%')
+              .style("left",'1%');
+
+        d3.selectAll('#LineChart')
+              .style("width",'45%')
+              .style("height", "70%")
+              .style("float", "left");
+
+        d3.selectAll('#bubble')
+              .style("width",'45%')
+              .style("height", "100%")
+              .style("float", "right");
+              panelExtended=true;
+      }
+    else{
+      d3.selectAll('#panel').transition()
+            .duration(2000)
+            .style("width")
+            .style("left");
+
+      d3.selectAll('#LineChart')
+            .style("width",'100%')
+            .style("height",'50%')
+            .style("float",'top');
+
+      d3.selectAll('#bubble')
+            .style("width",'100%')
+            .style("height",'49%')
+            .style("float",'bottom');
+      panelExtended=false;
+
+    }
+    });

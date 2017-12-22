@@ -77,9 +77,10 @@ export class TimeSlider {
 
         //add tooltops for events
         d3.selectAll('.noUi-base').append('div')
-        .attr('class','.noUi-tooltip')
-        .attr('id','test2')
-        .text('2000');
+        .attr('class','noUi-tooltip-event')
+        .text('2000')
+        .style('left',String((2000-1960)*100/(2013-1960)) + '%');
+
 
 
 
