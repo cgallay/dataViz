@@ -13,6 +13,7 @@ export class LineChart {
         this.charts = [];
         this.colorscale = d3_scale_chromatic.schemeSet2;
         this.data_mean = data_mean.sort((a, b) => (a.dt) - (b.dt)).map(elem => {
+            console.log(elem);
             return [{/*
                 x: elem.dt,
                 y: elem.AverageTemperature
@@ -23,10 +24,8 @@ export class LineChart {
                 x: elem.dt,
                 y: elem.CO2
             }, {
-                year: elem.dt,
-                pop: elem.population,
-                delta: elem.delta,
-                co2: elem.CO2,
+                x: elem.dt,
+                y: elem.footprint/10000000
             }];
         });
     }
@@ -152,11 +151,25 @@ export class LineChart {
             worldDataSet.label = 'World';
             worldDataSet.borderColor = this.colorscale[0];
             worldDataSet.backgroundColor = this.colorscale[0];
-            worldDataSet.data = this.data_mean.map(elem => elem[i]);
+            
+            if(i==0){
+                this.charts[i].options.scales.yAxes[0].ticks.min = -1;
+                this.charts[i].options.scales.yAxes[0].ticks.max = 2;
+                worldDataSet.data = this.data_mean.map(elem => elem[i]);
+            }
+            else if (i==1){
+                this.charts[i].options.scales.yAxes[0].ticks.min = 0;
+                this.charts[i].options.scales.yAxes[0].ticks.max = 6;
+                worldDataSet.data = this.data_mean.map(elem => elem[i]);
+                console.log('test');
+                console.log(worldDataSet.data);
+            }
+            else {
+                this.charts[i].options.scales.yAxes[0].ticks.min = 0;
+                this.charts[i].options.scales.yAxes[0].ticks.max = 12;
+                worldDataSet.data = this.data_mean.map(elem => elem[i]);
+            }
 
-
-            this.charts[i].options.scales.yAxes[0].ticks.min = i==0 ? -1:0;
-            this.charts[i].options.scales.yAxes[0].ticks.max = i==0 ? 2:6;
             this.charts[i].data.datasets = [worldDataSet];
             this.charts[i].options.legend.display = true;
             this.charts[i].update();
@@ -172,7 +185,7 @@ export class LineChart {
 
             let max_values = [];
             let min_values = [];
-
+            
             if (chart.length > 0) {
 
                 chart.forEach((country, index) => {

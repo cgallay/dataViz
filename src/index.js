@@ -53,7 +53,7 @@ d3.csv(fulldata_path, (data) => {
             myMap.setColorDomain(mapData.getTempDomain(), 'TEMPERATURE');
             myMap.setColorDomain(mapData.getCo2Domain(), 'CO2');
             myMap.addLegend();
-            //tuto.start();
+            tuto.start();
 
             myMap.updateData(mapData.getData());
             myMap.updateColor();

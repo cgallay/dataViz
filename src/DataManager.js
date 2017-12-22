@@ -67,7 +67,6 @@ export class DataManager {
             let sortedValue = this.timeDimension.top(Infinity).sort((a,b)=> a.dt-b.dt);
 
             let data = sortedValue.map( (elem) => {
-
                 return [{/*
                     x: elem.dt,
                     y: elem.AverageTemperature
@@ -79,7 +78,7 @@ export class DataManager {
                     y: elem.CO2
                 },{
                     x: elem.dt,
-                    y: elem.footprint
+                    y: elem.footprint/10000000
                 },{
                     year: elem.dt,
                     pop: elem.population,
