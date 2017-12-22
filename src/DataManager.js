@@ -59,7 +59,7 @@ export class DataManager {
 
     getDataByCountry(selected_countries) {
 
-        let dataDictList = [[], [], []]; // TempChart, CO2Chart, BubbleChart
+        let dataDictList = [[], [], [], []]; // TempChart, CO2Chart, footprintChart, BubbleChart
 
         selected_countries.forEach(country => {
 
@@ -78,8 +78,11 @@ export class DataManager {
                     x: elem.dt,
                     y: elem.CO2
                 },{
+                    x: elem.dt,
+                    y: elem.footprint
+                },{
                     year: elem.dt,
-                    pop: elem.population,
+                    foot: elem.footprint,
                     delta: elem.delta,
                     co2: elem.CO2,
                 }];

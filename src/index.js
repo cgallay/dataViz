@@ -29,6 +29,7 @@ d3.csv(fulldata_path, (data) => {
     d3.csv(fulldata_mean_path, (data_mean) => {
         d3.json(geojson_path, (geojson) => {
 
+            console.log(data);
             let mapData = new DataManager(data);
             let panelData = new DataManager(data);
             let myMap = new MapManager(geojson);
@@ -59,16 +60,15 @@ d3.csv(fulldata_path, (data) => {
             myLineCharts.setWorldInfo();
 
             //Create Bubble chart
-            let myBubble = new BubbleChart(years_slider[0]);
+            let myBubble = new BubbleChart(years_slider[0], data_mean);
             myBubble.addTo('#bubble');
             myBubble.get_chart();
 
             //When country selected update data and charts
             myMap.addSelectListener((sel) => {
                 let data = panelData.getDataByCountry(sel)
-                myLineCharts.updateData(data.slice(0, 2));
-                //myBubble.update(sel);
-                myBubble.updateData(data[2]);
+                myLineCharts.updateData(data.slice(0, 3));
+                myBubble.updateData(data[3]);
 
 
             });

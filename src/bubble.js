@@ -8,6 +8,7 @@ export class BubbleChart {
     constructor(initial_year) {
         this.width = window.innerWidth;
         this.height = window.innerHeight;
+        this.bubbleData = [];
         this.selectedYear = parseInt(initial_year);
 
     }
@@ -78,22 +79,61 @@ export class BubbleChart {
         });
     }
 
+    color2(index) {
+        let r, g, b;
+        let randRGBhex = d3_scale_chromatic.schemeSet2[index];
+
+        function hex2rgb(hex) {
+            // long version
+            r = hex.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
+            if (r) {
+                return r.slice(1, 4).map(function (x) { return parseInt(x, 16); });
+            }
+            // short version
+            r = hex.match(/^#([0-9a-f])([0-9a-f])([0-9a-f])$/i);
+            if (r) {
+                return r.slice(1, 4).map(function (x) { return 0x11 * parseInt(x, 16); });
+            }
+            return null;
+        }
+        let rgb = hex2rgb(randRGBhex)
+        let randRGB = 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',';
+
+        //let randRGB = 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',';
+        return [randRGB + '0.5' + ')', randRGB + '1' + ')'];
+
+    };
+
     updateTime(year) {
 
         this.selectedYear = parseInt(year);
-        this.myBubbleChart.data.datasets.forEach((dataset, index) => {
 
-            dataset.data.forEach(element => {
+        if (this.bubbleData.length > 0) {
 
-                let data = this.bubbleData.filter(x => x.name == dataset.label)[0].value.filter(x => x.year == this.selectedYear)[0];
+            this.myBubbleChart.data.datasets.forEach((dataset, index) => {
 
-                element.x = parseFloat(data.delta);
-                element.y = parseFloat(data.co2);
-                element.r = Math.sqrt(parseFloat(data.pop) / 100000);
+                dataset.data.forEach(element => {
+                    let data = this.bubbleData.filter(x => x.name == dataset.label)[0].value.filter(x => x.year == this.selectedYear)[0];
+
+                    element.x = parseFloat(data.delta);
+                    element.y = parseFloat(data.co2);
+                    element.r = Math.sqrt(parseFloat(data.foot) / 10000000);
+                });
 
             });
-        })
-        this.myBubbleChart.update(5000);
+            this.myBubbleChart.update(5000);
+        }
+        else {
+
+            let data = this.data_mean.map(elem => elem[2]).filter(x => x.year == this.selectedYear)[0];
+
+            this.myBubbleChart.data.datasets.data = [{
+                x: parseFloat(data.delta),
+                y: parseFloat(data.co2),
+                r: Math.sqrt(parseFloat(data.foot) / 10000000)
+            }]
+            this.myBubbleChart.update(5000);
+        }
     }
 
 
@@ -102,31 +142,6 @@ export class BubbleChart {
         let eraseIndex = [];
 
         let countries = bubbleData.map(country => country.name);
-
-        let color2 = (i) => {
-            let r, g, b;
-            let randRGBhex = d3_scale_chromatic.schemeSet2[i];
-
-            function hex2rgb(hex) {
-                // long version
-                r = hex.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
-                if (r) {
-                    return r.slice(1, 4).map(function (x) { return parseInt(x, 16); });
-                }
-                // short version
-                r = hex.match(/^#([0-9a-f])([0-9a-f])([0-9a-f])$/i);
-                if (r) {
-                    return r.slice(1, 4).map(function (x) { return 0x11 * parseInt(x, 16); });
-                }
-                return null;
-            }
-            let rgb = hex2rgb(randRGBhex)
-            let randRGB = 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',';
-
-            //let randRGB = 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',';
-            return [randRGB + '0.5' + ')', randRGB + '1' + ')'];
-
-        };
 
         this.myBubbleChart.data.datasets.forEach((dataset, index) => {
 
@@ -142,27 +157,25 @@ export class BubbleChart {
             this.myBubbleChart.data.datasets.splice(ind, 1);
         });
 
-        countries.forEach(newCountry => {
+            countries.forEach(newCountry => {
 
-            //let myColor = color();
-            
-            let data = bubbleData.filter(x => x.name == newCountry)[0].value.filter(x => x.year == this.selectedYear)[0];
-
-            this.myBubbleChart.data.datasets.push({
-                label: newCountry,
-                data: [{
-                    x: parseFloat(data.delta),
-                    y: parseFloat(data.co2),
-                    r: Math.sqrt(parseFloat(data.pop) / 100000)
-                }]
+                let data = bubbleData.filter(x => x.name == newCountry)[0].value.filter(x => x.year == this.selectedYear)[0];
+                this.myBubbleChart.data.datasets.push({
+                    label: newCountry,
+                    data: [{
+                        x: parseFloat(data.delta),
+                        y: parseFloat(data.co2),
+                        r: Math.sqrt(parseFloat(data.foot) / 10000000)
+                    }]
+                });
             });
-        });
-        //same colors as the linecharts
+            //same colors as the linecharts
 
-        this.myBubbleChart.data.datasets.forEach((element, i) => {
-            element.backgroundColor = color2(i)[0];
-            element.borderColor = color2(i)[1];
-        });
-        this.myBubbleChart.update();
+            this.myBubbleChart.data.datasets.forEach((element, i) => {
+                element.backgroundColor = this.color2(i)[0];
+                element.borderColor = this.color2(i)[1];
+            });
+            this.myBubbleChart.update();
+
     }
 }

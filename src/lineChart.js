@@ -34,6 +34,7 @@ export class LineChart {
     draw(years) {
         this.drawLineChart("temperatureChart", 'Temperature [°C]', 'rgba(255,99,132,1)', ' °C', years);
         this.drawLineChart("CO2Chart", 'CO2 Emmissions [kt]', 'rgba(99,255,132,1)', ' kt', years);
+        this.drawLineChart("footprintChart", 'Footprint', 'rgba(99,255,132,1)', 'GHA', years);
     }
 
     drawLineChart(idLineChart, title, color, label, range) {
