@@ -115,7 +115,7 @@ export class MapManager {
      * @param {string} div id of the div
      */
     addTo(div) {
-        console.log("adding to div " + div);
+        
         this.svg = d3.select(div)
             .append("svg")
             .attr("id", "map")

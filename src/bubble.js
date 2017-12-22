@@ -145,10 +145,9 @@ export class BubbleChart {
         countries.forEach(newCountry => {
 
             //let myColor = color();
-            console.log(this.selectedYear);
+            
             let data = bubbleData.filter(x => x.name == newCountry)[0].value.filter(x => x.year == this.selectedYear)[0];
-            console.log("data");
-            console.log(data);
+
             this.myBubbleChart.data.datasets.push({
                 label: newCountry,
                 data: [{

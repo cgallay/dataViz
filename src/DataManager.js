@@ -64,7 +64,8 @@ export class DataManager {
         selected_countries.forEach(country => {
 
             this.countryDim.filter(c => c == country.id);
-            let sortedValue = this.timeDimension.top(Infinity).sort(this.compareDate);
+            let sortedValue = this.timeDimension.top(Infinity).sort((a,b)=> a.dt-b.dt);
+
             let data = sortedValue.map( (elem) => {
 
                 return [{/*
