@@ -75,6 +75,15 @@ export class TimeSlider {
         d3.selectAll('.noUi-handle-lower').classed(" noUi-extended ", true);
         d3.selectAll('.noUi-extended').style("height", "24px").style("width", "16px").style("position", "relative").style("top", "-5px").style("left", "-8px");
 
+        //add tooltops for events
+        d3.selectAll('.noUi-base').append('div')
+        .attr('class','.noUi-tooltip')
+        .attr('id','test2')
+        .text('2000');
+
+
+
+
     }
 
     sliderChange() {
