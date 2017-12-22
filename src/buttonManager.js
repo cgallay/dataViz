@@ -9,17 +9,17 @@ export class ButtonManger{
 
         this.tempButton.click((d) => {
             this.mapRef.setValueType('TEMPERATURE');
-            if (!this.tempButton.hasClass('selected')) {
-                this.co2Button.removeClass('selected');
-                this.tempButton.addClass('selected');
+            if (!this.tempButton.hasClass('active')) {
+                this.co2Button.removeClass('active');
+                this.tempButton.addClass('active');
             }
         });
 
         this.co2Button.click((d) => {
             this.mapRef.setValueType('CO2');
-            if (!this.co2Button.hasClass('selected')) {
-                this.tempButton.removeClass('selected');
-                this.co2Button.addClass('selected');
+            if (!this.co2Button.hasClass('active')) {
+                this.tempButton.removeClass('active');
+                this.co2Button.addClass('active');
             }
         });
     }

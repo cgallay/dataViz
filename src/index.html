@@ -16,16 +16,12 @@
     </div>
     <div id="main">
         <div style="margin:10px;position:absolute;z-index:2">
-            <button id="tempButton" type="button" class="btn btn-primary btn-rounded">Temperature</button>
-            <button id="CO2Button" type="button" class="btn btn-primary btn-rounded selected">Co2</button>
+            <button id="tempButton" type="button" class="btn btn-primary btn-rounded active">Temperature</button>
+            <button id="CO2Button" type="button" class="btn btn-primary btn-rounded">Co2</button>
         </div>
         <div id="mapContainer">
         </div>
-        <div>
-            <div id="panel" data-toggle='popover' data-placement='left' data-content='jskjfdksf' title='title'>
-                
-            </div>
-        </div>
+        
         <div id="timeHandler">
             <div id="timeSliderContainer">
                 <div id="timeSlider">
@@ -36,7 +32,7 @@
             </div>
         </div>
       </div>
-            <div id="panel" style="overflow:scroll;">
+            <div id="panel" style="overflow:scroll;" >
               <canvas id= "temperatureChart">
               </canvas>
               <canvas id="CO2Chart">
@@ -61,9 +57,6 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
                         <h4 class="modal-title" id="myModalLabel">Climate change the big picture</h4>
                     </div>
                     <div class="modal-body">
@@ -77,7 +70,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Explore</button>
-                        <button type="button" class="btn btn-primary">Follow the story</button>
+                        <button id="storyBt" type="button" class="btn btn-primary">Follow the story</button>
                     </div>
                 </div>
             </div>
