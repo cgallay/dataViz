@@ -45,7 +45,7 @@ d3.csv(fulldata_path, (data) => {
             let panelData = new DataManager(data);
             let myMap = new MapManager(geojson);
             let myButtons = new ButtonManger(myMap);
-            let tuto = new Tutorial(myMap);
+            //let tuto = new Tutorial(myMap);
 
             myMap.addTo("#mapContainer");
             myMap.drawMap();
@@ -53,7 +53,7 @@ d3.csv(fulldata_path, (data) => {
             myMap.setColorDomain(mapData.getTempDomain(), 'TEMPERATURE');
             myMap.setColorDomain(mapData.getCo2Domain(), 'CO2');
             myMap.addLegend();
-            tuto.start();
+            //tuto.start();
 
             myMap.updateData(mapData.getData());
             myMap.updateColor();
