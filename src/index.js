@@ -10,6 +10,7 @@ import { getRandomdata2 } from './helpers.js';
 import { getYears } from './helpers.js';
 import { LineChart } from './lineChart.js';
 import { bubble, BubbleChart } from './bubble.js';
+import { ButtonManger } from './buttonManager.js';
 
 var $ = require("jquery");
 
@@ -29,6 +30,7 @@ d3.csv(fulldata_path, (data) => {
         let mapData = new DataManager(data);
         let panelData = new DataManager(data);
         let myMap = new MapManager(geojson);
+        let myButtons = new ButtonManger(myMap);
         myMap.addTo("#mapContainer");
         myMap.drawMap();
         myMap.valueType = 'CO2';

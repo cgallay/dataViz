@@ -80,6 +80,7 @@ export class MapManager {
 
     setValueType(valueType){
         this.valueType = valueType;
+        this.updateColor();
     }
 
     /**
@@ -117,11 +118,6 @@ export class MapManager {
             default:
                 throw 'Unexpected selection value';
         };
-    }
-
-    setValueType(type){
-        // test type is either CO2 or TEMPERATURE
-        this.valueType = type; 
     }
 
     updateColor() {
