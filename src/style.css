@@ -31,7 +31,7 @@ body{
     height: 15%;
     position: absolute;
     z-index:2;
-    top: 94%;
+    top: 92%;
 }
 
 #mapContainer {
@@ -47,7 +47,7 @@ body{
     margin: 0;
     padding: 1%;
     width: 28%;
-    height: 90%;
+    height: 86%;
     left: 68%;
     top: 1%;
     background-color: white;
@@ -56,15 +56,29 @@ body{
 }
 #LineChart{
   /*position:relative;*/
-  height: 50%;
+  height: auto;
   float:top;
-  margin-bottom:20px;
+  /*margin-bottom:20px;*/
+}
+#temperatureChart{
+  height: auto;
+  width:100%;
+}
+#CO2Chart{
+  height: auto;
+  width:100%;
+}
+#footprintChart{
+  height: auto;
+  width:100%;
 }
 
 #bubble{
-  height:49%;
+
+  height:500px;
+  width:100%;
   float:bottom;
-  margin-top:auto
+  /*margin-top:auto*/
 }
 /*#bubble {
     margin: 0;

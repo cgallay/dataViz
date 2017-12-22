@@ -46,7 +46,7 @@ d3.csv(fulldata_path, (data) => {
             let myMap = new MapManager(geojson);
             let myButtons = new ButtonManger(myMap);
             let tuto = new Tutorial(myMap);
-            
+
             myMap.addTo("#mapContainer");
             myMap.drawMap();
             myMap.setValueType('CO2');
@@ -131,13 +131,13 @@ d3.selectAll('#panel')
 
       d3.selectAll('#LineChart')
             .style("width",'100%')
-            .style("height",'50%')
-            .style("float",'top');
+            .style("height",'auto')
+            .style("float",null);
 
       d3.selectAll('#bubble')
             .style("width",'100%')
-            .style("height",'49%')
-            .style("float",'bottom');
+            .style("height",'500px')
+            .style("float",null);
       panelExtended=false;
 
     }
