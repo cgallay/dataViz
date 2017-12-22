@@ -11,6 +11,8 @@ In order to visualize our website, please following those steps:
 - npm install
 - npm run dev
 
+A localhost server will be created on :
+http://localhost:8080/
 
 ## Process book
 
