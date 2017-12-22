@@ -9,9 +9,26 @@ import { min } from 'd3';
 
 export class LineChart {
 
-    constructor() {
+    constructor(data_mean) {
         this.charts = [];
         this.colorscale = d3_scale_chromatic.schemeSet2;
+        this.data_mean = data_mean.sort((a, b) => (a.dt) - (b.dt)).map(elem => {
+            return [{/*
+                x: elem.dt,
+                y: elem.AverageTemperature
+            },{/*/
+                x: elem.dt,
+                y: elem.delta
+            }, {//*/
+                x: elem.dt,
+                y: elem.CO2
+            }, {
+                year: elem.dt,
+                pop: elem.population,
+                delta: elem.delta,
+                co2: elem.CO2,
+            }];
+        });
     }
 
     addTo(div,id) {
@@ -27,8 +44,9 @@ export class LineChart {
         this.addTo("#temperatureChart","temperatureCanvas");
         this.addTo("#CO2Chart","CO2Canvas");
 
-        this.drawLineChart("temperatureCanvas", 'Temperature [°C]', 'rgba(255,99,132,1)', ' °C', years);
-        this.drawLineChart("CO2Canvas", 'CO2 Emmissions [kt]', 'rgba(99,255,132,1)', ' kt', years);
+        this.drawLineChart("temperatureChart", 'Temperature [°C]', 'rgba(255,99,132,1)', ' °C', years);
+        this.drawLineChart("CO2Chart", 'CO2 Emmissions [kt]', 'rgba(99,255,132,1)', ' kt', years);
+        this.drawLineChart("footprintChart", 'Footprint', 'rgba(99,255,132,1)', 'GHA', years);
     }
 
     drawLineChart(idLineChart, title, color, label, range) {
@@ -82,9 +100,9 @@ export class LineChart {
             },
             tooltips: {
                 callbacks: {
-                    label:  (tooltipItem, chart) => {
-                        let format=wNumb({
-                          decimals: 1
+                    label: (tooltipItem, chart) => {
+                        let format = wNumb({
+                            decimals: 1
                         });
                         let country = chart.datasets[tooltipItem.datasetIndex].label;
                         country = country.concat(": ");
@@ -124,38 +142,67 @@ export class LineChart {
         return dataset;
     }
 
+    setWorldInfo() {
+
+        for(let i = 0; i<this.charts.length; i++){
+
+            let worldDataSet = this.getTemplateDataset()
+            worldDataSet.label = 'World';
+            worldDataSet.borderColor = this.colorscale[0];
+            worldDataSet.backgroundColor = this.colorscale[0];
+            worldDataSet.data = this.data_mean.map(elem => elem[i]);
+            
+            
+            this.charts[i].options.scales.yAxes[0].ticks.min = i==0 ? -1:0;
+            this.charts[i].options.scales.yAxes[0].ticks.max = i==0 ? 2:6;
+            this.charts[i].data.datasets = [worldDataSet];
+            this.charts[i].options.legend.display = true;
+            this.charts[i].update();
+        }
+
+    }
+
     updateData(chartData) {
 
         chartData.forEach((chart, i) => {
 
             let chartDatasets = [];
 
-            let max_values=[];
-            let min_values=[];
+            let max_values = [];
+            let min_values = [];
 
-            chart.forEach((country, index) => {
-                let lineDatasets = this.getTemplateDataset();
-                lineDatasets.data = country.value;
-                lineDatasets.label = country.name;
-                lineDatasets.borderColor = this.colorscale[index];
-                lineDatasets.backgroundColor = this.colorscale[index];
+            if (chart.length > 0) {
+
+                chart.forEach((country, index) => {
+                    let lineDatasets = this.getTemplateDataset();
+                    lineDatasets.data = country.value;
+                    lineDatasets.label = country.name;
+                    lineDatasets.borderColor = this.colorscale[index];
+                    lineDatasets.backgroundColor = this.colorscale[index];
 
 
-                let value = country.value.map((elem) => parseFloat(elem.y)).filter((elem) => ! isNaN(elem));
+                    let value = country.value.map((elem) => parseFloat(elem.y)).filter((elem) => !isNaN(elem));
 
-                max_values.push(Math.max.apply(null, value));
-                min_values.push(Math.min.apply(null, value));
+                    max_values.push(Math.max.apply(null, value));
+                    min_values.push(Math.min.apply(null, value));
 
-                chartDatasets.push(lineDatasets);
+                    chartDatasets.push(lineDatasets);
 
-            });
+                });
 
-            this.charts[i].options.scales.yAxes[0].ticks.max = ( max_values.length > 0 ? Math.max.apply(null, max_values) : 30) ;
-            this.charts[i].options.scales.yAxes[0].ticks.min = ( min_values.length > 0 ? Math.min.apply(null, min_values) : 0) ;
+                this.charts[i].options.scales.yAxes[0].ticks.max = Math.max.apply(null, max_values);
+                this.charts[i].options.scales.yAxes[0].ticks.min = Math.min.apply(null, min_values);
+                
+                this.charts[i].data.datasets = chartDatasets;
+                this.charts[i].options.legend.display = true;
+                this.charts[i].update();
+            }
+            else {
 
-            this.charts[i].data.datasets = chartDatasets;
-            this.charts[i].options.legend.display = true;
-            this.charts[i].update();
+                this.setWorldInfo(chartData.length);
+                
+            }
+
         });
 
     }

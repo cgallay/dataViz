@@ -59,12 +59,13 @@ export class DataManager {
 
     getDataByCountry(selected_countries) {
 
-        let dataDictList = [[], [], []]; // TempChart, CO2Chart, BubbleChart
+        let dataDictList = [[], [], [], []]; // TempChart, CO2Chart, footprintChart, BubbleChart
 
         selected_countries.forEach(country => {
 
             this.countryDim.filter(c => c == country.id);
-            let sortedValue = this.timeDimension.top(Infinity).sort(this.compareDate);
+            let sortedValue = this.timeDimension.top(Infinity).sort((a,b)=> a.dt-b.dt);
+
             let data = sortedValue.map( (elem) => {
 
                 return [{/*
@@ -76,6 +77,9 @@ export class DataManager {
                 },{//*/
                     x: elem.dt,
                     y: elem.CO2
+                },{
+                    x: elem.dt,
+                    y: elem.footprint
                 },{
                     year: elem.dt,
                     pop: elem.population,
