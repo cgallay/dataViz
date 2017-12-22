@@ -44,7 +44,7 @@ export class LineChart {
         this.addTo("#CO2Chart","CO2Canvas");
         this.addTo("#footprintChart","footprintCanvas");
 
-        this.drawLineChart("temperatureCanvas", 'Temperature [°C]', 'rgba(255,99,132,1)', ' °C', years);
+        this.drawLineChart("temperatureCanvas", 'Temperature variation [°C]', 'rgba(255,99,132,1)', ' °C', years);
         this.drawLineChart("CO2Canvas", 'CO2 Emmissions [kt]', 'rgba(99,255,132,1)', ' kt', years);
         this.drawLineChart("footprintCanvas", 'Footprint [gha]', 'rgba(99,255,132,1)', ' gha', years);
     }
@@ -96,6 +96,11 @@ export class LineChart {
                     ticks: {
                         beginAtZero: false,
                         autoSkip: true
+                    },
+
+                    scaleLabel: {
+                        display: true,
+                        labelString: title
                     }
                 }]
             },
@@ -151,7 +156,7 @@ export class LineChart {
             worldDataSet.label = 'World';
             worldDataSet.borderColor = this.colorscale[0];
             worldDataSet.backgroundColor = this.colorscale[0];
-            
+
             if(i==0){
                 this.charts[i].options.scales.yAxes[0].ticks.min = -1;
                 this.charts[i].options.scales.yAxes[0].ticks.max = 2;
@@ -185,7 +190,7 @@ export class LineChart {
 
             let max_values = [];
             let min_values = [];
-            
+
             if (chart.length > 0) {
 
                 chart.forEach((country, index) => {
