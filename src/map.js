@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import { legendColor } from 'd3-svg-legend'
 export class MapManager {
     constructor(geojson) {
         this.width = window.innerWidth;
@@ -31,8 +32,33 @@ export class MapManager {
         //Adding Zoom to the map
         this.zoom = d3.zoom()
             .scaleExtent([0.65, 8])
-            .on("zoom", this.zoomed.bind(this));
+            .on("zoom", this.zoomed.bind(this));        
+    }
 
+    addLegend(){
+        this.svg.append("g")
+            .attr("class", "legendQuant")
+            .attr("transform", "translate(20,150)");
+
+        this.updateLegend();
+    }
+    
+    updateLegend() {
+        let colorLegend = legendColor()
+            .labelFormat(d3.format(".2f"))
+            .useClass(false)
+            .scale(this.colorScale[this.valueType]);
+        this.svg.select(".legendQuant")
+            .style('fill', '#FFF');
+        this.svg.select(".legendQuant").call(colorLegend);
+    }
+
+    getElementByCountry(country) {
+        return d3.select(country)
+    }
+
+    setOverTextCountry(country, text) {
+        d3.select(country)
     }
 
     zoomed() {
@@ -81,6 +107,7 @@ export class MapManager {
     setValueType(valueType){
         this.valueType = valueType;
         this.updateColor();
+        this.updateLegend();
     }
 
     /**

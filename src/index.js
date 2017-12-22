@@ -33,9 +33,10 @@ d3.csv(fulldata_path, (data) => {
         let myButtons = new ButtonManger(myMap);
         myMap.addTo("#mapContainer");
         myMap.drawMap();
-        myMap.valueType = 'CO2';
+        myMap.setValueType('CO2');
         myMap.setColorDomain(mapData.getTempDomain(), 'TEMPERATURE');
         myMap.setColorDomain(mapData.getCo2Domain(), 'CO2');
+        myMap.addLegend();
 
         myMap.updateData(mapData.getData());
         myMap.updateColor();
