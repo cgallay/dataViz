@@ -1,9 +1,6 @@
 //@flow
 
 require("bootstrap-loader");
-global.Tether = require('tether');
-Tether = require('tether');
-console.log(Tether);
 import * as d3 from 'd3';
 import 'bootstrap';
 import * as crossfilter from 'crossfilter';
@@ -46,14 +43,14 @@ d3.csv(fulldata_path, (data) => {
             let myMap = new MapManager(geojson);
             let myButtons = new ButtonManger(myMap);
             let tuto = new Tutorial(myMap);
+            tuto.showModal();
 
             myMap.addTo("#mapContainer");
             myMap.drawMap();
-            myMap.setValueType('CO2');
+            myMap.setValueType('TEMPERATURE');
             myMap.setColorDomain(mapData.getTempDomain(), 'TEMPERATURE');
             myMap.setColorDomain(mapData.getCo2Domain(), 'CO2');
             myMap.addLegend();
-            tuto.start();
 
             myMap.updateData(mapData.getData());
             myMap.updateColor();
