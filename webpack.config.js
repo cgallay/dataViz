@@ -27,12 +27,16 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
-        // ExtractTextPlugin.extract({
-        //   fallbackLoader: 'style-loader',
-        //   loader: ['css-loader'],
-        //   publicPath: '/build'
-        // })
+        use: ['style-loader', 'css-loader', {
+          loader: 'postcss-loader', // Run post css actions
+          options: {
+            plugins: function () { // post css plugins, can be exported to postcss.config.js
+              return [
+                require('precss'),
+                require('autoprefixer')
+              ];
+            }
+          }}, 'sass-loader']
       },
       {
         test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -57,20 +61,18 @@ module.exports = {
     new ExtractTextPlugin({
       filename: "styles.css"
     }),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery',
+      Tether : 'tether',
+      Popper: ['popper.js', 'default']
+    }),
     new HtmlWebpackPlugin({
       // minify: {
       //  collapseWhitespace: true
       // },
       template: './src/index.html'
-    }),
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-      'window.jQuery': 'jquery',
-      Popper: ['popper.js', 'default'],
-      // In case you imported plugins individually, you must also require them here:
-      Util: "exports-loader?Util!bootstrap/js/dist/util",
-      Dropdown: "exports-loader?Dropdown!bootstrap/js/dist/dropdown"
     })
     
     //new OpenBrowserPlugin({url: 'http://localhost:8081'})

@@ -1,4 +1,6 @@
-export class Tutorial{
+var $ = require("jquery");
+
+export class Tutorial {
     
     constructor(mapRef) {
         this.mapRef = mapRef;
@@ -6,8 +8,13 @@ export class Tutorial{
 
     start(){
         this.mapRef.zoomActive(false);
-        this.mapRef.setTextOverCountry('#ESP', 'test', 'hello');
-        
+        this.mapRef.centerOn('CHN');
+        this.mapRef.setTextOverCountry('FRA', 'test', 'hello');
+        this.mapRef.setTextOverCountry('USA', 'test', 'hello', 'rigth');
+        //$('#USA').popover('show');
+        this.mapRef.clickOnCountry('FRA', 'France');
+        $('#myModal').modal('show')
     }
+
 
 }

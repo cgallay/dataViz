@@ -1,4 +1,9 @@
 //@flow
+
+require("bootstrap-loader");
+global.Tether = require('tether');
+Tether = require('tether');
+console.log(Tether);
 import * as d3 from 'd3';
 import 'bootstrap';
 import * as crossfilter from 'crossfilter';
@@ -13,7 +18,8 @@ import { LineChart } from './lineChart.js';
 import { bubble, BubbleChart } from './bubble.js';
 import { ButtonManger } from './buttonManager.js';
 import { Tutorial } from './Tutorial';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-material-design/dist/css/bootstrap-material-design.min.css';
+//import 'bootstrap/dist/css/bootstrap.min.css';
 
 var $ = require("jquery");
 
@@ -42,9 +48,6 @@ d3.csv(fulldata_path, (data) => {
         myMap.setColorDomain(mapData.getCo2Domain(), 'CO2');
         myMap.addLegend();
         tuto.start();
-        $(function () {
-            $('[data-toggle="popover"]').popover('show')
-          })
         myMap.updateData(mapData.getData());
         myMap.updateColor();
 
@@ -74,7 +77,6 @@ d3.csv(fulldata_path, (data) => {
             myLineCharts.updateData(data.slice(0,2));
             //myBubble.update(sel);
             myBubble.updateData(data[2]);
-
 
         });
 

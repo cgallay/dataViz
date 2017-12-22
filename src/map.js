@@ -1,5 +1,7 @@
 import * as d3 from 'd3';
+
 import { legendColor } from 'd3-svg-legend'
+
 export class MapManager {
     constructor(geojson) {
         this.width = window.innerWidth;
@@ -35,6 +37,32 @@ export class MapManager {
             .scaleExtent([0.65, 8])
             .on("zoom", this.zoomed.bind(this));        
     }
+    
+    centerOn(country){
+        let d = this.svg.select('#' + country).datum();
+        let svgWidth = parseInt(this.svg.style("width").replace("px", "")) * 0.68;
+        let svgHeight = parseInt(this.svg.style("height").replace("px", ""));
+        let center = this.path.centroid(d);
+        
+        this.g.transition()
+            .duration(1000)
+            .attr("transform", "translate(" + (svgWidth/2 - center[0]) + "," + (svgHeight/2 - center[1]) + ")");
+    }
+
+    selectCountries(countries) {
+        this.selections = countries
+        this.updateColor()
+    }
+
+    /**
+     * Used for simulate a user click for the Story telling
+     * @param {String} country_id 
+     * @param {String} name 
+     */
+    clickOnCountry(country_id, name) {
+        let d = {id: country_id, properties: {name: name}}
+        this.clicked(d)
+    }
 
     addLegend(){
         this.svg.append("g")
@@ -43,6 +71,8 @@ export class MapManager {
 
         this.updateLegend();
     }
+
+    
     
     updateLegend() {
         let colorLegend = legendColor()
@@ -58,13 +88,13 @@ export class MapManager {
         this.actifZoom = actifZoom;
     }
 
-    setTextOverCountry(country, title, text) {
-        d3.select(country)
+    setTextOverCountry(country, title, text, pos='top') {
+        d3.select('#' + country)
             .attr('data-toggle', 'popover')
             .attr('title', title)
             .attr('data-content', text)
             .attr('data-container', 'body')
-            .attr('data-placement', 'top');
+            .attr('data-placement', pos);
     }
 
     zoomed() {
