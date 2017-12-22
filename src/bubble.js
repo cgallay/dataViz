@@ -34,7 +34,7 @@ export class BubbleChart {
                     yAxes: [{
                         ticks: {
                             min: 0,
-                            max: 25
+                            max: 30
                         },
                         scaleLabel: {
                             display: true,
@@ -43,8 +43,8 @@ export class BubbleChart {
                     }],
                     xAxes: [{
                         ticks: {
-                            suggestedMin: -1,
-                            suggestedMax: 3
+                            min: -0.5,
+                            max: 2
                         },
                         scaleLabel: {
                             display: true,
@@ -81,9 +81,6 @@ export class BubbleChart {
     updateTime(year) {
 
         this.selectedYear = parseInt(year);
-        //find max y scales
-        //let co2_values = [];
-        //let r_values = [];
         this.myBubbleChart.data.datasets.forEach((dataset, index) => {
 
             dataset.data.forEach(element => {
@@ -94,16 +91,8 @@ export class BubbleChart {
                 element.y = parseFloat(data.co2);
                 element.r = Math.sqrt(parseFloat(data.pop) / 100000);
 
-                //co2_values.push(data[0].co2);
-                //r_values.push(Math.sqrt(parseFloat(data[0].pop) / 100000));
-
             });
         })
-
-        //let co2_max = Math.max.apply(null, co2_values);
-        //let r_co2_max = r_values[co2_values.indexOf(String(co2_max))];
-
-        //this.myBubbleChart.options.scales.yAxes[0].ticks.max =  co2_max ;
         this.myBubbleChart.update(5000);
     }
 
@@ -114,29 +103,6 @@ export class BubbleChart {
 
         let countries = bubbleData.map(country => country.name);
 
-        //find max y scales
-        //let co2_values = [];
-        //let r_values = [];
-        countries.forEach(displayedCountry => {
-            
-            let data = bubbleData.filter(x => x.name == displayedCountry)[0].value.filter(x => x.year == this.selectedYear);
-            //co2_values.push(data[0].co2);
-            //r_values.push(Math.sqrt(parseFloat(data[0].pop) / 100000));
-        });
-
-
-        //let co2_max = Math.max.apply(null, co2_values);
-        //let r_co2_max = r_values[co2_values.indexOf(String(co2_max))];
-
-        //this.myBubbleChart.options.scales.yAxes[0].ticks.max =  co2_max ;
-
-        let color = () => {
-            let o = Math.round, r = Math.random, s = 255;
-
-            let randRGB = 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',';
-            return [randRGB + '0.5' + ')', randRGB + '1' + ')'];
-
-        };
         let color2 = (i) => {
             let r, g, b;
             let randRGBhex = d3_scale_chromatic.schemeSet2[i];
@@ -185,10 +151,6 @@ export class BubbleChart {
             console.log(data);
             this.myBubbleChart.data.datasets.push({
                 label: newCountry,
-                //backgroundColor: myColor[0],
-                //borderColor: myColor[1],
-                //backgroundColor: myColor[country_ind],
-                //borderColor: myColor[country_ind],
                 data: [{
                     x: parseFloat(data.delta),
                     y: parseFloat(data.co2),
@@ -197,27 +159,11 @@ export class BubbleChart {
             });
         });
         //same colors as the linecharts
-        if (this.myBubbleChart.data.datasets.length >= 1) {
-            this.myBubbleChart.data.datasets[0].backgroundColor = color2(0)[0];
-            this.myBubbleChart.data.datasets[0].borderColor = color2(0)[1];
-        }
-        if (this.myBubbleChart.data.datasets.length >= 2) {
-            this.myBubbleChart.data.datasets[1].backgroundColor = color2(1)[0];
-            this.myBubbleChart.data.datasets[1].borderColor = color2(1)[1];
-        }
-        if (this.myBubbleChart.data.datasets.length >= 3) {
-            this.myBubbleChart.data.datasets[2].backgroundColor = color2(2)[0];
-            this.myBubbleChart.data.datasets[2].borderColor = color2(2)[1];
-        }
-        if (this.myBubbleChart.data.datasets.length >= 4) {
-            this.myBubbleChart.data.datasets[3].backgroundColor = color2(3)[0];
-            this.myBubbleChart.data.datasets[3].borderColor = color2(3)[1];
-        }
-        if (this.myBubbleChart.data.datasets.length >= 5) {
-            this.myBubbleChart.data.datasets[4].backgroundColor = color2(4)[0];
-            this.myBubbleChart.data.datasets[4].borderColor = color2(4)[1];
-        }
 
+        this.myBubbleChart.data.datasets.forEach((element, i) => {
+            element.backgroundColor = color2(i)[0];
+            element.borderColor = color2(i)[1];
+        });
         this.myBubbleChart.update();
     }
 }
