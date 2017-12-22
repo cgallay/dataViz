@@ -16,7 +16,6 @@ export class BubbleChart {
 
         this.Bubble = d3.select(div);
         this.canvas = this.Bubble.append('canvas')
-            .attr('width', window.innerWidth)
             .attr('id', 'bubble-chart');
 
     }
@@ -28,6 +27,7 @@ export class BubbleChart {
                 datasets: []
             },
             options: {
+                maintainAspectRatio : false,
                 title: {
                     display: true,
                     text: 'CO2 / Temperature change'
@@ -99,7 +99,6 @@ export class BubbleChart {
         let rgb = hex2rgb(randRGBhex)
         let randRGB = 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',';
 
-        //let randRGB = 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',';
         return [randRGB + '0.5' + ')', randRGB + '1' + ')'];
 
     };
@@ -117,7 +116,7 @@ export class BubbleChart {
 
                     element.x = parseFloat(data.delta);
                     element.y = parseFloat(data.co2);
-                    element.r = Math.sqrt(parseFloat(data.foot) / 10000000);
+                    element.r = Math.sqrt(parseFloat(data.pop) / 100000);
                 });
 
             });
@@ -130,7 +129,7 @@ export class BubbleChart {
             this.myBubbleChart.data.datasets.data = [{
                 x: parseFloat(data.delta),
                 y: parseFloat(data.co2),
-                r: Math.sqrt(parseFloat(data.foot) / 10000000)
+                r: Math.sqrt(parseFloat(data.pop) / 100000)
             }]
             this.myBubbleChart.update(5000);
         }
@@ -165,7 +164,7 @@ export class BubbleChart {
                     data: [{
                         x: parseFloat(data.delta),
                         y: parseFloat(data.co2),
-                        r: Math.sqrt(parseFloat(data.foot) / 10000000)
+                        r: Math.sqrt(parseFloat(data.pop) / 100000)
                     }]
                 });
             });

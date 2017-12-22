@@ -31,7 +31,19 @@ export class LineChart {
         });
     }
 
+    addTo(div,id) {
+
+        this.div = d3.select(div);
+        this.canvas = this.div.append('canvas')
+            .attr('width', window.innerWidth)
+            .attr('id', id)
+            .attr('responsive','true');
+    }
+
     draw(years) {
+        this.addTo("#temperatureChart","temperatureCanvas");
+        this.addTo("#CO2Chart","CO2Canvas");
+
         this.drawLineChart("temperatureChart", 'Temperature [°C]', 'rgba(255,99,132,1)', ' °C', years);
         this.drawLineChart("CO2Chart", 'CO2 Emmissions [kt]', 'rgba(99,255,132,1)', ' kt', years);
         this.drawLineChart("footprintChart", 'Footprint', 'rgba(99,255,132,1)', 'GHA', years);
@@ -56,6 +68,7 @@ export class LineChart {
 
         let option = {
             animation: false,
+            maintainAspectRatio: true,
             legend: {
                 display: false
             },
@@ -73,8 +86,6 @@ export class LineChart {
                         max: range[range.length - 1],
                         minRotation: 45,
                         autoSkip: true
-
-
                     }
 
 

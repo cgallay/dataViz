@@ -82,7 +82,7 @@ export class DataManager {
                     y: elem.footprint
                 },{
                     year: elem.dt,
-                    foot: elem.footprint,
+                    pop: elem.population,
                     delta: elem.delta,
                     co2: elem.CO2,
                 }];
