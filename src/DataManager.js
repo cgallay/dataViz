@@ -41,6 +41,12 @@ export class DataManager {
         let domain = [d3.quantile(temperature, 0), d3.quantile(temperature, .50), d3.quantile(temperature, 1)];
         return domain;
     }
+    
+    getCo2Domain() {
+        let C02 = this.data.map((d) => d.CO2).sort((a, b) => a - b);
+        let domain = [d3.quantile(C02, 0), d3.quantile(C02, .50), d3.quantile(C02, 1)];
+        return domain;
+    }
 
     selectYear(year) {
         return this.timeDimension.filter(d => d==year).top(Infinity);

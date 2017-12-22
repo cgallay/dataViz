@@ -22,16 +22,7 @@ const dataset_path = "data/temp_country_group.csv";
 
 const fulldata_path = "data/full_data.csv"
 
-
-/**
- * Move inside helpers
- */
-function selectYear(year) {
-
-}
-
 //Loading dataset
-
 d3.csv(fulldata_path, (data) => {
     d3.json(geojson_path, (geojson) => {
 
@@ -40,11 +31,11 @@ d3.csv(fulldata_path, (data) => {
         let myMap = new MapManager(geojson);
         myMap.addTo("#mapContainer");
         myMap.drawMap();
+        myMap.valueType = 'CO2';
+        myMap.setColorDomain(mapData.getTempDomain(), 'TEMPERATURE');
+        myMap.setColorDomain(mapData.getCo2Domain(), 'CO2');
 
-        myMap.setColorDomain(mapData.getTempDomain());
-
-
-        myMap.updateTemperature(mapData.getData());
+        myMap.updateData(mapData.getData());
         myMap.updateColor();
 
         //create year vector for slider (all years present in the dataset)
@@ -83,7 +74,7 @@ d3.csv(fulldata_path, (data) => {
 
             myBubble.updateTime(years_selected[1]);
             mapData.selectYear(years_selected[1]);
-            myMap.updateTemperature(mapData.getData());
+            myMap.updateData(mapData.getData());
             myMap.updateColor();
 
         });
