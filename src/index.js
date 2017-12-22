@@ -1,5 +1,11 @@
 //@flow
+
+require("bootstrap-loader");
+global.Tether = require('tether');
+Tether = require('tether');
+console.log(Tether);
 import * as d3 from 'd3';
+import 'bootstrap';
 import * as crossfilter from 'crossfilter';
 import { MapManager } from './map.js';
 import { DataManager } from './DataManager.js';
@@ -11,6 +17,9 @@ import { getYears } from './helpers.js';
 import { LineChart } from './lineChart.js';
 import { bubble, BubbleChart } from './bubble.js';
 import { ButtonManger } from './buttonManager.js';
+import { Tutorial } from './Tutorial';
+import 'bootstrap-material-design/dist/css/bootstrap-material-design.min.css';
+//import 'bootstrap/dist/css/bootstrap.min.css';
 
 var $ = require("jquery");
 
@@ -29,18 +38,19 @@ let myBubble;
 let panelExtended = false;
 d3.csv(fulldata_path, (data) => {
     d3.json(geojson_path, (geojson) => {
-
         let mapData = new DataManager(data);
         let panelData = new DataManager(data);
         let myMap = new MapManager(geojson);
         let myButtons = new ButtonManger(myMap);
+        let tuto = new Tutorial(myMap);
+
         myMap.addTo("#mapContainer");
         myMap.drawMap();
         myMap.setValueType('CO2');
         myMap.setColorDomain(mapData.getTempDomain(), 'TEMPERATURE');
         myMap.setColorDomain(mapData.getCo2Domain(), 'CO2');
         myMap.addLegend();
-
+        //tuto.start();
         myMap.updateData(mapData.getData());
         myMap.updateColor();
 

@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>My D3 map</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -18,9 +17,24 @@
     <div id="main">
         <div style="margin:10px;position:absolute;z-index:2">
             <button id="tempButton" type="button" class="btn btn-primary btn-rounded">Temperature</button>
-             <button id="CO2Button" type="button" class="btn btn-primary btn-rounded selected">Co2</button>
+            <button id="CO2Button" type="button" class="btn btn-primary btn-rounded selected">Co2</button>
         </div>
-      <div id="mapContainer">
+        <div id="mapContainer">
+        </div>
+        <div>
+            <div id="panel" data-toggle='popover' data-placement='left' data-content='jskjfdksf' title='title'>
+                
+            </div>
+        </div>
+        <div id="timeHandler">
+            <div id="timeSliderContainer">
+                <div id="timeSlider">
+                </div>
+            </div>
+            <div id="PlayPauseContainer">
+                <!--<button id="playPause">Play/ Pause</button>-->
+            </div>
+        </div>
       </div>
             <div id="panel" style="overflow:scroll;">
               <div id="LineChart">
@@ -43,7 +57,33 @@
               </div>
 
 
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">Climate change the big picture</h4>
+                    </div>
+                    <div class="modal-body">
+                        Environmental changes have certainly been a major topic for the last decades but we could argue that due to the massive amount
+                        of information that is regularly given by news, it can be hard to filter out the actual relevant
+                        facts that influence climate evolution. A lot of raw data on the matter are available but hard to
+                        interpret to get the full picture. That's the seed of our motivation behind this project, getting
+                        a full picture of environmental changes happening for last decades and awaken (the force) awareness.
+                        Therefore, this project implements a visualization of this raw data to take a better grasp at the
+                        different aspects of the actual changes.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Explore</button>
+                        <button type="button" class="btn btn-primary">Follow the story</button>
+                    </div>
+                </div>
+            </div>
         </div>
+
+    </div>
 
     </div>
 

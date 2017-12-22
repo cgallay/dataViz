@@ -27,12 +27,31 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
-        // ExtractTextPlugin.extract({
-        //   fallbackLoader: 'style-loader',
-        //   loader: ['css-loader'],
-        //   publicPath: '/build'
-        // })
+        use: ['style-loader', 'css-loader', {
+          loader: 'postcss-loader', // Run post css actions
+          options: {
+            plugins: function () { // post css plugins, can be exported to postcss.config.js
+              return [
+                require('precss'),
+                require('autoprefixer')
+              ];
+            }
+          }}, 'sass-loader']
+      },
+      {
+        test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        use: 'url-loader?limit=10000',
+      },
+      {
+        test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/,
+        use: 'file-loader',
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        use: [
+          'file-loader?name=images/[name].[ext]',
+          'image-webpack-loader?bypassOnDebug'
+        ]
       }
     ]
   },
@@ -41,6 +60,13 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new ExtractTextPlugin({
       filename: "styles.css"
+    }),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery',
+      Tether : 'tether',
+      Popper: ['popper.js', 'default']
     }),
     new HtmlWebpackPlugin({
       // minify: {
