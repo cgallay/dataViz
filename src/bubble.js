@@ -8,7 +8,6 @@ export class BubbleChart {
     constructor(initial_year) {
         this.width = window.innerWidth;
         this.height = window.innerHeight;
-        this.bubbleData = [];
         this.selectedYear = parseInt(initial_year);
 
     }
@@ -107,8 +106,6 @@ export class BubbleChart {
 
         this.selectedYear = parseInt(year);
 
-        if (this.bubbleData.length > 0) {
-
             this.myBubbleChart.data.datasets.forEach((dataset, index) => {
 
                 dataset.data.forEach(element => {
@@ -121,20 +118,8 @@ export class BubbleChart {
 
             });
             this.myBubbleChart.update(5000);
-        }
-        else {
-
-            let data = this.data_mean.map(elem => elem[2]).filter(x => x.year == this.selectedYear)[0];
-
-            this.myBubbleChart.data.datasets.data = [{
-                x: parseFloat(data.delta),
-                y: parseFloat(data.co2),
-                r: Math.sqrt(parseFloat(data.pop) / 100000)
-            }]
-            this.myBubbleChart.update(5000);
-        }
+        
     }
-
 
     updateData(bubbleData) {
         this.bubbleData = bubbleData;
