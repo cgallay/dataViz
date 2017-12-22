@@ -173,3 +173,7 @@ body{
 body {
   background-color: #18506F;
 }
+
+.selected {
+  background-color: red;
+}

@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>My D3 map</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -15,10 +16,13 @@
         </div>
     </div>
     <div id="main">
-
+        <div style="margin:10px;position:absolute;z-index:2">
+            <button id="tempButton" type="button" class="btn btn-primary btn-rounded">Temperature</button>
+             <button id="CO2Button" type="button" class="btn btn-primary btn-rounded selected">Co2</button>
+        </div>
       <div id="mapContainer">
       </div>
-            <div id="panel">
+            <div id="panel" style="overflow:scroll;">
               <div id="LineChart">
               <div id= "temperatureChart">
               </div>

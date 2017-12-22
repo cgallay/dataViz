@@ -10,6 +10,7 @@ import { getRandomdata2 } from './helpers.js';
 import { getYears } from './helpers.js';
 import { LineChart } from './lineChart.js';
 import { bubble, BubbleChart } from './bubble.js';
+import { ButtonManger } from './buttonManager.js';
 
 var $ = require("jquery");
 
@@ -22,14 +23,6 @@ const dataset_path = "data/temp_country_group.csv";
 
 const fulldata_path = "data/full_data.csv"
 
-
-/**
- * Move inside helpers
- */
-function selectYear(year) {
-
-}
-
 //Loading dataset
 let myLineCharts;
 let myBubble;
@@ -40,13 +33,15 @@ d3.csv(fulldata_path, (data) => {
         let mapData = new DataManager(data);
         let panelData = new DataManager(data);
         let myMap = new MapManager(geojson);
+        let myButtons = new ButtonManger(myMap);
         myMap.addTo("#mapContainer");
         myMap.drawMap();
+        myMap.setValueType('CO2');
+        myMap.setColorDomain(mapData.getTempDomain(), 'TEMPERATURE');
+        myMap.setColorDomain(mapData.getCo2Domain(), 'CO2');
+        myMap.addLegend();
 
-        myMap.setColorDomain(mapData.getTempDomain());
-
-
-        myMap.updateTemperature(mapData.getData());
+        myMap.updateData(mapData.getData());
         myMap.updateColor();
 
         //create year vector for slider (all years present in the dataset)
@@ -84,7 +79,7 @@ d3.csv(fulldata_path, (data) => {
 
             myBubble.updateTime(years_selected[1]);
             mapData.selectYear(years_selected[1]);
-            myMap.updateTemperature(mapData.getData());
+            myMap.updateData(mapData.getData());
             myMap.updateColor();
 
         });

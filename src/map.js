@@ -1,10 +1,12 @@
 import * as d3 from 'd3';
+import { legendColor } from 'd3-svg-legend'
 export class MapManager {
     constructor(geojson) {
         this.width = window.innerWidth;
         this.height = window.innerHeight;
         this.countries = geojson;
 
+        this.valueType = 'TEMPERATURE';
         this.selection = null;
         this.selections = [];
         this.SELECTION_MAX = 5;
@@ -18,15 +20,45 @@ export class MapManager {
             .projection(this.projection);
 
         //colormap for population density
-        this.colorScale = d3.scaleLinear()
+        this.colorScale = {};
+        this.colorScale['TEMPERATURE'] = d3.scaleLinear()
+            .range(["#2c7bb6", "#ffff8c", "#d7191c"])
+            .interpolate(d3.interpolateHcl);
+        
+        this.colorScale['CO2'] = d3.scaleLinear()
             .range(["#2c7bb6", "#ffff8c", "#d7191c"])
             .interpolate(d3.interpolateHcl);
 
         //Adding Zoom to the map
         this.zoom = d3.zoom()
             .scaleExtent([0.65, 8])
-            .on("zoom", this.zoomed.bind(this));
+            .on("zoom", this.zoomed.bind(this));        
+    }
 
+    addLegend(){
+        this.svg.append("g")
+            .attr("class", "legendQuant")
+            .attr("transform", "translate(20,150)");
+
+        this.updateLegend();
+    }
+    
+    updateLegend() {
+        let colorLegend = legendColor()
+            .labelFormat(d3.format(".2f"))
+            .useClass(false)
+            .scale(this.colorScale[this.valueType]);
+        this.svg.select(".legendQuant")
+            .style('fill', '#FFF');
+        this.svg.select(".legendQuant").call(colorLegend);
+    }
+
+    getElementByCountry(country) {
+        return d3.select(country)
+    }
+
+    setOverTextCountry(country, text) {
+        d3.select(country)
     }
 
     zoomed() {
@@ -67,9 +99,15 @@ export class MapManager {
         this.selectListener = listener;
     }
 
-    setColorDomain(domain) {
+    setColorDomain(domain, typeValue) {
         //TODO test that domain match (sanity check)
-        this.colorScale = this.colorScale.domain(domain);
+        this.colorScale[typeValue] = this.colorScale[typeValue].domain(domain);
+    }
+
+    setValueType(valueType){
+        this.valueType = valueType;
+        this.updateColor();
+        this.updateLegend();
     }
 
     /**
@@ -88,28 +126,47 @@ export class MapManager {
         this.svg.call(this.zoom);
     }
 
+    getValue(d){
+        switch(this.valueType){
+            case 'TEMPERATURE':
+                return d.properties.temperature;
+            case 'CO2':
+                return d.properties.CO2;
+            default:
+                throw 'Unexpected selection value';
+        };
+    }
+    setValue(d){
+        switch(this.valueType){
+            case 'TEMPERATURE':
+                return d.properties.temperature;
+            case 'CO2':
+                return d.properties.CO2;
+            default:
+                throw 'Unexpected selection value';
+        };
+    }
+
     updateColor() {
         this.g.selectAll(".country")
         .data(this.countries.features)
         .attr("id", (d) => d.id)
         .transition().duration(500)
         .style("fill", (d) => {
-                const temperature = d.properties.temperature;
+                const value = this.getValue(d);//d.properties.temperature;
                 //color the selected country in a different manner
                 if(this.isCountrySelected(d.id)) {
                     return 'rgba(80,111,255,1)';
                 }
-                return temperature ? this.colorScale(temperature) : "gray";
+                return value ? this.colorScale[this.valueType](value) : "gray";
             })
         .style("stroke",(d) => {
-                const temperature = d.properties.temperature;
                 //color the selected country in a different manner
                 if(this.isCountrySelected(d.id)) {
                     return 'white';
                 }
             })
         .style("stroke-width",(d) => {
-                const temperature = d.properties.temperature;
                 //color the selected country in a different manner
                 if(this.isCountrySelected(d.id)) {
                     return '1';
@@ -135,25 +192,22 @@ export class MapManager {
             .text(d => d.properties.name);
     }
 
-    /**
-     * For each country add a temperature property
-     * to countries json
-     * @param {Array} data temperature for countries
-     */
-    updateTemperature(data) {
+    updateData(data) {
         //TODO try avoid the double loop (sorting once for all)
         // Loop through each country data value in the .csv file
         for (let i = 0; i < data.length; i++) {
             // Country name
             let dataWorldCode = data[i]['ISO Code'];
             // Country temperature
-            let dataWorldTemp = data[i].AverageTemperature
+            let dataWorldTemp = data[i].AverageTemperature;
+            let dataWorldCo2 = data[i].CO2;
             // Find the corresponding country inside the JSON
             for (let j = 0; j < this.countries.features.length; j++) {
                 let jsonWorldCode = this.countries.features[j].id;
                 if (dataWorldCode === jsonWorldCode) {
                     // Copy the Country temperature into the JSON
                     this.countries.features[j].properties.temperature = dataWorldTemp;
+                    this.countries.features[j].properties.CO2 = dataWorldCo2;
                     break;
                 }
             }
