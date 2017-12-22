@@ -33,6 +33,21 @@ module.exports = {
         //   loader: ['css-loader'],
         //   publicPath: '/build'
         // })
+      },
+      {
+        test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        use: 'url-loader?limit=10000',
+      },
+      {
+        test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/,
+        use: 'file-loader',
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        use: [
+          'file-loader?name=images/[name].[ext]',
+          'image-webpack-loader?bypassOnDebug'
+        ]
       }
     ]
   },
@@ -47,6 +62,15 @@ module.exports = {
       //  collapseWhitespace: true
       // },
       template: './src/index.html'
+    }),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery',
+      Popper: ['popper.js', 'default'],
+      // In case you imported plugins individually, you must also require them here:
+      Util: "exports-loader?Util!bootstrap/js/dist/util",
+      Dropdown: "exports-loader?Dropdown!bootstrap/js/dist/dropdown"
     })
     
     //new OpenBrowserPlugin({url: 'http://localhost:8081'})

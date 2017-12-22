@@ -1,5 +1,6 @@
 //@flow
 import * as d3 from 'd3';
+import 'bootstrap';
 import * as crossfilter from 'crossfilter';
 import { MapManager } from './map.js';
 import { DataManager } from './DataManager.js';
@@ -11,6 +12,8 @@ import { getYears } from './helpers.js';
 import { LineChart } from './lineChart.js';
 import { bubble, BubbleChart } from './bubble.js';
 import { ButtonManger } from './buttonManager.js';
+import { Tutorial } from './Tutorial';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 var $ = require("jquery");
 
@@ -26,18 +29,22 @@ const fulldata_path = "data/full_data.csv"
 //Loading dataset
 d3.csv(fulldata_path, (data) => {
     d3.json(geojson_path, (geojson) => {
-
         let mapData = new DataManager(data);
         let panelData = new DataManager(data);
         let myMap = new MapManager(geojson);
         let myButtons = new ButtonManger(myMap);
+        let tuto = new Tutorial(myMap);
+
         myMap.addTo("#mapContainer");
         myMap.drawMap();
         myMap.setValueType('CO2');
         myMap.setColorDomain(mapData.getTempDomain(), 'TEMPERATURE');
         myMap.setColorDomain(mapData.getCo2Domain(), 'CO2');
         myMap.addLegend();
-
+        tuto.start();
+        $(function () {
+            $('[data-toggle="popover"]').popover('show')
+          })
         myMap.updateData(mapData.getData());
         myMap.updateColor();
 

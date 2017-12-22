@@ -30,6 +30,7 @@ export class MapManager {
             .interpolate(d3.interpolateHcl);
 
         //Adding Zoom to the map
+        this.actifZoom = true
         this.zoom = d3.zoom()
             .scaleExtent([0.65, 8])
             .on("zoom", this.zoomed.bind(this));        
@@ -53,17 +54,24 @@ export class MapManager {
         this.svg.select(".legendQuant").call(colorLegend);
     }
 
-    getElementByCountry(country) {
-        return d3.select(country)
+    zoomActive(actifZoom) {
+        this.actifZoom = actifZoom;
     }
 
-    setOverTextCountry(country, text) {
+    setTextOverCountry(country, title, text) {
         d3.select(country)
+            .attr('data-toggle', 'popover')
+            .attr('title', title)
+            .attr('data-content', text)
+            .attr('data-container', 'body')
+            .attr('data-placement', 'top');
     }
 
     zoomed() {
-        this.g.style("stroke-width", 1.5 / d3.event.transform.k + "px");
-        this.g.attr("transform", d3.event.transform);
+        if(this.actifZoom) {
+            this.g.style("stroke-width", 1.5 / d3.event.transform.k + "px");
+            this.g.attr("transform", d3.event.transform);
+        }
     }
 
     isCountrySelected(countryId) {
